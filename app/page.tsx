@@ -43,7 +43,8 @@ export default function Page() {
             src="/images/meeting.jpg"
             alt="Meeting at the office"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
@@ -52,7 +53,8 @@ export default function Page() {
             src="/images/balcony.jpg"
             alt="Portrait of Lars on a balcony"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
@@ -61,7 +63,8 @@ export default function Page() {
             src="/images/bikes.jpg"
             alt="Lars on a motorcycle"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
@@ -70,7 +73,8 @@ export default function Page() {
             src="/images/laugh.jpg"
             alt="Lars laughing"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
@@ -79,7 +83,8 @@ export default function Page() {
             src="/images/workdiscussion.jpg"
             alt="Lars discussing work with a colleague"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
@@ -88,7 +93,8 @@ export default function Page() {
             src="/images/workstation.jpg"
             alt="Lars working at his desk"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            sizes="(max-width: 768px) 213px, 33vw"
+            fetchPriority="high"
             fill
           />
         </div>
