@@ -1,4 +1,4 @@
-import { BlogPosts } from "app/components/posts";
+import { JourneyPosts } from "app/components/posts";
 import Badge from "app/components/badge";
 import Link from "next/link";
 import Image from "next/image";
@@ -165,7 +165,7 @@ export default function Page() {
       </p>
 
       <div className="my-8">
-        <BlogPosts />
+        <JourneyPosts />
       </div>
     </section>
   );

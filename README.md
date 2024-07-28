@@ -67,7 +67,7 @@ NEXT_PUBLIC_BASE_URL=https://your-base-url.com
 ## Features
 
 - **RSS Feed**: Stay updated with the latest posts via the RSS feed.
-- **Dynamically Generated Blog Articles**: Blog articles are generated dynamically.
+- **Dynamically Generated Articles**: Articles are generated dynamically, using a list of articles written in MDX.
 - **SEO**: Sitemap and OpenGraph support for better SEO.
 
 ## License
