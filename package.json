@@ -20,6 +20,7 @@
     "postcss": "^8.4.40",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "sharp": "^0.33.4",
     "sugar-high": "^0.7.0",
     "tailwindcss": "4.0.0-alpha.13",
     "typescript": "5.5.4"
