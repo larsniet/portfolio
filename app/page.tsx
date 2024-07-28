@@ -41,7 +41,7 @@ export default function Page() {
         <div className="relative h-40">
           <Image
             src="/images/meeting.webp"
-            alt="Frontend Frameworks"
+            alt="Meeting at the office"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
@@ -50,7 +50,7 @@ export default function Page() {
         <div className="relative sm:row-span-2 row-span-1">
           <Image
             src="/images/balcony.webp"
-            alt="Security Camera"
+            alt="Portrait of Lars on a balcony"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
@@ -59,7 +59,7 @@ export default function Page() {
         <div className="relative">
           <Image
             src="/images/bikes.webp"
-            alt="Motorcycle"
+            alt="Lars on a motorcycle"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
@@ -68,7 +68,7 @@ export default function Page() {
         <div className="relative row-span-2">
           <Image
             src="/images/laugh.webp"
-            alt="Home Automation"
+            alt="Lars laughing"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
@@ -77,7 +77,7 @@ export default function Page() {
         <div className="relative row-span-2">
           <Image
             src="/images/workdiscussion.webp"
-            alt="Security Camera"
+            alt="Lars discussing work with a colleague"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
@@ -86,7 +86,7 @@ export default function Page() {
         <div className="relative h-40">
           <Image
             src="/images/workstation.webp"
-            alt="Security Camera"
+            alt="Lars working at his desk"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
