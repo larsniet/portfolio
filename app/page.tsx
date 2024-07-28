@@ -71,7 +71,6 @@ export default function Page() {
             alt="Lars laughing"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
-            priority
             fill
           />
         </div>
