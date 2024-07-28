@@ -20,7 +20,12 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: ["larsniet.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "larsniet.com",
+      },
+    ],
   },
 };
 
