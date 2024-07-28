@@ -1,42 +1,79 @@
-# Portfolio Blog Starter
+# Lars van der Niet
 
-This is a porfolio site template complete with a blog. Includes:
+Welcome to my personal website! This project is built with Next.js and showcases my skills as a full stack developer and tech enthusiast. Below you'll find all the necessary information to get started with the project.
 
-- MDX and Markdown support
-- Optimized for SEO (sitemap, robots, JSON-LD schema)
-- RSS Feed
-- Dynamic OG images
-- Syntax highlighting
-- Tailwind v4
-- Vercel Speed Insights / Web Analytics
-- Geist font
+## Table of Contents
 
-## Demo
+- [Installation](#installation)
+- [Usage](#usage)
+- [Environment Variables](#environment-variables)
+- [Features](#features)
+- [License](#license)
 
-https://portfolio-blog-starter.vercel.app
+## Installation
 
-## How to Use
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/larsniet/portfolio.git
+   ```
 
-You can choose from one of the following two methods to use this repository:
+2. Change into the project directory:
+   ```bash
+   cd portfolio
+   ```
 
-### One-Click Deploy
+3. Install the dependencies:
+   ```bash
+   pnpm install
+   ```
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+## Usage
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/solutions/blog&project-name=blog&repository-name=blog)
+### Development
 
-### Clone and Deploy
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
-
-```bash
-pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/blog blog
-```
-
-Then, run Next.js in development mode:
-
+To run the project in development mode, use the following command:
 ```bash
 pnpm dev
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+This will start the development server at `http://localhost:3000`.
+
+### Build
+
+To build the project for production, use the following command:
+```bash
+pnpm build
+```
+
+### Start
+
+To start the project in production mode, use the following command:
+```bash
+pnpm start
+```
+
+## Environment Variables
+
+The project uses a single environment variable:
+
+- `NEXT_PUBLIC_BASE_URL`: The base URL for the application.
+
+To set up the environment variable, create a `.env.local` file in the root of the project and add the following line:
+
+```env
+NEXT_PUBLIC_BASE_URL=https://your-base-url.com
+```
+
+## Features
+
+- **RSS Feed**: Stay updated with the latest posts via the RSS feed.
+- **Dynamically Generated Blog Articles**: Blog articles are generated dynamically.
+- **SEO**: Sitemap and OpenGraph support for better SEO.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+---
+
+Thank you for checking out my portfolio project! If you have any questions or feedback, feel free to open an issue or contact me directly.
