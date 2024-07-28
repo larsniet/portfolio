@@ -40,7 +40,7 @@ export default function Page() {
       <div className="grid grid-cols-2 grid-rows-4 sm:grid-rows-3 sm:grid-cols-3 gap-4 my-8">
         <div className="relative h-40">
           <Image
-            src="/images/meeting.webp"
+            src="/images/meeting.jpg"
             alt="Meeting at the office"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
@@ -49,7 +49,7 @@ export default function Page() {
         </div>
         <div className="relative sm:row-span-2 row-span-1">
           <Image
-            src="/images/balcony.webp"
+            src="/images/balcony.jpg"
             alt="Portrait of Lars on a balcony"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
@@ -58,7 +58,7 @@ export default function Page() {
         </div>
         <div className="relative">
           <Image
-            src="/images/bikes.webp"
+            src="/images/bikes.jpg"
             alt="Lars on a motorcycle"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
@@ -67,7 +67,7 @@ export default function Page() {
         </div>
         <div className="relative row-span-2">
           <Image
-            src="/images/laugh.webp"
+            src="/images/laugh.jpg"
             alt="Lars laughing"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
@@ -76,7 +76,7 @@ export default function Page() {
         </div>
         <div className="relative row-span-2">
           <Image
-            src="/images/workdiscussion.webp"
+            src="/images/workdiscussion.jpg"
             alt="Lars discussing work with a colleague"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
@@ -85,7 +85,7 @@ export default function Page() {
         </div>
         <div className="relative h-40">
           <Image
-            src="/images/workstation.webp"
+            src="/images/workstation.jpg"
             alt="Lars working at his desk"
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
