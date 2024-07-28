@@ -29,6 +29,7 @@ export default function Page() {
                 width={16}
                 height={16}
                 className="w-4 h-4"
+                priority
               />
             }
           />
@@ -45,6 +46,7 @@ export default function Page() {
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 213px, 33vw"
             fetchPriority="high"
+            priority
             fill
           />
         </div>
@@ -55,6 +57,7 @@ export default function Page() {
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 213px, 33vw"
             fetchPriority="high"
+            priority
             fill
           />
         </div>
@@ -65,6 +68,7 @@ export default function Page() {
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 213px, 33vw"
             fetchPriority="high"
+            priority
             fill
           />
         </div>
@@ -75,6 +79,7 @@ export default function Page() {
             className="rounded-lg object-cover"
             sizes="(max-width: 768px) 213px, 33vw"
             fetchPriority="high"
+            priority
             fill
           />
         </div>
