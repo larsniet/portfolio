@@ -37,8 +37,9 @@ export default function Page() {
           <Image
             src="/images/meeting.webp"
             alt="Frontend Frameworks"
-            fill
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            fill
           />
         </div>
         <div className="relative sm:row-span-2 row-span-1">
@@ -46,6 +47,7 @@ export default function Page() {
             src="/images/balcony.webp"
             alt="Security Camera"
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
             fill
           />
         </div>
@@ -53,32 +55,36 @@ export default function Page() {
           <Image
             src="/images/bikes.webp"
             alt="Motorcycle"
-            fill
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            fill
           />
         </div>
         <div className="relative row-span-2">
           <Image
             src="/images/laugh.webp"
             alt="Home Automation"
-            fill
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            fill
           />
         </div>
         <div className="relative row-span-2">
           <Image
             src="/images/workdiscussion.webp"
             alt="Security Camera"
-            fill
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            fill
           />
         </div>
         <div className="relative h-40">
           <Image
             src="/images/workstation.webp"
             alt="Security Camera"
-            fill
             className="rounded-lg object-cover"
+            sizes="(max-width: 768px) 150px, (max-width: 1200px) 200px, 220px"
+            fill
           />
         </div>
       </div>
@@ -89,22 +95,31 @@ export default function Page() {
         automation systems, I deeply enjoy exploring and integrating new
         technologies. Currently, I work full-time for Adswag, a digital
         advertising company based in Amsterdam. At Adswag, I immerse myself in
-        various technical challenges and projects, utilizing tools like
-        <Link href="https://www.docker.com/" target="_blank">
+        various technical challenges and projects, utilizing tools like {` `}
+        <Link
+          href="https://www.docker.com/"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="Docker"
             icon={
               <Image
                 src="/images/docker.png"
                 alt="Docker"
-                width={16}
+                width={20}
                 height={16}
+                className="w-5 h-4"
               />
             }
           />
         </Link>
         {` and `}
-        <Link href="https://kubernetes.io/" target="_blank">
+        <Link
+          href="https://kubernetes.io/"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="Kubernetes"
             icon={
@@ -113,12 +128,17 @@ export default function Page() {
                 alt="Kubernetes"
                 width={16}
                 height={16}
+                className="w-4 h-4"
               />
             }
           />
         </Link>
-        , working with
-        <Link href="https://nextjs.org" target="_blank">
+        , working with{` `}
+        <Link
+          href="https://nextjs.org"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="NextJS"
             icon={
@@ -127,12 +147,17 @@ export default function Page() {
                 alt="NextJS"
                 width={16}
                 height={16}
+                className="w-4 h-4"
               />
             }
           />
         </Link>
-        , setting up automated Ubuntu servers with
-        <Link href="https://www.ansible.com/" target="_blank">
+        , setting up automated Ubuntu servers with{` `}
+        <Link
+          href="https://www.ansible.com/"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="Ansible"
             icon={
@@ -141,12 +166,17 @@ export default function Page() {
                 alt="Ansible"
                 width={16}
                 height={16}
+                className="w-4 h-4"
               />
             }
           />
         </Link>
-        , and creating advanced analytics dashboards using
-        <Link href="https://www.ag-grid.com/" target="_blank">
+        , and creating advanced analytics dashboards using{` `}
+        <Link
+          href="https://www.ag-grid.com/"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="Ag Grid"
             icon={
@@ -155,6 +185,7 @@ export default function Page() {
                 alt="Ag-Grid"
                 width={16}
                 height={16}
+                className="w-4 h-4"
               />
             }
           />
