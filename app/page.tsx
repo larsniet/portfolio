@@ -15,15 +15,20 @@ export default function Page() {
       <p className="mb-4">
         I'm a full stack developer and a tech enthusiast with a passion for
         anything new in tech, working at{" "}
-        <Link href="https://adswag.nl" target="_blank">
+        <Link
+          href="https://adswag.nl"
+          target="_blank"
+          className="inline-flex align-middle"
+        >
           <Badge
             text="Adswag"
             icon={
               <Image
                 src="/images/adswag.png"
-                alt="Adswag"
+                alt="Adswag company logo"
                 width={16}
                 height={16}
+                className="w-4 h-4"
               />
             }
           />
@@ -106,7 +111,7 @@ export default function Page() {
             icon={
               <Image
                 src="/images/docker.png"
-                alt="Docker"
+                alt="Docker logo"
                 width={20}
                 height={16}
                 className="w-5 h-4"
@@ -125,7 +130,7 @@ export default function Page() {
             icon={
               <Image
                 src="/images/kubernetes.png"
-                alt="Kubernetes"
+                alt="Kubernetes logo"
                 width={16}
                 height={16}
                 className="w-4 h-4"
@@ -144,7 +149,7 @@ export default function Page() {
             icon={
               <Image
                 src="/images/nextjs.png"
-                alt="NextJS"
+                alt="NextJS logo"
                 width={16}
                 height={16}
                 className="w-4 h-4"
@@ -163,7 +168,7 @@ export default function Page() {
             icon={
               <Image
                 src="/images/ansible.png"
-                alt="Ansible"
+                alt="Ansible logo"
                 width={16}
                 height={16}
                 className="w-4 h-4"
@@ -182,7 +187,7 @@ export default function Page() {
             icon={
               <Image
                 src="/images/ag-grid.png"
-                alt="Ag-Grid"
+                alt="Ag-Grid logo"
                 width={16}
                 height={16}
                 className="w-4 h-4"
