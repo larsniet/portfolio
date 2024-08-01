@@ -1,0 +1,43 @@
+---
+title: "Building a TypeScript/JavaScript SDK for Adhese's advertising software"
+publishedAt: "2023-09-27"
+summary: "Developing a customized TypeScript/JavaScript SDK for Ahold with Adhese integration, offering seamless client-specific advertising solutions and enhanced performance."
+---
+
+# Introduction
+In the fast-paced world of digital advertising, creating a flexible and robust SDK tailored to specific client needs is crucial. This blog post will take you through the journey of how I developed a TypeScript/JavaScript SDK for Adhese's advertising software, designed to meet the unique requirements of Ahold. This SDK not only integrates seamlessly with Adhese but also provides the option to render Google Ads, ensuring a comprehensive advertising solution.
+
+# The genesis of the project
+## Why this was made
+Ahold, a major player in the retail industry, began collaborating with Adhese to enhance their advertising capabilities. Ahold required highly client-specific integrations that would blend seamlessly with their existing content. The old Adhese SDK was too general and lacked the flexibility to meet these needs. Therefore, we embarked on creating a new SDK that could handle Ahold's specific requirements while maintaining high performance and reliability. My role in this project was Lead Developer, since our team was small at the time, only consisting of 2 developers including me, almost all coding for the ARMP was done by me. The integration of this system was done by my co-worker.
+
+## Understanding the system
+The Ahold Request Mediation Platform (ARMP) serves as a mediator between web pages and advertisements. Its primary functions include:
+- Fetching content based on provided configurations.
+- Deciding how to render the fetched ads.
+- Ensuring ads are appropriately displayed on the page.
+- Emitting various events and logs for feedback and hooks for other systems or utilities to respond to.
+
+
+# The solution
+First we started with a deep dive into Ahold's advertising needs. We worked closely with different teams from Ahold to understand their existing content structure and the level of integration required. It became clear that a one-size-fits-all solution wouldn't suffice. We needed to build something versatile, yet specific enough to handle Ahold's unique requirements.
+
+## Key features
+To achieve this, we focused on several key features:
+- **Seamless integration**: The SDK needed to integrate effortlessly with Ahold's existing web content, ensuring ads appeared naturally without disrupting the user experience.
+- **Flexible ad rendering**: Whether fetching ads from Adhese or Google Ads, the SDK had to be capable of rendering them appropriately based on the content and context.
+- **Event emission and logging**: Providing detailed logs and emitting events for every significant action allowed us to offer insights and hooks for further customizations.
+
+# Collaboration and iteration
+Throughout the development process, we maintained close communication with Ahold's teams. Regular feedback sessions and demos helped us ensure the SDK aligned with their expectations. We also conducted extensive testing to identify and resolve any issues promptly.
+
+# The impact
+The new SDK has transformed how Ahold manages their advertising content. By implementing the ARMP we not only made advertising easier, we also enhanced the overall user experience. The flexibility to render Google Ads in addition to Adhese ads added a layer of versatility that was previously missing.
+
+## Future proofing
+The modular nature of the SDK means it can easily adapt to future requirements or changes in the advertising landscape. This future-proofing aspect ensures that Ahold can continue to rely on this solution as their needs evolve.
+
+# Conclusion
+Building a customized SDK for Ahold was a rewarding challenge that taught me some good lessons about the importance of flexibility and client-specific solutions in software development. Working closely with Ahold's team allowed me to gain a better understanding of how big coorporates work and how to adapt to their needs. The success of this project has opened up new opportunities for similar collaborations in the future, and I look forward to applying the knowledge and experience gained to other projects.
+
+
