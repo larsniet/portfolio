@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
   openGraph: {
     title: "Lars van der Niet",
-    description: "Creating and leading tech projects.",
+    description: "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
     url: baseUrl,
     siteName: "Lars van der Niet",
     locale: "en_US",

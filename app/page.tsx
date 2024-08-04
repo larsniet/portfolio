@@ -3,6 +3,10 @@ import Badge from "app/components/badge";
 import Link from "next/link";
 import Image from "next/image";
 
+export const metadata = {
+  description: "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+};
+
 export default function Page() {
   return (
     <section>
