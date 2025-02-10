@@ -1,0 +1,252 @@
+---
+title: "How to set up a passbolt server on Google Cloud"
+publishedAt: "2025-02-10"
+summary: "A step-by-step tutorial for setting up a self-hosted Passbolt password manager on a Google Cloud VM using Gmail’s SMTP service."
+---
+
+# Setup Passbolt with Gmail SMTP on Google Cloud
+
+This guide walks you through setting up a free, self-hosted Passbolt password manager on a Google Cloud VM using Gmail’s SMTP service (with your account `support@adswag.nl`). You will need:
+
+- A domain with DNS management.
+- A Google Cloud account.
+- A Gmail account with an App Password (if you use 2-Step Verification).
+
+---
+
+## Part 1: Set Up Your Google Cloud VM & DNS
+
+1. **Create a Google Cloud Project & Enable Billing**
+
+   - Navigate to [Google Cloud Console](https://console.cloud.google.com) and create a new project.
+   - Enable billing (a credit card is required, but free tier usage should result in a $0 invoice).
+
+2. **Enable the Compute Engine API**
+
+   - Search for "Compute Engine API" in the Cloud Console and enable it.
+
+3. **Create a VM Instance**
+
+   - Go to **Compute Engine** → **VM instances** and click **CREATE INSTANCE**.
+   - Name your instance (e.g., `passbolt`), select the **us-central1** region, and choose the **e2-micro** machine type.
+   - Leave other settings at their defaults. Once created, note the VM's **External IP**.
+
+4. **Configure Your Domain’s DNS**
+
+   - Log into your domain registrar (e.g., GoDaddy, Namecheap) and add an A record for your subdomain (e.g., `passbolt.yourdomain.com`) pointing to your VM's External IP.
+
+5. **Set Up Firewall Rules**
+   - In Google Cloud, navigate to **VPC network** → **Firewall rules** and create a rule to allow inbound HTTP and HTTPS traffic:
+     - **Name:** `passbolt-ingress`
+     - **Targets:** All instances (or use specific tags)
+     - **Source IP ranges:** `0.0.0.0/0`
+     - **Protocols/Ports:** TCP: `80,443`
+       > **Note:** Gmail SMTP on port 587 is used only for outbound mail, so no inbound rule is needed for it.
+
+---
+
+## Part 2: Configure Gmail SMTP with Postfix
+
+Passbolt sends emails (for registration, notifications, etc.) via SMTP. Since Google Cloud blocks port 25, we’ll configure Postfix to use Gmail's SMTP server on port 587.
+
+### Step 1: Generate an App Password for Gmail
+
+- Log in to your `support@adswag.nl` Gmail account.
+- If 2-Step Verification is enabled, generate an **App Password** in your Google Account security settings. Save this password for later use.
+
+### Step 2: SSH into Your VM & Switch to Root
+
+```bash
+sudo su -
+```
+
+### Step 3: Install Postfix & Required Modules
+
+```bash
+apt update && apt -y install postfix libsasl2-modules
+```
+
+_When prompted during Postfix’s configuration, choose **Local only**._
+
+### Step 4: Edit the Postfix Configuration
+
+Open the Postfix configuration file:
+
+```bash
+nano /etc/postfix/main.cf
+```
+
+Add or replace the following lines (remove any SendGrid-specific settings if present):
+
+```conf
+# Use Gmail’s SMTP server on port 587
+relayhost = [smtp.gmail.com]:587
+
+# Enable SASL authentication
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+# Enable TLS encryption
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+
+# (Optional) Increase header size limit
+header_size_limit = 4096000
+```
+
+Save and exit (press **Ctrl+X**, then **Y**, then **Enter**).
+
+### Step 5: Set Up the SASL Password File
+
+Create or edit the file:
+
+```bash
+nano /etc/postfix/sasl_passwd
+```
+
+Add the following line, replacing `YOUR_APP_PASSWORD` with your Gmail App Password (ensure there are no spaces):
+
+```plaintext
+[smtp.gmail.com]:587 support@adswag.nl:YOUR_APP_PASSWORD
+```
+
+Save and exit.
+
+### Step 6: Secure & Apply the Password File
+
+```bash
+postmap /etc/postfix/sasl_passwd
+chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+systemctl restart postfix
+```
+
+### Step 7: Test the Email Setup (Optional)
+
+Install `mailutils` to send a test email:
+
+```bash
+apt -y install mailutils
+echo "Test email from Postfix using Gmail SMTP" | mail -s "Test Email" your_email@example.com
+```
+
+Check your inbox (or spam folder) to confirm receipt.
+
+---
+
+## Part 3: Install Passbolt
+
+### Step 1: Generate UUIDs for Credentials
+
+Generate three UUIDs to use as secure passwords:
+
+```bash
+uuidgen
+uuidgen
+uuidgen
+```
+
+- **First UUID:** Database root password.
+- **Second UUID:** Passbolt admin database password (`passboltadmin` user).
+- **Third UUID:** IT administrator passphrase.
+
+### Step 2: Download and Verify the Passbolt Installer Script
+
+```bash
+curl -LO https://download.passbolt.com/ce/installer/passbolt-repo-setup.ce.sh
+curl -LO https://github.com/passbolt/passbolt-dep-scripts/releases/latest/download/passbolt-ce-SHA512SUM.txt
+sha512sum -c passbolt-ce-SHA512SUM.txt && sudo bash ./passbolt-repo-setup.ce.sh || { echo "Bad checksum. Aborting"; rm -f passbolt-repo-setup.ce.sh; exit 1; }
+```
+
+### Step 3: Install the Passbolt CE Server
+
+```bash
+sudo apt install passbolt-ce-server
+```
+
+### Step 4: Follow the On-Screen Prompts
+
+During installation, use the following guidelines:
+
+- **Proceed with installation?**
+  Type: `Yes`
+
+- **Database Configuration:**
+
+  - For the **root** database user, enter the **first UUID** as the password.
+  - For the Passbolt service user, use `passboltadmin` with the **second UUID** as its password.
+  - Set the database name to `passboltdb`.
+
+- **Web Server (Nginx) Setup:**
+
+  - Choose to install Nginx: `Yes`
+  - Use auto configuration.
+  - Enter your Passbolt subdomain (e.g., `passbolt.yourdomain.com`).
+  - Provide the email address that owns your Google Cloud project.
+
+- **SMTP Options:**
+  - **Sender Name:** e.g., `AdSwag Password Manager`
+  - **Sender Email:** `support@adswag.nl`
+  - **SMTP Host:** `smtp.gmail.com`
+  - **TLS:** Yes
+  - **Port:** `587`
+  - **Authentication:** Username and password
+  - **Username:** `support@adswag.nl`
+  - **Password:** Your Gmail App Password
+
+### Step 5: Fix File Permissions for JWT Files
+
+```bash
+sudo chown -Rf root:www-data /etc/passbolt/jwt/
+sudo chmod 750 /etc/passbolt/jwt/
+sudo chmod 640 /etc/passbolt/jwt/jwt.key
+sudo chmod 640 /etc/passbolt/jwt/jwt.pem
+```
+
+---
+
+## Part 4: Configure Passbolt via the Web Interface
+
+1. **Access the Passbolt UI**
+   Open your browser and navigate to your subdomain (e.g., `https://passbolt.yourdomain.com`). You should see the Passbolt welcome page.
+
+2. **Complete the Initial Setup:**
+
+   - **Database Settings:**
+     - **Host:** `127.0.0.1`
+     - **Port:** `3306`
+     - **User:** `passboltadmin`
+     - **Password:** Use the **second UUID**
+     - **Database Name:** `passboltdb`
+   - **OpenPGP Key Generation:**
+     Follow the prompts to generate your server’s OpenPGP key (set the server name as "passbolt" and use your associated email).
+   - **SMTP Settings:**
+     Confirm the following:
+     - **Sender Name:** e.g., `AdSwag Password Manager`
+     - **Sender Email:** `support@adswag.nl`
+     - **SMTP Host:** `smtp.gmail.com`
+     - **TLS:** Enabled
+     - **Port:** `587`
+     - **Authentication:** Username & password (Gmail credentials)
+
+3. **Test Email Functionality:**
+   Use the Passbolt interface to send a test email. Check your inbox (or spam folder) to verify that the email is received.
+
+4. **Create the Administrator Account:**
+   Create a new administrator account (e.g., "IT") using the **third UUID** as the passphrase. Follow any additional on-screen instructions.
+
+---
+
+## Part 5: Final Steps & Verification
+
+- **Verify Web Access:**
+  Confirm that you can access Passbolt at your subdomain via HTTPS.
+
+- **Test Sending Emails:**
+  Use Passbolt’s built-in test email function to ensure Gmail SMTP is working correctly.
+
+- **Review DNS & Firewall Settings:**
+  Make sure your domain’s A record points to your VM’s IP and that ports 80 and 443 are open.
+
+- **Secure Your Credentials:**
+  Safely store your generated UUIDs and Gmail App Password, as these are critical for managing your Passbolt installation.
