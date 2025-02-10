@@ -6,7 +6,7 @@ summary: "A step-by-step tutorial for setting up a self-hosted Passbolt password
 
 # Setup Passbolt with Gmail SMTP on Google Cloud
 
-This guide walks you through setting up a free, self-hosted Passbolt password manager on a Google Cloud VM using Gmail’s SMTP service (with your account `support@adswag.nl`). You will need:
+This guide walks you through setting up a free, self-hosted Passbolt password manager on a Google Cloud VM using Gmail’s SMTP service (with your account `mail@email.com`). You will need:
 
 - A domain with DNS management.
 - A Google Cloud account.
@@ -49,7 +49,7 @@ Passbolt sends emails (for registration, notifications, etc.) via SMTP. Since Go
 
 ### Step 1: Generate an App Password for Gmail
 
-- Log in to your `support@adswag.nl` Gmail account.
+- Log in to your `mail@email.com` Gmail account.
 - If 2-Step Verification is enabled, generate an **App Password** in your Google Account security settings. Save this password for later use.
 
 ### Step 2: SSH into Your VM & Switch to Root
@@ -106,7 +106,7 @@ nano /etc/postfix/sasl_passwd
 Add the following line, replacing `YOUR_APP_PASSWORD` with your Gmail App Password (ensure there are no spaces):
 
 ```plaintext
-[smtp.gmail.com]:587 support@adswag.nl:YOUR_APP_PASSWORD
+[smtp.gmail.com]:587 mail@email.com:YOUR_APP_PASSWORD
 ```
 
 Save and exit.
@@ -183,13 +183,13 @@ During installation, use the following guidelines:
   - Provide the email address that owns your Google Cloud project.
 
 - **SMTP Options:**
-  - **Sender Name:** e.g., `AdSwag Password Manager`
-  - **Sender Email:** `support@adswag.nl`
+  - **Sender Name:** e.g., `Password Manager`
+  - **Sender Email:** `mail@email.com`
   - **SMTP Host:** `smtp.gmail.com`
   - **TLS:** Yes
   - **Port:** `587`
   - **Authentication:** Username and password
-  - **Username:** `support@adswag.nl`
+  - **Username:** `mail@email.com`
   - **Password:** Your Gmail App Password
 
 ### Step 5: Fix File Permissions for JWT Files
@@ -220,8 +220,8 @@ sudo chmod 640 /etc/passbolt/jwt/jwt.pem
      Follow the prompts to generate your server’s OpenPGP key (set the server name as "passbolt" and use your associated email).
    - **SMTP Settings:**
      Confirm the following:
-     - **Sender Name:** e.g., `AdSwag Password Manager`
-     - **Sender Email:** `support@adswag.nl`
+     - **Sender Name:** e.g., `Password Manager`
+     - **Sender Email:** `mail@email.com`
      - **SMTP Host:** `smtp.gmail.com`
      - **TLS:** Enabled
      - **Port:** `587`
