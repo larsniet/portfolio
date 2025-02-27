@@ -4,15 +4,17 @@ import { formatDate, getJourneyPosts } from "app/journey/utils";
 import { baseUrl } from "app/sitemap";
 
 export async function generateStaticParams() {
-  let posts = getJourneyPosts();
+  let posts = await getJourneyPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export function generateMetadata({ params }) {
-  let post = getJourneyPosts().find((post) => post.slug === params.slug);
+export async function generateMetadata({ params }) {
+  let posts = await getJourneyPosts();
+  const slug = (await params).slug;
+  let post = posts.find((post) => post.slug === slug);
   if (!post) {
     return;
   }
@@ -51,8 +53,10 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function Journey({ params }) {
-  let post = getJourneyPosts().find((post) => post.slug === params.slug);
+export default async function Journey({ params }) {
+  let posts = await getJourneyPosts();
+  const slug = (await params).slug;
+  let post = posts.find((post) => post.slug === slug);
 
   if (!post) {
     notFound();

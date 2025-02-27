@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 
 type Metadata = {
@@ -26,30 +26,31 @@ function parseFrontmatter(fileContent: string) {
   return { metadata: metadata as Metadata, content };
 }
 
-function getMDXFiles(dir) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
+async function getMDXFiles(dir: string) {
+  const files = await fs.readdir(dir);
+  return files.filter((file) => path.extname(file) === ".mdx");
 }
 
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, "utf-8");
+async function readMDXFile(filePath: string) {
+  const rawContent = await fs.readFile(filePath, "utf-8");
   return parseFrontmatter(rawContent);
 }
 
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir);
-  return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file));
-    let slug = path.basename(file, path.extname(file));
-
+async function getMDXData(dir: string) {
+  const mdxFiles = await getMDXFiles(dir);
+  const postsPromises = mdxFiles.map(async (file) => {
+    const { metadata, content } = await readMDXFile(path.join(dir, file));
+    const slug = path.basename(file, path.extname(file));
     return {
       metadata,
       slug,
       content,
     };
   });
+  return Promise.all(postsPromises);
 }
 
-export function getJourneyPosts() {
+export async function getJourneyPosts() {
   return getMDXData(path.join(process.cwd(), "app", "journey", "posts"));
 }
 

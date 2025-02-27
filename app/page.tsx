@@ -2,12 +2,16 @@ import { JourneyPosts } from "app/components/posts";
 import Badge from "app/components/badge";
 import Link from "next/link";
 import Image from "next/image";
+import { getJourneyPosts } from "./journey/utils";
 
 export const metadata = {
-  description: "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+  description:
+    "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
 };
 
-export default function Page() {
+export default async function Page() {
+  let posts = await getJourneyPosts();
+
   return (
     <section>
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
@@ -216,7 +220,7 @@ export default function Page() {
       </p>
 
       <div className="my-8">
-        <JourneyPosts />
+        <JourneyPosts posts={posts} />
       </div>
     </section>
   );

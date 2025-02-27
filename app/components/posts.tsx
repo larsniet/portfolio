@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { formatDate, getJourneyPosts } from "app/journey/utils";
+import { formatDate } from "app/journey/utils";
 
-export function JourneyPosts() {
-  let allJourneys = getJourneyPosts();
-
+export function JourneyPosts({ posts }) {
   return (
     <div>
-      {allJourneys
+      {posts
         .sort((a, b) => {
           if (
             new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
