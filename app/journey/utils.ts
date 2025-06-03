@@ -1,6 +1,8 @@
 import matter from "gray-matter";
 import path from "path";
 import fs from "fs/promises";
+import { compileMDX } from "next-mdx-remote/rsc";
+
 export type Metadata = {
   title: string;
   publishedAt: string;
@@ -33,7 +35,13 @@ export async function getPost(slug: string) {
 
   try {
     const fileContents = await fs.readFile(fullPath, "utf8");
-    const { data: metadata, content } = matter(fileContents);
+    const { data: metadata, content: rawContent } = matter(fileContents);
+
+    const { content } = await compileMDX({
+      source: rawContent,
+      options: { parseFrontmatter: true },
+    });
+
     return { metadata, content, slug };
   } catch (error) {
     console.error(`Error reading MDX file: ${fullPath}`, error);

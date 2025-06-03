@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { formatDate } from "app/journey/utils";
 import { baseUrl } from "app/sitemap";
-import { CustomMDX } from "app/components/mdx";
 import { getPost, getPosts } from "app/journey/utils";
+import { CustomMDX } from "app/components/mdx";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
