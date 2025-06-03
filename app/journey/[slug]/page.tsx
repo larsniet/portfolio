@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { formatDate } from "app/journey/utils";
 import { baseUrl } from "app/sitemap";
 import { getPost, getPosts } from "app/journey/utils";
-import { CustomMDX } from "app/components/mdx";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -98,7 +97,7 @@ export default async function Journey({ params }: Props) {
           </p>
         </div>
         <article className="prose prose-quoteless prose-neutral dark:prose-invert">
-          <CustomMDX>{post.content}</CustomMDX>
+          {post.content}
         </article>
       </section>
     );

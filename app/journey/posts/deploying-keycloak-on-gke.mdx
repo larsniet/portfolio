@@ -6,7 +6,7 @@ summary: "Learn how to deploy Keycloak on Google Kubernetes Engine (GKE) using a
 
 # Deploying Keycloak on GKE with a custom Helm Chart
 
-In this guide, you&apos;ll learn how to deploy Keycloak on Google Kubernetes Engine (GKE) using:
+In this guide, you'll learn how to deploy Keycloak on Google Kubernetes Engine (GKE) using:
 
 - A **Chart.yaml** that specifies dependencies (Bitnami Keycloak),
 - **values.yaml** for configuration details,
@@ -17,19 +17,29 @@ In this guide, you&apos;ll learn how to deploy Keycloak on Google Kubernetes Eng
 ## 1. Prerequisites
 
 1. **GKE cluster**
-   - You&apos;ll need a functional GKE cluster. Ensure `kubectl` is pointing to it:
-     ```bash
-     kubectl config get-contexts
-     ```
+
+   - You'll need a functional GKE cluster. Ensure `kubectl` is pointing to it:
+
+   ```bash
+   kubectl config get-contexts
+   ```
+
 2. **Helm (v3+)**
+
    - Verify Helm is installed:
-     ```bash
-     helm version
-     ```
+
+   ```bash
+   helm version
+   ```
+
 3. **Bastion host (if needed)**
+
    - If your cluster is private, confirm you can SSH into a bastion host with internal cluster access.
+
 4. **Argo CD (optional)**
+
    - If you wish to automate deployments, have Argo CD installed in the cluster.
+
 5. **Reserved static IP (optional)**
    - Consider reserving a global static IP in GCP for a consistent external IP.
 
@@ -55,12 +65,12 @@ You can place `keycloak-argo.yaml` either in the root of your repo or alongside 
 
 ---
 
-## 3. `Chart.yaml`
+## 3. Chart.yaml
 
-**Purpose**: Defines your Helm chart&apos;s name, version, description, and dependencies.
+**Purpose**: Defines your Helm chart's name, version, description, and dependencies.
 
 <details>
-<summary>Click to expand <code>Chart.yaml</code></summary>
+<summary>View Chart.yaml configuration</summary>
 
 ```yaml
 apiVersion: v2
@@ -82,16 +92,16 @@ dependencies:
 - **`dependencies`**: References the Bitnami Keycloak chart and its version.
 - **`name`, `version`, and `appVersion`** can be customized to fit your needs.
 
-When you run `helm dependency update` in this chart&apos;s directory, Helm will fetch the Bitnami Keycloak chart from the specified repository.
+When you run `helm dependency update` in this chart's directory, Helm will fetch the Bitnami Keycloak chart from the specified repository.
 
 ---
 
-## 4. `values.yaml`
+## 4. values.yaml
 
-**Purpose**: Holds the main configuration for Keycloak, its database, and resources. These values override or supplement the Bitnami chart&apos;s defaults.
+**Purpose**: Holds the main configuration for Keycloak, its database, and resources. These values override or supplement the Bitnami chart's defaults.
 
 <details>
-<summary>Click to expand <code>values.yaml</code></summary>
+<summary>View values.yaml configuration</summary>
 
 ```yaml
 keycloak:
@@ -173,12 +183,12 @@ keycloak:
 
 ---
 
-## 5. `ingress.yaml`
+## 5. ingress.yaml
 
-In a typical Helm chart, you&apos;d place this file under `templates/ingress.yaml`.
+In a typical Helm chart, you'd place this file under `templates/ingress.yaml`.
 
 <details>
-<summary>Click to expand <code>ingress.yaml</code></summary>
+<summary>View ingress.yaml configuration</summary>
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -217,12 +227,12 @@ spec:
 
 ---
 
-## 6. `managed-cert.yaml`
+## 6. managed-cert.yaml
 
 Also stored in `templates/` (e.g., `templates/managed-cert.yaml`). This resource requests and manages an SSL certificate for your domain.
 
 <details>
-<summary>Click to expand <code>managed-cert.yaml</code></summary>
+<summary>View managed-cert.yaml configuration</summary>
 
 ```yaml
 apiVersion: networking.gke.io/v1
@@ -244,12 +254,12 @@ spec:
 
 ---
 
-## 7. `keycloak-argo.yaml` (Optional)
+## 7. keycloak-argo.yaml (Optional)
 
-If you want a GitOps approach with Argo CD, you can define an Argo CD Application pointing to this Helm chart. You can place it at your repo&apos;s root or in the `keycloak/` folder.
+If you want a GitOps approach with Argo CD, you can define an Argo CD Application pointing to this Helm chart. You can place it at your repo's root or in the `keycloak/` folder.
 
 <details>
-<summary>Click to expand <code>keycloak-argo.yaml</code></summary>
+<summary>View keycloak-argo.yaml configuration</summary>
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -296,7 +306,7 @@ This downloads the Bitnami Keycloak chart locally so Helm can merge it with your
 
 ### 8.2 Using Helm CLI
 
-If you&apos;re deploying manually:
+If you're deploying manually:
 
 ```bash
 helm upgrade --install keycloak path/to/keycloak/ \
@@ -315,7 +325,7 @@ Helm will render `Chart.yaml`, `values.yaml`, and everything under `templates/`.
      ```bash
      kubectl port-forward svc/argocd-server -n argocd 8081:443
      ```
-   - Go to `https://localhost:8081` and look for the `keycloak` application. Argo CD will either auto-sync or you can press “Sync” to deploy.
+   - Go to `https://localhost:8081` and look for the `keycloak` application. Argo CD will either auto-sync or you can press "Sync" to deploy.
 
 ---
 
@@ -327,7 +337,7 @@ Helm will render `Chart.yaml`, `values.yaml`, and everything under `templates/`.
    kubectl get pods -n keycloak
    ```
 
-   - Look for Keycloak and PostgreSQL pods in a “Running” state.
+   - Look for Keycloak and PostgreSQL pods in a "Running" state.
 
 2. **Ingress**:
 
@@ -343,11 +353,11 @@ Helm will render `Chart.yaml`, `values.yaml`, and everything under `templates/`.
    kubectl describe managedcertificate -n keycloak
    ```
 
-   - Wait for “Active” before HTTPS is fully functional.
+   - Wait for "Active" before HTTPS is fully functional.
 
 4. **Browser test**:
    - Visit `https://keycloak.mydomain.com` (or whichever domain you set).
-   - You should see Keycloak&apos;s login screen.
+   - You should see Keycloak's login screen.
 
 ---
 
@@ -361,7 +371,7 @@ Helm will render `Chart.yaml`, `values.yaml`, and everything under `templates/`.
   ```
   - Check for issues like incorrect database credentials or insufficient memory.
 - **Argo CD errors**
-  - Inspect the “Events” or “Application” details in the Argo CD UI.
+  - Inspect the "Events" or "Application" details in the Argo CD UI.
   - Make sure your `repoURL`, `path`, and `Chart.yaml` references are correct.
 - **Ingress not resolving**
   - Confirm your domain DNS points to the Ingress external IP.
@@ -378,4 +388,4 @@ Helm will render `Chart.yaml`, `values.yaml`, and everything under `templates/`.
 3. **TLS**
    - Use GKE-managed certificates externally and auto-generated self-signed certs internally to ensure end-to-end encryption.
 4. **Argo CD prune & self-heal**
-   - Test changes in a staging environment first; these features can remove resources or revert manual changes unexpectedly if you&apos;re not prepared.
+   - Test changes in a staging environment first; these features can remove resources or revert manual changes unexpectedly if you're not prepared.

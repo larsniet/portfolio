@@ -2,6 +2,7 @@ import matter from "gray-matter";
 import path from "path";
 import fs from "fs/promises";
 import { compileMDX } from "next-mdx-remote/rsc";
+import { mdxComponents } from "app/components/mdx-remote-components";
 
 export type Metadata = {
   title: string;
@@ -35,14 +36,26 @@ export async function getPost(slug: string) {
 
   try {
     const fileContents = await fs.readFile(fullPath, "utf8");
-    const { data: metadata, content: rawContent } = matter(fileContents);
+    const { data: frontMatter, content: rawContent } = matter(fileContents);
 
     const { content } = await compileMDX({
       source: rawContent,
-      options: { parseFrontmatter: true },
+      components: mdxComponents,
+      options: {
+        parseFrontmatter: true,
+        mdxOptions: {
+          remarkPlugins: [],
+          rehypePlugins: [],
+          format: "mdx",
+        },
+      },
     });
 
-    return { metadata, content, slug };
+    return {
+      metadata: frontMatter as Metadata,
+      content,
+      slug,
+    };
   } catch (error) {
     console.error(`Error reading MDX file: ${fullPath}`, error);
     return null;
