@@ -1,57 +1,44 @@
-import fs from "fs/promises";
+import matter from "gray-matter";
 import path from "path";
-
-type Metadata = {
+import fs from "fs/promises";
+export type Metadata = {
   title: string;
   publishedAt: string;
   summary: string;
   image?: string;
 };
 
-function parseFrontmatter(fileContent: string) {
-  let frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-  let match = frontmatterRegex.exec(fileContent);
-  let frontMatterBlock = match![1];
-  let content = fileContent.replace(frontmatterRegex, "").trim();
-  let frontMatterLines = frontMatterBlock.trim().split("\n");
-  let metadata: Partial<Metadata> = {};
+export async function getPosts() {
+  const postsDirectory = path.join(process.cwd(), "app/journey/posts");
+  const files = await fs.readdir(postsDirectory);
 
-  frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(": ");
-    let value = valueArr.join(": ").trim();
-    value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value;
-  });
+  const posts = await Promise.all(
+    files
+      .filter((file) => file.endsWith(".mdx"))
+      .map(async (file) => {
+        const slug = file.replace(/\.mdx$/, "");
+        const post = await getPost(slug);
+        return post;
+      })
+  );
 
-  return { metadata: metadata as Metadata, content };
+  return posts.filter(
+    (post): post is NonNullable<typeof post> => post !== null
+  );
 }
 
-async function getMDXFiles(dir: string) {
-  const files = await fs.readdir(dir);
-  return files.filter((file) => path.extname(file) === ".mdx");
-}
+export async function getPost(slug: string) {
+  const postsDirectory = path.join(process.cwd(), "app/journey/posts");
+  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
 
-async function readMDXFile(filePath: string) {
-  const rawContent = await fs.readFile(filePath, "utf-8");
-  return parseFrontmatter(rawContent);
-}
-
-async function getMDXData(dir: string) {
-  const mdxFiles = await getMDXFiles(dir);
-  const postsPromises = mdxFiles.map(async (file) => {
-    const { metadata, content } = await readMDXFile(path.join(dir, file));
-    const slug = path.basename(file, path.extname(file));
-    return {
-      metadata,
-      slug,
-      content,
-    };
-  });
-  return Promise.all(postsPromises);
-}
-
-export async function getJourneyPosts() {
-  return getMDXData(path.join(process.cwd(), "app", "journey", "posts"));
+  try {
+    const fileContents = await fs.readFile(fullPath, "utf8");
+    const { data: metadata, content } = matter(fileContents);
+    return { metadata, content, slug };
+  } catch (error) {
+    console.error(`Error reading MDX file: ${fullPath}`, error);
+    return null;
+  }
 }
 
 export function formatDate(date: string, includeRelative = false) {

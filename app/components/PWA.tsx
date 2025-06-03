@@ -22,46 +22,82 @@ function PushNotificationManager() {
     null
   );
   const [message, setMessage] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
       setIsSupported(true);
-      registerServiceWorker();
+      registerServiceWorker().catch((err) => {
+        console.error("Service worker registration failed:", err);
+        setError(
+          "Failed to register service worker. Please refresh the page and try again."
+        );
+      });
     }
   }, []);
 
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register("/sw.js", {
-      scope: "/",
-      updateViaCache: "none",
-    });
-    const sub = await registration.pushManager.getSubscription();
-    setSubscription(sub);
+    try {
+      const registration = await navigator.serviceWorker.register("/sw.js", {
+        scope: "/",
+        updateViaCache: "none",
+      });
+
+      // Wait for the service worker to be ready
+      await navigator.serviceWorker.ready;
+
+      const sub = await registration.pushManager.getSubscription();
+      setSubscription(sub);
+      setError(null);
+    } catch (err) {
+      console.error("Service worker registration error:", err);
+      throw err;
+    }
   }
 
   async function subscribeToPush() {
-    const registration = await navigator.serviceWorker.ready;
-    const sub = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
-      ),
-    });
-    setSubscription(sub);
-    const serializedSub = JSON.parse(JSON.stringify(sub));
-    await subscribeUser(serializedSub);
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
+          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+        ),
+      });
+      setSubscription(sub);
+      const serializedSub = JSON.parse(JSON.stringify(sub));
+      await subscribeUser(serializedSub);
+      setError(null);
+    } catch (err) {
+      console.error("Push subscription error:", err);
+      setError("Failed to subscribe to push notifications. Please try again.");
+    }
   }
 
   async function unsubscribeFromPush() {
-    await subscription?.unsubscribe();
-    setSubscription(null);
-    await unsubscribeUser();
+    try {
+      await subscription?.unsubscribe();
+      setSubscription(null);
+      await unsubscribeUser();
+      setError(null);
+    } catch (err) {
+      console.error("Push unsubscription error:", err);
+      setError(
+        "Failed to unsubscribe from push notifications. Please try again."
+      );
+    }
   }
 
   async function sendTestNotification() {
-    if (subscription) {
-      await sendNotification(message);
-      setMessage("");
+    try {
+      if (subscription) {
+        await sendNotification(message);
+        setMessage("");
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Send notification error:", err);
+      setError("Failed to send test notification. Please try again.");
     }
   }
 
@@ -72,6 +108,7 @@ function PushNotificationManager() {
   return (
     <div>
       <h3>Push Notifications</h3>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       {subscription ? (
         <>
           <p>You are subscribed to push notifications.</p>

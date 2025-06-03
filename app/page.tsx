@@ -2,7 +2,7 @@ import { JourneyPosts } from "app/components/posts";
 import Badge from "app/components/badge";
 import Link from "next/link";
 import Image from "next/image";
-import { getJourneyPosts } from "./journey/utils";
+import { getPosts } from "./journey/utils";
 
 export const metadata = {
   description:
@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  let posts = await getJourneyPosts();
+  let posts = await getPosts();
 
   return (
     <section>

@@ -1,12 +1,13 @@
 import { JourneyPosts } from "app/components/posts";
-import { getJourneyPosts } from "app/journey/utils";
+import { getPosts } from "app/journey/utils";
+
 export const metadata = {
   title: "Journey",
   description: "Read about the latest developments in my programming journey.",
 };
 
 export default async function Page() {
-  let posts = await getJourneyPosts();
+  let posts = await getPosts();
 
   return (
     <section>

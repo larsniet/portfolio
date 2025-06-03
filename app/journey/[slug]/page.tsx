@@ -1,85 +1,63 @@
 import { notFound } from "next/navigation";
-import { CustomMDX } from "app/components/mdx";
-import { formatDate, getJourneyPosts } from "app/journey/utils";
+import { formatDate } from "app/journey/utils";
 import { baseUrl } from "app/sitemap";
+import { CustomMDX } from "app/components/mdx";
+import { getPost, getPosts } from "app/journey/utils";
+
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 type Props = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<any>;
+  searchParams: Promise<any>;
 };
 
 export async function generateStaticParams() {
-  try {
-    const posts = await getJourneyPosts();
-    return posts.map((post) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params:", error);
-    return [];
-  }
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: Props) {
-  try {
-    const posts = await getJourneyPosts();
-    const { slug } = await params;
-    const post = posts.find((post) => post.slug === slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
 
-    if (!post) {
-      return {
-        title: "Post Not Found",
-        description: "The requested post could not be found.",
-      };
-    }
-
-    const {
-      title,
-      publishedAt: publishedTime,
-      summary: description,
-      image,
-    } = post.metadata;
-
-    const ogImage = image
-      ? image
-      : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
-
+  if (!post) {
     return {
-      title,
-      description,
-      openGraph: {
-        title,
-        description,
-        type: "article",
-        publishedTime,
-        url: `${baseUrl}/journey/${post.slug}`,
-        images: [
-          {
-            url: ogImage,
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title,
-        description,
-        images: [ogImage],
-      },
-    };
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Error",
-      description: "An error occurred while loading the post.",
+      title: "Post Not Found",
+      description: "The requested post could not be found.",
     };
   }
+
+  const ogImage = post.metadata.image
+    ? post.metadata.image
+    : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`;
+
+  return {
+    title: post.metadata.title,
+    description: post.metadata.summary,
+    openGraph: {
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      type: "article",
+      publishedTime: post.metadata.publishedAt,
+      url: `${baseUrl}/journey/${slug}`,
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function Journey({ params }: Props) {
   try {
-    const posts = await getJourneyPosts();
     const { slug } = await params;
-    const post = posts.find((post) => post.slug === slug);
+    const post = await getPost(slug);
 
     if (!post) {
       notFound();
@@ -100,8 +78,10 @@ export default async function Journey({ params }: Props) {
               description: post.metadata.summary,
               image: post.metadata.image
                 ? `${baseUrl}${post.metadata.image}`
-                : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-              url: `${baseUrl}/journey/${post.slug}`,
+                : `${baseUrl}/og?title=${encodeURIComponent(
+                    post.metadata.title
+                  )}`,
+              url: `${baseUrl}/journey/${slug}`,
               author: {
                 "@type": "Person",
                 name: "Lars van der Niet",
@@ -117,13 +97,13 @@ export default async function Journey({ params }: Props) {
             {formatDate(post.metadata.publishedAt)}
           </p>
         </div>
-        <article className="prose">
-          <CustomMDX source={post.content} />
+        <article className="prose prose-quoteless prose-neutral dark:prose-invert">
+          <CustomMDX>{post.content}</CustomMDX>
         </article>
       </section>
     );
   } catch (error) {
-    console.error("Error rendering post:", error);
-    notFound();
+    console.error("[Journey] Error rendering post:", error);
+    throw error;
   }
 }

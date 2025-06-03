@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { MDXRemote } from "next-mdx-remote/rsc";
+import { MDXProvider } from "@mdx-js/react";
 import { highlight } from "sugar-high";
 import React from "react";
 
@@ -86,7 +88,7 @@ function createHeading(level) {
   return Heading;
 }
 
-let components = {
+const components = {
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -99,11 +101,20 @@ let components = {
   Table,
 };
 
-export function CustomMDX(props) {
+export interface CustomMDXProps {
+  children: React.ReactNode;
+  components?: Record<string, React.ComponentType<any>>;
+}
+
+export function CustomMDX({
+  children,
+  components: additionalComponents,
+}: CustomMDXProps) {
   return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-    />
+    <MDXProvider
+      components={{ ...components, ...(additionalComponents || {}) }}
+    >
+      {children}
+    </MDXProvider>
   );
 }

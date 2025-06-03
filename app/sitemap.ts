@@ -1,10 +1,10 @@
-import { getJourneyPosts } from "app/journey/utils";
+import { getPosts } from "app/journey/utils";
 
 export const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://larsniet.nl";
 
 export default async function sitemap() {
-  const journeys = (await getJourneyPosts()).map((post) => ({
+  const journeys = (await getPosts()).map((post) => ({
     url: `${baseUrl}/journey/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));
