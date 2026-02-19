@@ -1,78 +1,86 @@
-# Lars van der Niet
+# Lars van der Niet Portfolio
 
-Welcome to my personal website! This project is built with Next.js and showcases my skills as a full stack developer and tech enthusiast. Below you'll find all the necessary information to get started with the project.
+Personal site built with Next.js App Router, MDX-based writing, and a small JSON feed.
 
-## Table of Contents
+## Stack
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Environment Variables](#environment-variables)
-- [Features](#features)
-- [License](#license)
+- Next.js `16`
+- React `19`
+- TypeScript (strict mode)
+- Tailwind CSS `4`
+- MDX via `@next/mdx` + `next-mdx-remote`
+- `pnpm` (locked via `packageManager` in `package.json`)
 
-## Installation
+## Getting Started
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/larsniet/portfolio.git
-   ```
-
-2. Change into the project directory:
-   ```bash
-   cd portfolio
-   ```
-
-3. Install the dependencies:
-   ```bash
-   pnpm install
-   ```
-
-## Usage
-
-### Development
-
-To run the project in development mode, use the following command:
 ```bash
+pnpm install
 pnpm dev
 ```
 
-This will start the development server at `http://localhost:3000`.
+App runs on `http://localhost:3000`.
 
-### Build
+Production:
 
-To build the project for production, use the following command:
 ```bash
 pnpm build
-```
-
-### Start
-
-To start the project in production mode, use the following command:
-```bash
 pnpm start
 ```
 
+## Scripts
+
+- `pnpm dev` - run local dev server with Turbopack
+- `pnpm build` - production build
+- `pnpm start` - run production server
+
 ## Environment Variables
 
-The project uses a single environment variable:
+- `NEXT_PUBLIC_BASE_URL`
+  - Used for canonical URLs in sitemap, robots, and social metadata.
+  - Defaults to `https://larsniet.com` when unset.
 
-- `NEXT_PUBLIC_BASE_URL`: The base URL for the application.
-
-To set up the environment variable, create a `.env.local` file in the root of the project and add the following line:
+Example `.env.local`:
 
 ```env
-NEXT_PUBLIC_BASE_URL=https://your-base-url.com
+NEXT_PUBLIC_BASE_URL=https://your-domain.com
 ```
 
-## Features
+## Project Structure
 
-- **Dynamically Generated Articles**: Articles are generated dynamically, using a list of articles written in MDX.
-- **SEO**: Sitemap and OpenGraph support for better SEO.
+- `app/page.tsx` - homepage
+- `app/journey/page.tsx` - list of journey posts
+- `app/journey/[slug]/page.tsx` - individual MDX post route (static params + revalidate)
+- `app/journey/posts/*.mdx` - post content
+- `app/journey/utils.ts` - post loading, MDX compile, date formatting
+- `app/components/mdx-remote-components.tsx` - MDX render components
+- `app/api/projects/route.ts` - JSON feed endpoint used in footer (`/api/projects`)
+- `app/sitemap.ts`, `app/robots.ts`, `app/og/route.tsx` - SEO/metadata routes
+- `app/manifest.ts` + `ServiceWorkerRegister` - PWA basics
+
+## Writing Posts
+
+Add a new file in `app/journey/posts/` with `.mdx` extension and frontmatter:
+
+```mdx
+---
+title: Your Post Title
+publishedAt: 2026-02-19
+summary: Short summary for list and metadata.
+image: /images/your-image.jpg
+featured: true
+---
+```
+
+Posts are read from the filesystem, compiled to React, sorted by `publishedAt`, and rendered at `/journey/[slug]`.
+
+## Current Behavior
+
+- Generates metadata per post, including Open Graph and Twitter cards
+- Generates structured data (`BlogPosting`) on post pages
+- Exposes post feed JSON at `/api/projects`
+- Registers a service worker (`/sw.js`) on the client
+- Serves sitemap and robots from app routes
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
----
-
-Thank you for checking out my portfolio project! If you have any questions or feedback, feel free to open an issue or contact me directly.
+MIT. See `LICENSE`.
