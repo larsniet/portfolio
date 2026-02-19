@@ -1,0 +1,84 @@
+---
+title: "Image Renamer: Bringing order to your photo library"
+publishedAt: "2026-02-19"
+summary: "A Python tool that automatically renames image and video files based on their EXIF metadata, solving the chaos caused by cameras resetting their file numbering when SD cards are reformatted."
+featured: false
+---
+
+# Image Renamer: Bringing order to your photo library
+
+If you've ever transferred photos from a digital camera or phone, you've likely encountered files named something like `IMG_0001.jpg` — and then another batch starting at `IMG_0001.jpg` again after reformatting the card. Sorting through thousands of cryptically named files to find a specific photo is a frustrating experience. That's exactly the problem Image Renamer was built to solve.
+
+## The problem
+
+Digital cameras reset their file numbering every time an SD card is formatted. After just a few trips, you can end up with dozens of files sharing the same name, scattered across different folders. Sorting by name becomes useless, and sorting by date only works if your file system preserved the original timestamps — which it often doesn't when copying between devices.
+
+The actual creation date, however, is almost always preserved inside the file itself as EXIF metadata. Every modern camera embeds the exact date and time a photo was taken directly into the file. Image Renamer reads that data and uses it to give every file a meaningful, chronologically sortable name.
+
+## How it works
+
+The core of the application is straightforward. For each image file in a folder, it:
+
+1. Reads the `DateTimeOriginal` field from the file's EXIF metadata using Pillow
+2. Falls back to the file's system creation timestamp if no EXIF data is present
+3. Generates a new filename using a configurable `strftime` format (default: `2023-04-25_14-30-15.jpg`)
+4. Handles collisions by appending a counter suffix, so no files are ever silently overwritten
+5. Optionally creates a backup of all original files before renaming
+
+The result is a folder where every file has a unique, human-readable name that sorts perfectly in any file explorer.
+
+## Features
+
+- Supports JPG, JPEG, PNG, NEF, CR2, and ARW image formats
+- Optional video support (MP4, MOV, AVI, MKV, and more)
+- Customizable filename format using standard Python `strftime` codes
+- Backup mode to keep originals safe
+- Duplicate detection — skip or remove files taken at the exact same timestamp
+- Settings persistence, so your preferences are remembered between sessions
+
+## Two ways to use it
+
+### GUI
+
+For anyone who prefers a visual interface, the app ships with a PyQt6-based GUI. You can select your folder, pick a date format from the presets or define your own, toggle backup and video options, and watch the rename operation complete in real time with a live log.
+
+### CLI
+
+For scripting or bulk operations, the command-line interface covers all the same functionality:
+
+```bash
+# Basic usage
+imagerenamer /path/to/photos
+
+# With backup
+imagerenamer /path/to/photos --backup
+
+# Include video files
+imagerenamer /path/to/photos --include-videos
+
+# Custom filename format
+imagerenamer /path/to/photos --format "%Y%m%d_%H%M%S"
+
+# Remove duplicates instead of renaming with a suffix
+imagerenamer /path/to/photos --remove-duplicates
+```
+
+## Distribution
+
+One of the goals was to make the tool accessible to non-technical users. The project uses GitHub Actions to automatically build platform-native executables on every release — a standalone `.exe` for Windows, a `.app` bundle for macOS, and a binary for Linux. No Python installation required. Anyone can download it and run it immediately.
+
+For developers, it's also available on PyPI:
+
+```bash
+pip install modern-image-renamer
+```
+
+## Lessons learned
+
+Building cross-platform GUI applications in Python comes with some quirks. PyInstaller, which packages the app into standalone executables, often triggers false positives in antivirus software on Windows — a common frustration for developers distributing Python apps. The solution was to document the issue clearly and provide alternative installation paths for users who encounter it.
+
+Setting up the CI/CD pipeline with GitHub Actions also taught me a lot about matrix builds — running the same build job in parallel on Windows, macOS, and Linux runners and producing platform-specific artifacts from a single workflow.
+
+---
+
+[View on GitHub](https://github.com/larsniet/image-renamer) · [Download latest release](https://github.com/larsniet/image-renamer/releases/latest)
