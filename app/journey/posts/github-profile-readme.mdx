@@ -1,0 +1,52 @@
+---
+title: "A self-updating GitHub profile README"
+publishedAt: "2026-02-19"
+summary: "My GitHub profile README stays in sync with my portfolio automatically. A GitHub Actions workflow fetches the latest projects from my website every hour and rewrites the README — no manual updates needed."
+featured: false
+---
+
+# A self-updating GitHub profile README
+
+GitHub has a hidden feature: if you create a repository with the same name as your username, its README is displayed directly on your profile page. It's essentially a personal landing page, but in markdown. The catch is that it gets stale fast — every time you finish a new project, you have to remember to update it manually.
+
+I didn't want to do that. So I automated it.
+
+## How it works
+
+The portfolio website already exposes all my projects through an API endpoint at `/api/projects`. Each project has a title, description, URL, and a `featured` flag. That's all the data needed to keep the README up to date.
+
+A GitHub Actions workflow runs on a schedule — every hour — and does the following:
+
+1. **Fetches** the latest projects from `larsniet.com/api/projects`
+2. **Filters** them using `jq`: featured projects go into one list, everything else into another
+3. **Injects** the generated content into the README between a pair of HTML comment markers using `awk`
+4. **Commits and pushes** the result if anything changed
+
+```yaml
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+```
+
+The `workflow_dispatch` trigger is useful for forcing an immediate update after publishing a new post, without waiting for the next scheduled run.
+
+## The marker system
+
+The README uses HTML comment markers to define the zones that get replaced:
+
+```markdown
+<!-- FEATURED-PROJECTS:START -->
+- [Project title](url) — description
+<!-- FEATURED-PROJECTS:END -->
+```
+
+The `awk` script scans the file line by line, and when it hits a `START` marker it prints the new content and sets a skip flag. Everything between the markers gets replaced. Lines outside the markers are passed through untouched, so the rest of the README stays exactly as written.
+
+## The result
+
+Whenever I publish a new post on my portfolio, the GitHub profile updates itself within the hour. Featured projects appear at the top, the rest follow below — all without me touching the profile repository.
+
+It's a small thing, but it means the profile always reflects the actual current state of my work rather than whatever I last remembered to write down.
+
+[View the repository](https://github.com/larsniet/larsniet)
