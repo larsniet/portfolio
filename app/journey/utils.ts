@@ -2,13 +2,14 @@ import matter from "gray-matter";
 import path from "path";
 import fs from "fs/promises";
 import { compileMDX } from "next-mdx-remote/rsc";
-import { mdxComponents } from "app/components/mdx-remote-components";
+import { mdxComponents } from "@/app/components/mdx-remote-components";
 
 export type Metadata = {
   title: string;
   publishedAt: string;
   summary: string;
   image?: string;
+  featured?: boolean;
 };
 
 export async function getPosts() {

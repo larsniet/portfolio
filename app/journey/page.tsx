@@ -1,5 +1,5 @@
-import { JourneyPosts } from "app/components/posts";
-import { getPosts } from "app/journey/utils";
+import { JourneyPosts } from "@/app/components/posts";
+import { getPosts } from "@/app/journey/utils";
 
 export const metadata = {
   title: "Journey",

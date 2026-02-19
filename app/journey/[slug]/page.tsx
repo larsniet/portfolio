@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
-import { formatDate } from "app/journey/utils";
-import { baseUrl } from "app/sitemap";
-import { getPost, getPosts } from "app/journey/utils";
+import { formatDate, getPost, getPosts } from "@/app/journey/utils";
+import { baseUrl } from "@/app/sitemap";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;

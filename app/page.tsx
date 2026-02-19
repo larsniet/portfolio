@@ -1,8 +1,9 @@
-import { JourneyPosts } from "app/components/posts";
-import Badge from "app/components/badge";
 import Link from "next/link";
 import Image from "next/image";
-import { getPosts } from "./journey/utils";
+
+import { JourneyPosts } from "@/app/components/posts";
+import Badge from "@/app/components/badge";
+import { getPosts } from "@/app/journey/utils";
 
 export const metadata = {
   description:

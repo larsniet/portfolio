@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { formatDate } from "app/journey/utils";
+import { formatDate } from "@/app/journey/utils";
 
-export function JourneyPosts({ posts }) {
+export function JourneyPosts({ posts }: { posts: { slug: string; metadata: { title: string; publishedAt: string } }[] }) {
   return (
     <div>
       {posts

@@ -1,3 +1,5 @@
+import React from "react";
+
 interface BadgeProps {
   icon?: React.ReactNode;
   text: string;

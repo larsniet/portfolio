@@ -6,7 +6,16 @@ import { MDXProvider } from "@mdx-js/react";
 import { highlight } from "sugar-high";
 import React from "react";
 
-function Table({ data }) {
+type TableData = {
+  headers: React.ReactNode[];
+  rows: React.ReactNode[][];
+};
+
+type TableProps = {
+  data: TableData;
+};
+
+function Table({ data }: TableProps) {
   let headers = data.headers.map((header, index) => (
     <th key={index}>{header}</th>
   ));
@@ -28,34 +37,56 @@ function Table({ data }) {
   );
 }
 
-function CustomLink(props) {
-  let href = props.href;
+type CustomLinkProps = React.ComponentProps<"a"> & {
+  href: string;
+};
+
+function CustomLink({ href, ...props }: CustomLinkProps) {
+  const children = props.children;
 
   if (href.startsWith("/")) {
     return (
       <Link href={href} {...props}>
-        {props.children}
+        {children}
       </Link>
     );
   }
 
   if (href.startsWith("#")) {
-    return <a {...props} />;
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
   }
 
-  return <a target="_blank" rel="noopener noreferrer" {...props} />;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+      {children}
+    </a>
+  );
 }
 
-function RoundedImage(props) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />;
+function RoundedImage(props: React.ComponentProps<typeof Image>) {
+  return <Image className="rounded-lg" {...props} />;
 }
 
-function Code({ children, ...props }) {
-  let codeHTML = highlight(children);
+type CodeProps = React.ComponentProps<"code"> & {
+  children: React.ReactNode;
+};
+
+function Code({ children, ...props }: CodeProps) {
+  const text =
+    typeof children === "string"
+      ? children
+      : Array.isArray(children)
+      ? children.join("")
+      : String(children ?? "");
+  let codeHTML = highlight(text);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
 
-function Details({ children }) {
+function Details({ children }: { children: React.ReactNode }) {
   return (
     <details className="my-4 rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 [&_summary]:cursor-pointer [&_summary]:font-medium">
       {children}
@@ -63,11 +94,24 @@ function Details({ children }) {
   );
 }
 
-function Summary({ children }) {
+function Summary({ children }: { children: React.ReactNode }) {
   return <summary className="text-lg font-semibold">{children}</summary>;
 }
 
-function slugify(str) {
+function extractText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(extractText).join("");
+  }
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
+    return extractText(node.props.children);
+  }
+  return "";
+}
+
+function slugify(str: string) {
   return str
     .toString()
     .toLowerCase()
@@ -78,9 +122,9 @@ function slugify(str) {
     .replace(/\-\-+/g, "-"); // Replace multiple - with single -
 }
 
-function createHeading(level) {
-  const Heading = ({ children }) => {
-    let slug = slugify(children);
+function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
+  const Heading = ({ children }: { children: React.ReactNode }) => {
+    const slug = slugify(extractText(children));
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -118,11 +162,19 @@ const components = {
       <hr className="border-t border-neutral-200 dark:border-neutral-800" />
     </div>
   ),
-  ul: ({ children }) => <ul className="my-4 ml-6 list-disc">{children}</ul>,
-  ol: ({ children }) => <ol className="my-4 ml-6 list-decimal">{children}</ol>,
-  li: ({ children }) => <li className="my-2">{children}</li>,
-  p: ({ children }) => <p className="my-4 leading-7">{children}</p>,
-  blockquote: ({ children }) => (
+  ul: ({ children }: { children: React.ReactNode }) => (
+    <ul className="my-4 ml-6 list-disc">{children}</ul>
+  ),
+  ol: ({ children }: { children: React.ReactNode }) => (
+    <ol className="my-4 ml-6 list-decimal">{children}</ol>
+  ),
+  li: ({ children }: { children: React.ReactNode }) => (
+    <li className="my-2">{children}</li>
+  ),
+  p: ({ children }: { children: React.ReactNode }) => (
+    <p className="my-4 leading-7">{children}</p>
+  ),
+  blockquote: ({ children }: { children: React.ReactNode }) => (
     <blockquote className="my-4 border-l-4 border-neutral-200 dark:border-neutral-800 pl-4 italic">
       {children}
     </blockquote>
