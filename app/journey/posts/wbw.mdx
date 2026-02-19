@@ -1,0 +1,47 @@
+---
+title: "WBW: A Telegram bot that watches web pages for you"
+publishedAt: "2025-10-20"
+summary: "A Dockerized Python bot that monitors any web page for element changes and sends you a Telegram message the moment something updates. Supports both static HTML parsing and full JavaScript rendering for dynamic content."
+featured: false
+---
+
+# WBW: A Telegram bot that watches web pages for you
+
+Some pages don't have notifications. Stock levels, ticket availability, appointment slots — you just have to keep refreshing and hope you catch it. WBW automates that by monitoring a page's content via CSS selectors and sending you a Telegram message the moment the text changes or an element disappears.
+
+## How it works
+
+You start a conversation with the bot, send it a URL and one or more CSS selectors, and it begins polling every 60 seconds. When the selected element's text changes, you get a message. When your 12-hour session ends, it tells you that too.
+
+The monitoring loop runs in two modes depending on the target page:
+
+- **Fast mode** — fetches static HTML with Cloudflare bypass via cloudscraper. Lightweight and quick.
+- **JavaScript mode** — spins up a headless Chrome instance via Zendriver for pages that load their content dynamically. Slower, but handles anything a real browser can.
+
+You set the mode upfront with an environment variable. If a site requires JavaScript execution to render the element you're watching, you enable it globally.
+
+## Implementation
+
+The bot is built with Python and runs as a single Docker container. FastAPI serves a health check endpoint on port 8080, and the bot polling loop runs concurrently in the same event loop using asyncio — no threading, no separate processes.
+
+Sessions are stored in a SQLite database persisted via a Docker volume, so the bot survives restarts without losing active monitors. Up to 5 users can monitor simultaneously; sessions expire automatically after 12 hours.
+
+The retry logic handles flaky pages gracefully — if an element goes missing, the monitor retries up to three times before notifying you, avoiding false alerts for temporary page states or transient load failures. Network errors get exponential backoff before the bot gives up and reports the issue.
+
+## Running it
+
+The whole setup is a single `docker-compose up`:
+
+```bash
+# .env
+TELEGRAM_BOT_TOKEN=your_token_here
+USE_JAVASCRIPT=true  # or false for static-only mode
+```
+
+```bash
+docker-compose up --build
+```
+
+No other dependencies. The Dockerfile handles Chrome installation for JavaScript mode.
+
+[View on GitHub](https://github.com/larsniet/wbw)

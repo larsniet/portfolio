@@ -1,0 +1,52 @@
+---
+title: "Queens: Building a constraint-satisfaction puzzle game"
+publishedAt: "2025-07-08"
+summary: "A browser-based puzzle game inspired by the N-Queens problem. Place one crown in each row, column, and color region without any two crowns touching — then build the engine that generates uniquely solvable puzzles every time."
+featured: false
+---
+
+# Queens: Building a constraint-satisfaction puzzle game
+
+The N-Queens problem is a classic: place N queens on an N×N chessboard so no two attack each other. Queens is a variation — instead of chess attack rules, the constraint is simpler and more visual. Crowns can't touch at all, not even diagonally, and the board is divided into colored regions that each need exactly one crown. The result is a puzzle that's easy to understand but requires genuine logical deduction to solve.
+
+## The rules
+
+- Place exactly one crown in each row, column, and color region
+- No two crowns can touch, including diagonally
+- Tap once to mark a cell as impossible (×), tap again to place a crown
+
+That's the whole game. The complexity comes from the interaction between the region constraint and the no-touching rule — eliminating one cell can cascade through the board.
+
+## The interesting part: puzzle generation
+
+Playing the game was the easy part. The hard part was building a generator that consistently produces puzzles that are:
+
+1. **Uniquely solvable** — exactly one valid placement of crowns exists
+2. **Logically deducible** — no guessing required, every step follows from what's already known
+3. **Visually varied** — different layouts between puzzles, no two feeling the same
+
+The generator follows a five-step pipeline:
+
+1. Generate a valid N-Queens solution with the no-adjacency constraint applied
+2. Grow colored regions around each queen's position using varied growth strategies (horizontal, vertical, circular)
+3. Validate the region layout — no mono-color rows or columns, no region dominating more than 40% of the board, all regions orthogonally connected
+4. Generate initial clues (pre-placed crowns and crosses) that give logical starting points
+5. Verify uniqueness with a backtracking solver and confirm the DeductionEngine can solve it without guessing
+
+If any step fails, the generator retries — up to 100 times — rather than relaxing constraints. The result passes a 49-test validation suite with a 90%+ success rate across grid sizes from 4×4 to 7×7.
+
+## The DeductionEngine
+
+The solver is what made the "logically deducible" requirement non-trivial. It implements the same reasoning a human player would use:
+
+- If a row has only one cell left in a region, a crown must go there
+- If placing a crown in a cell would leave another region with no valid cells, it can be eliminated
+- If all remaining valid cells in a region share a row or column, that row or column can be cleared for all other regions
+
+Puzzles are only accepted if the engine can solve them from start to finish using these rules, with no backtracking or guessing.
+
+## Tech stack
+
+Built with Next.js and TypeScript. The game state, puzzle generation, and deduction logic all live in `src/game/` as pure TypeScript classes — no framework dependencies — making them straightforward to test independently from the UI. The test suite covers all generator requirements and the deduction rules.
+
+[View on GitHub](https://github.com/larsniet/queens)

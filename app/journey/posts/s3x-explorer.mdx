@@ -1,0 +1,59 @@
+---
+title: "S3X Explorer: A VS Code extension for S3-compatible storage"
+publishedAt: "2025-07-31"
+summary: "A VS Code extension for browsing and managing S3-compatible storage right from the editor. Built with first-class support for Cloudflare R2, AWS S3, and MinIO — with inline editing, bulk operations, presigned URLs, and multipart uploads."
+featured: false
+---
+
+# S3X Explorer: A VS Code extension for S3-compatible storage
+
+If you work with object storage regularly, switching between your editor and a web console to manage files gets old quickly. S3X Explorer brings the file management directly into VS Code — browse buckets, open and edit objects inline, upload and download files, all without leaving the editor.
+
+## Why I built it
+
+I use Cloudflare R2 as my primary object storage. It's S3-compatible and cost-effective, but the dashboard is slow for quick operations. I wanted something that felt like a local file explorer — tree navigation, click to open, save to sync — but backed by an S3 API. The existing VS Code extensions I tried either didn't support R2's path-style URL requirement or were abandoned. So I built one.
+
+## Features
+
+The extension integrates into the VS Code Activity Bar as a tree view that mirrors your bucket structure. From there you can:
+
+- **Browse** buckets and folders with pagination for large buckets
+- **Open objects** directly in the VS Code editor — text files open as editable buffers that sync back on save
+- **Upload** files via right-click or drag and drop, with multipart handling for files over 100MB
+- **Download, rename, copy, move, delete** — the full set of CRUD operations via context menus
+- **Bulk operations** — multi-select with Ctrl/Cmd+click for batch delete, copy, or move
+- **Generate presigned URLs** with configurable expiry (15 minutes to 7 days), copied straight to clipboard
+- **Search** objects by prefix (server-side) or content (client-side)
+- **View object metadata** — size, content type, storage class, custom headers
+
+## Cloudflare R2 support
+
+R2 requires path-style URLs and works with any region identifier. The extension handles this out of the box with a `forcePathStyle` setting. Configuring it takes about 30 seconds:
+
+```jsonc
+{
+  "s3x.endpointUrl": "https://<account-id>.auto.r2.cloudflarestorage.com",
+  "s3x.accessKeyId": "your-access-key-id",
+  "s3x.secretAccessKey": "your-secret-access-key",
+  "s3x.forcePathStyle": true,
+  "s3x.region": "us-east-1"
+}
+```
+
+The same configuration works for AWS S3, MinIO, and other S3-compatible services — just swap the endpoint URL.
+
+## How it's built
+
+The extension is written in TypeScript and structured around VS Code's extension APIs:
+
+- **TreeDataProvider** — drives the bucket/folder/object tree view
+- **FileSystemProvider** — registers a custom `s3x://` URI scheme so VS Code can open and save S3 objects like local files
+- **S3 client layer** — wraps the AWS SDK with caching, retry logic, and rate limiting
+
+The inline editing flow works by mounting a virtual filesystem. When you click an object, VS Code opens it via the `s3x://` provider, which fetches the content from S3. On save, the provider pushes the updated content back. To the user it feels identical to editing a local file.
+
+## Published to two marketplaces
+
+The extension is available on both the VS Code Marketplace and Open VSX (for VS Code-compatible editors like VSCodium). Releases are automated via GitHub Actions — a single workflow publishes to both on every tagged release.
+
+[View on GitHub](https://github.com/larsniet/s3x-explorer)
