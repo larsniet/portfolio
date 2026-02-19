@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { formatDate, getPost, getPosts } from "@/app/journey/utils";
 import { baseUrl } from "@/app/sitemap";
 
@@ -17,7 +18,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
 
@@ -35,6 +36,9 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: post.metadata.title,
     description: post.metadata.summary,
+    alternates: {
+      canonical: `/journey/${slug}`,
+    },
     openGraph: {
       title: post.metadata.title,
       description: post.metadata.summary,

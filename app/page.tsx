@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 
 import { JourneyPosts } from "@/app/components/posts";
 import Badge from "@/app/components/badge";
 import { getPosts } from "@/app/journey/utils";
 
-export const metadata = {
+export const metadata: Metadata = {
   description:
     "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default async function Page() {

@@ -12,6 +12,12 @@ import { baseUrl } from "./sitemap";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "/",
+    types: {
+      "application/rss+xml": `${baseUrl}/rss`,
+    },
+  },
   title: {
     default: "Lars van der Niet",
     template: "%s | Lars van der Niet",
