@@ -18,6 +18,10 @@ export default async function sitemap() {
       url: `${baseUrl}/journey`,
       lastModified: new Date(),
     },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+    },
     ...journeys,
   ];
 }

@@ -1,0 +1,163 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+type Post = { title: string; slug: string };
+
+export function SearchBar({ posts }: { posts: Post[] }) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered =
+    query.length > 0
+      ? posts.filter((p) =>
+          p.title.toLowerCase().includes(query.toLowerCase())
+        )
+      : [];
+
+  const isOpen = open && query.length > 0;
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.min(i + 1, filtered.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter" && activeIndex >= 0) {
+      navigate(filtered[activeIndex].slug);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+      setQuery("");
+      inputRef.current?.blur();
+    }
+  }
+
+  function navigate(slug: string) {
+    setQuery("");
+    setOpen(false);
+    setActiveIndex(-1);
+    router.push(`/journey/${slug}`);
+  }
+
+  function highlight(text: string) {
+    if (!query) return text;
+    const idx = text.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return text;
+    return (
+      <>
+        {text.slice(0, idx)}
+        <span className="font-medium text-black dark:text-white">
+          {text.slice(idx, idx + query.length)}
+        </span>
+        {text.slice(idx + query.length)}
+      </>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Input */}
+      <div className="relative flex items-center">
+        <svg
+          className="absolute left-2.5 size-3.5 text-neutral-400 dark:text-neutral-500 pointer-events-none"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+            setActiveIndex(-1);
+          }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={handleKeyDown}
+          placeholder="Search posts..."
+          className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-36 focus:w-52 transition-all duration-200"
+        />
+      </div>
+
+      {/* Dropdown */}
+      {isOpen && (
+        <div className="absolute right-0 mt-1.5 w-72 z-50 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-xl shadow-black/5 dark:shadow-black/40 overflow-hidden">
+          {filtered.length > 0 ? (
+            <>
+              <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-800">
+                <p className="text-xs text-neutral-400 dark:text-neutral-500 font-medium uppercase tracking-wider">
+                  Posts
+                </p>
+              </div>
+              <ul className="py-1 max-h-56 overflow-y-auto">
+                {filtered.map((post, i) => (
+                  <li
+                    key={post.slug}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    onClick={() => navigate(post.slug)}
+                    className={`flex items-center gap-2.5 px-3 py-2 cursor-pointer transition-colors ${
+                      i === activeIndex
+                        ? "bg-neutral-100 dark:bg-neutral-800/70"
+                        : ""
+                    }`}
+                  >
+                    <svg
+                      className="size-3.5 shrink-0 text-neutral-400 dark:text-neutral-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
+                      {highlight(post.title)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="px-3 py-6 text-center">
+              <p className="text-sm text-neutral-400 dark:text-neutral-500">
+                No posts found.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

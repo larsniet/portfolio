@@ -6,6 +6,20 @@ import { JourneyPosts } from "@/app/components/posts";
 import Badge from "@/app/components/badge";
 import { getPosts } from "@/app/journey/utils";
 
+import meeting from "@/assets/images/meeting.jpg";
+import balcony from "@/assets/images/balcony.jpg";
+import bikes from "@/assets/images/bikes.jpg";
+import laugh from "@/assets/images/laugh.jpg";
+import workdiscussion from "@/assets/images/workdiscussion.jpg";
+import workstation from "@/assets/images/workstation.jpg";
+
+import docker from "@/assets/images/docker.png";
+import adswag from "@/assets/images/adswag.png";
+import kubernetes from "@/assets/images/kubernetes.png";
+import nextjs from "@/assets/images/nextjs.png";
+import ansible from "@/assets/images/ansible.png";
+import agGrid from "@/assets/images/ag-grid.png";
+
 export const metadata: Metadata = {
   description:
     "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
@@ -14,11 +28,33 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Lars van der Niet",
+  jobTitle: "Full Stack Developer",
+  url: "https://larsniet.com",
+  email: "lvdnbusiness@gmail.com",
+  worksFor: {
+    "@type": "Organization",
+    name: "Adswag",
+    url: "https://adswag.nl",
+  },
+  sameAs: [
+    "http://linkedin.com/in/larsvanderniet",
+    "https://github.com/larsniet",
+  ],
+};
+
 export default async function Page() {
   let posts = await getPosts();
 
   return (
     <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
         Hi, I am Lars
         <span role="img" aria-label="Wave" className="ml-2">
@@ -37,12 +73,11 @@ export default async function Page() {
             text="Adswag"
             icon={
               <Image
-                src="/images/adswag.png"
+                src={adswag}
                 alt="Adswag company logo"
                 width={16}
                 height={16}
                 className="w-4 h-4"
-                priority
               />
             }
           />
@@ -54,65 +89,65 @@ export default async function Page() {
       <div className="grid grid-cols-2 grid-rows-4 sm:grid-rows-3 sm:grid-cols-3 gap-4 my-8">
         <div className="relative h-40">
           <Image
-            src="/images/meeting.jpg"
+            src={meeting}
             alt="Meeting at the office"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             priority
             fill
           />
         </div>
         <div className="relative sm:row-span-2 row-span-1">
           <Image
-            src="/images/balcony.jpg"
+            src={balcony}
             alt="Portrait of Lars on a balcony"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             priority
             fill
           />
         </div>
         <div className="relative">
           <Image
-            src="/images/bikes.jpg"
+            src={bikes}
             alt="Lars on a motorcycle"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             priority
             fill
           />
         </div>
         <div className="relative row-span-2">
           <Image
-            src="/images/laugh.jpg"
+            src={laugh}
             alt="Lars laughing"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             priority
             fill
           />
         </div>
         <div className="relative row-span-2">
           <Image
-            src="/images/workdiscussion.jpg"
+            src={workdiscussion}
             alt="Lars discussing work with a colleague"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             fill
           />
         </div>
         <div className="relative h-40">
           <Image
-            src="/images/workstation.jpg"
+            src={workstation}
             alt="Lars working at his desk"
             className="rounded-lg object-cover"
-            sizes="(max-width: 768px) 213px, 33vw"
-            fetchPriority="high"
+            sizes="(max-width: 640px) 50vw, 33vw"
+            quality={100}
             fill
           />
         </div>
@@ -134,7 +169,7 @@ export default async function Page() {
             text="Docker"
             icon={
               <Image
-                src="/images/docker.png"
+                src={docker}
                 alt="Docker logo"
                 width={20}
                 height={16}
@@ -153,7 +188,7 @@ export default async function Page() {
             text="Kubernetes"
             icon={
               <Image
-                src="/images/kubernetes.png"
+                src={kubernetes}
                 alt="Kubernetes logo"
                 width={16}
                 height={16}
@@ -172,7 +207,7 @@ export default async function Page() {
             text="NextJS"
             icon={
               <Image
-                src="/images/nextjs.png"
+                src={nextjs}
                 alt="NextJS logo"
                 width={16}
                 height={16}
@@ -191,7 +226,7 @@ export default async function Page() {
             text="Ansible"
             icon={
               <Image
-                src="/images/ansible.png"
+                src={ansible}
                 alt="Ansible logo"
                 width={16}
                 height={16}
@@ -210,7 +245,7 @@ export default async function Page() {
             text="Ag Grid"
             icon={
               <Image
-                src="/images/ag-grid.png"
+                src={agGrid}
                 alt="Ag-Grid logo"
                 width={16}
                 height={16}
