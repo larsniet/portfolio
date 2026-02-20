@@ -74,7 +74,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
   }
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative w-full md:w-auto">
       {/* Input */}
       <div className="relative flex items-center">
         <svg
@@ -102,13 +102,13 @@ export function SearchBar({ posts }: { posts: Post[] }) {
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder="Search posts..."
-          className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-36 focus:w-52 transition-all duration-200"
+          className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-full md:w-36 md:focus:w-52 transition-all duration-200"
         />
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-72 z-50 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-xl shadow-black/5 dark:shadow-black/40 overflow-hidden">
+        <div className="absolute left-0 right-0 md:left-auto md:right-0 md:w-72 mt-1.5 z-50 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-xl shadow-black/5 dark:shadow-black/40 overflow-hidden">
           {filtered.length > 0 ? (
             <>
               <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-800">

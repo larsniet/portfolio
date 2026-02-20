@@ -25,7 +25,7 @@ export async function Navbar() {
     <aside className="-ml-[8px] mb-16 tracking-tight">
       <div className="lg:sticky lg:top-20 relative z-10">
         <nav
-          className="flex flex-row items-center justify-between relative px-0 pb-0 fade md:relative"
+          className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between relative px-0 pb-0 fade"
           id="nav"
         >
           <div className="flex flex-row space-x-0">
