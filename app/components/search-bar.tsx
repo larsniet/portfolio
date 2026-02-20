@@ -102,7 +102,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder="Search posts..."
-          className="pl-8 pr-3 py-1.5 text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-full md:w-36 md:focus:w-52 transition-all duration-200"
+          className="pl-8 pr-3 py-1.5 text-base md:text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-full md:w-36 md:focus:w-52 transition-all duration-200"
         />
       </div>
 
