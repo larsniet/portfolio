@@ -7,9 +7,9 @@ import Badge from "@/app/components/badge";
 import { getPosts } from "@/app/journey/utils";
 
 import meeting from "@/assets/images/meeting.jpg";
-import balcony from "@/assets/images/balcony.jpg";
+import balcony from "@/assets/images/balcony.webp";
 import bikes from "@/assets/images/bikes.jpg";
-import laugh from "@/assets/images/laugh.jpg";
+import laugh from "@/assets/images/laugh.webp";
 import workdiscussion from "@/assets/images/workdiscussion.jpg";
 import workstation from "@/assets/images/workstation.jpg";
 
