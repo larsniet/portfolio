@@ -106,7 +106,7 @@ export default async function Journey({ params }: Props) {
                   image: post.metadata.image
                     ? `${baseUrl}${post.metadata.image}`
                     : `${baseUrl}/og?title=${encodeURIComponent(
-                        post.metadata.title
+                        post.metadata.title,
                       )}`,
                   url: `${baseUrl}/journey/${slug}`,
                   author: {
@@ -121,7 +121,7 @@ export default async function Journey({ params }: Props) {
           }}
         />
         <div className="fade-up fade-up-1 mb-6">
-          <p className="text-xs text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)] tabular-nums">
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono) tabular-nums">
             {formatDate(post.metadata.publishedAt)}
           </p>
         </div>

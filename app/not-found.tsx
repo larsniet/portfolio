@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <section className="pt-2 pb-16">
       <div className="fade-up fade-up-1">
-        <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)] mb-3">
+        <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono) mb-3">
           404
         </p>
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-4">

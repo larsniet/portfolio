@@ -45,7 +45,7 @@ export default function Footer() {
           </a>
         </li>
       </ul>
-      <p className="text-xs text-neutral-400 dark:text-neutral-600 font-[family-name:var(--font-geist-mono)]">
+      <p className="text-xs text-neutral-400 dark:text-neutral-600 font-(family-name:--font-geist-mono)">
         © {new Date().getFullYear()} Lars van der Niet — MIT Licensed
       </p>
     </footer>

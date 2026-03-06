@@ -276,7 +276,7 @@ export default async function Page() {
       {/* ── Writing ──────────────────────────────────────────── */}
       <div className="fade-up fade-up-4">
         <div className="flex items-center gap-3 mb-5">
-          <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+          <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono)">
             writing
           </p>
           <div className="flex-1 h-px bg-neutral-100 dark:bg-neutral-900" />
