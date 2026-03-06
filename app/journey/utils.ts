@@ -2,6 +2,7 @@ import matter from "gray-matter";
 import path from "path";
 import fs from "fs/promises";
 import { compileMDX } from "next-mdx-remote/rsc";
+import rehypePrettyCode from "rehype-pretty-code";
 import { mdxComponents } from "@/app/components/mdx-remote-components";
 
 export type Metadata = {
@@ -46,7 +47,18 @@ export async function getPost(slug: string) {
         parseFrontmatter: true,
         mdxOptions: {
           remarkPlugins: [],
-          rehypePlugins: [],
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: {
+                  light: "github-light",
+                  dark: "github-dark",
+                },
+                keepBackground: false,
+              },
+            ],
+          ],
           format: "mdx",
         },
       },

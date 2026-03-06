@@ -1,13 +1,14 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-function ArrowIcon() {
+function ArrowIcon({ className = "" }: { className?: string }) {
   return (
     <svg
-      width="12"
-      height="12"
+      width="10"
+      height="10"
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M2.07102 11.3494L0.963068 10.2415L9.2017 1.98864H2.83807L2.85227 0.454545H11.8438V9.46023H10.2955L10.3097 3.09659L2.07102 11.3494Z"
@@ -19,33 +20,33 @@ function ArrowIcon() {
 
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
+    <footer className="mt-16 mb-10 border-t border-neutral-200 dark:border-neutral-800 pt-8">
+      <ul className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-6 mb-6">
         <li>
           <Link
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="group flex items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200"
             rel="noopener noreferrer"
             target="_blank"
             href="/rss"
           >
-            <ArrowIcon />
-            <p className="ml-2 h-7">rss feed</p>
+            <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span>rss feed</span>
           </Link>
         </li>
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="group flex items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/larsniet/portfolio"
           >
-            <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
+            <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span>view source</span>
           </a>
         </li>
       </ul>
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
+      <p className="text-xs text-neutral-400 dark:text-neutral-600 font-[family-name:var(--font-geist-mono)]">
+        © {new Date().getFullYear()} Lars van der Niet — MIT Licensed
       </p>
     </footer>
   );

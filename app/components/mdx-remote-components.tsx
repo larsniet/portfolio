@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { highlight } from "sugar-high";
 
 export const mdxComponents = {
   h1: ({ children }: { children: React.ReactNode }) => (
@@ -50,26 +49,27 @@ export const mdxComponents = {
   li: ({ children }: { children: React.ReactNode }) => (
     <li className="mb-2">{children}</li>
   ),
-  pre: ({ children }: { children: React.ReactNode }) => (
-    <pre className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto mb-4">
+  // Block code pre — rehype-pretty-code wraps in <figure>, but the pre still passes through here
+  pre: ({ children, ...props }: { children: React.ReactNode }) => (
+    <pre
+      className="text-sm overflow-x-auto rounded-lg p-4 mb-4 bg-neutral-50 dark:bg-neutral-900"
+      {...props}
+    >
       {children}
     </pre>
   ),
-  code: ({ children, className }: { children: string; className?: string }) => {
-    // If there's a className, it's a code block (```code```)
-    if (className) {
-      const language = className.replace("language-", "");
-      const codeHTML = highlight(children);
+  // Block code is pre-highlighted by shiki (children are spans, not a string).
+  // Inline code (children is a plain string) gets a simple background pill.
+  code: ({ children, className, ...props }: { children: React.ReactNode; className?: string }) => {
+    if (typeof children === "string" && !className) {
       return (
-        <code
-          className={`${language} text-sm`}
-          dangerouslySetInnerHTML={{ __html: codeHTML }}
-        />
+        <code className="font-mono text-sm bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded">
+          {children}
+        </code>
       );
     }
-    // Inline code (`code`)
     return (
-      <code className="font-mono text-sm bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded">
+      <code className={className} {...props}>
         {children}
       </code>
     );

@@ -15,9 +15,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
 
   const filtered =
     query.length > 0
-      ? posts.filter((p) =>
-          p.title.toLowerCase().includes(query.toLowerCase())
-        )
+      ? posts.filter((p) => p.title.toLowerCase().includes(query.toLowerCase()))
       : [];
 
   const isOpen = open && query.length > 0;
@@ -74,7 +72,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
   }
 
   return (
-    <div ref={containerRef} className="relative w-full md:w-auto">
+    <div ref={containerRef} className="relative w-auto">
       {/* Input */}
       <div className="relative flex items-center">
         <svg
@@ -101,36 +99,36 @@ export function SearchBar({ posts }: { posts: Post[] }) {
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search posts..."
-          className="pl-8 pr-3 py-1.5 text-base md:text-sm rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 focus:border-neutral-300 dark:focus:border-neutral-700 w-full md:w-36 md:focus:w-52 transition-all duration-200"
+          placeholder="Search..."
+          className="pl-8 pr-3 py-1 text-xs rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-black dark:focus:border-white w-full md:w-28 md:focus:w-44 transition-all duration-200 font-(family-name:--font-geist-mono)"
         />
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute left-0 right-0 md:left-auto md:right-0 md:w-72 mt-1.5 z-50 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 shadow-xl shadow-black/5 dark:shadow-black/40 overflow-hidden">
+        <div className="absolute left-0 right-0 md:left-auto md:right-0 md:w-64 mt-1 z-50 rounded-sm border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black shadow-lg shadow-black/5 dark:shadow-black/50 overflow-hidden">
           {filtered.length > 0 ? (
             <>
-              <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-800">
-                <p className="text-xs text-neutral-400 dark:text-neutral-500 font-medium uppercase tracking-wider">
+              <div className="px-3 py-1.5 border-b border-neutral-100 dark:border-neutral-900">
+                <p className="text-[10px] text-neutral-400 dark:text-neutral-600 font-medium uppercase tracking-widest font-(family-name:--font-geist-mono)">
                   Posts
                 </p>
               </div>
-              <ul className="py-1 max-h-56 overflow-y-auto">
+              <ul className="py-1 max-h-52 overflow-y-auto">
                 {filtered.map((post, i) => (
                   <li
                     key={post.slug}
                     onMouseDown={(e) => e.preventDefault()}
                     onMouseEnter={() => setActiveIndex(i)}
                     onClick={() => navigate(post.slug)}
-                    className={`flex items-center gap-2.5 px-3 py-2 cursor-pointer transition-colors ${
+                    className={`flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors ${
                       i === activeIndex
-                        ? "bg-neutral-100 dark:bg-neutral-800/70"
+                        ? "bg-neutral-50 dark:bg-neutral-900"
                         : ""
                     }`}
                   >
                     <svg
-                      className="size-3.5 shrink-0 text-neutral-400 dark:text-neutral-500"
+                      className="size-3 shrink-0 text-neutral-400 dark:text-neutral-600"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="none"
@@ -142,7 +140,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
                       <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                       <polyline points="14 2 14 8 20 8" />
                     </svg>
-                    <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
+                    <span className="text-xs text-neutral-600 dark:text-neutral-400 truncate font-(family-name:--font-geist-mono)">
                       {highlight(post.title)}
                     </span>
                   </li>
@@ -150,8 +148,8 @@ export function SearchBar({ posts }: { posts: Post[] }) {
               </ul>
             </>
           ) : (
-            <div className="px-3 py-6 text-center">
-              <p className="text-sm text-neutral-400 dark:text-neutral-500">
+            <div className="px-3 py-5 text-center">
+              <p className="text-xs text-neutral-400 dark:text-neutral-600 font-(family-name:--font-geist-mono)">
                 No posts found.
               </p>
             </div>

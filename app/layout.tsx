@@ -26,7 +26,8 @@ export const metadata: Metadata = {
     "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
   openGraph: {
     title: "Lars van der Niet",
-    description: "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+    description:
+      "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
     url: baseUrl,
     siteName: "Lars van der Niet",
     locale: "en_US",
@@ -61,15 +62,17 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased max-w-2xl mx-4 mt-8 lg:mx-auto">
+      <body className="antialiased noise">
         <ServiceWorkerRegister />
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          <Navbar />
+        {/* Full-width sticky navbar */}
+        <Navbar />
+        {/* Centered reading column */}
+        <main className="max-w-2xl w-full mx-auto px-4 mt-12 mb-0 flex flex-col flex-auto min-w-0">
           {children}
           <Footer />
-          <Analytics />
-          <SpeedInsights />
         </main>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

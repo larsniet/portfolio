@@ -3,15 +3,9 @@ import { getPosts } from "@/app/journey/utils";
 import { SearchBar } from "./search-bar";
 
 const navItems = {
-  "/": {
-    name: "home",
-  },
-  "/journey": {
-    name: "journey",
-  },
-  "/contact": {
-    name: "contact",
-  },
+  "/": { name: "home" },
+  "/journey": { name: "journey" },
+  "/contact": { name: "contact" },
 };
 
 export async function Navbar() {
@@ -22,28 +16,42 @@ export async function Navbar() {
   }));
 
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
-      <div className="lg:sticky lg:top-20 relative z-10">
-        <nav
-          className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between relative px-0 pb-0 fade"
-          id="nav"
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-black/90 backdrop-blur-md">
+      <div className="max-w-2xl w-full mx-auto px-4 h-12 flex items-center justify-between tracking-tight">
+        {/* Identity — hidden on xs, visible from sm */}
+        <Link
+          href="/"
+          className="hidden sm:block text-xs font-medium text-neutral-400 dark:text-neutral-500 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
         >
-          <div className="flex flex-row space-x-0">
-            {Object.entries(navItems).map(([path, { name }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
-                >
-                  {name}
-                </Link>
-              );
-            })}
+          larsniet
+        </Link>
+
+        {/* On mobile: show logo initial */}
+        <Link
+          href="/"
+          className="sm:hidden text-xs font-semibold text-neutral-400 dark:text-neutral-500 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
+          aria-label="Home"
+        >
+          ln/
+        </Link>
+
+        {/* Nav links + Search */}
+        <nav className="flex items-center gap-0.5">
+          {Object.entries(navItems).map(([path, { name }]) => (
+            <Link
+              key={path}
+              href={path}
+              className="px-2 py-1 text-sm text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 rounded cursor-pointer"
+            >
+              {name}
+            </Link>
+          ))}
+          {/* Search: hidden on mobile, shown on md+ */}
+          <div className="hidden md:block ml-2">
+            <SearchBar posts={searchData} />
           </div>
-          <SearchBar posts={searchData} />
         </nav>
       </div>
-    </aside>
+    </header>
   );
 }

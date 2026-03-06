@@ -34,15 +34,29 @@ export default async function Page() {
   };
 
   return (
-    <section>
+    <section className="pt-2 pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">
-        My journey
-      </h1>
-      <JourneyPosts posts={posts} />
+      <div className="fade-up fade-up-1 mb-10">
+        <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-3">
+          My journey
+        </h1>
+        <p className="text-sm text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+          A log of projects, experiments, and discoveries.
+        </p>
+      </div>
+
+      <div className="fade-up fade-up-2">
+        <div className="flex items-center gap-3 mb-5">
+          <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+            all posts
+          </p>
+          <div className="flex-1 h-px bg-neutral-100 dark:bg-neutral-900" />
+        </div>
+        <JourneyPosts posts={posts} />
+      </div>
     </section>
   );
 }

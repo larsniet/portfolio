@@ -66,7 +66,7 @@ export default async function Journey({ params }: Props) {
     }
 
     return (
-      <section>
+      <section className="pt-2 pb-16">
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -91,15 +91,12 @@ export default async function Journey({ params }: Props) {
             }),
           }}
         />
-        <h1 className="title font-semibold tracking-tighter">
-          {post.metadata.title}
-        </h1>
-        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="fade-up fade-up-1 mb-6">
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)] tabular-nums">
             {formatDate(post.metadata.publishedAt)}
           </p>
         </div>
-        <article className="prose prose-quoteless prose-neutral dark:prose-invert">
+        <article className="prose prose-quoteless prose-neutral dark:prose-invert fade-up fade-up-2">
           {post.content}
         </article>
       </section>

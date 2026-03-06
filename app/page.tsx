@@ -50,102 +50,104 @@ export default async function Page() {
   let posts = await getPosts();
 
   return (
-    <section>
+    <section className="pt-2 pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        Hi, I am Lars
-        <span role="img" aria-label="Wave" className="ml-2">
-          👋
-        </span>
-      </h1>
-      <p className="mb-4">
-        I'm a full stack developer and a tech enthusiast with a passion for
-        anything new in tech, working at{" "}
-        <Link
-          href="https://adswag.nl"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="Adswag"
-            icon={
-              <Image
-                src={adswag}
-                alt="Adswag company logo"
-                width={16}
-                height={16}
-                className="w-4 h-4"
-              />
-            }
-          />
-        </Link>
-        . I lead projects, guiding them in specific directions to align with
-        strategic goals and technical standards.
-      </p>
 
-      <div className="grid grid-cols-2 grid-rows-4 sm:grid-rows-3 sm:grid-cols-3 gap-4 my-8">
-        <div className="relative h-40">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <div className="fade-up fade-up-1 mb-10">
+        <h1 className="mb-4 text-4xl font-semibold tracking-tighter leading-tight text-black dark:text-white">
+          Hi, I am Lars
+        </h1>
+        <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          Full-stack developer and tech enthusiast working at{" "}
+          <Link
+            href="https://adswag.nl"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Adswag"
+              icon={
+                <Image
+                  src={adswag}
+                  alt="Adswag"
+                  width={14}
+                  height={14}
+                  className="w-3.5 h-3.5"
+                />
+              }
+            />
+          </Link>
+          , a digital advertising company in Amsterdam. I lead projects, align
+          them with strategic goals, and push the boundaries of what&apos;s
+          technically possible.
+        </p>
+      </div>
+
+      {/* ── Photo Grid ───────────────────────────────────────── */}
+      <div className="fade-up fade-up-2 grid grid-cols-2 grid-rows-4 sm:grid-rows-3 sm:grid-cols-3 gap-3 mb-12">
+        <div className="relative h-40 overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={meeting}
             alt="Meeting at the office"
-            className="rounded-lg object-cover"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             priority
             fill
           />
         </div>
-        <div className="relative sm:row-span-2 row-span-1">
+        <div className="relative sm:row-span-2 row-span-1 overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={balcony}
-            alt="Portrait of Lars on a balcony"
-            className="rounded-lg object-cover"
+            alt="Portrait on a balcony"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             priority
             fill
           />
         </div>
-        <div className="relative">
+        <div className="relative overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={bikes}
-            alt="Lars on a motorcycle"
-            className="rounded-lg object-cover"
+            alt="On a motorcycle"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             priority
             fill
           />
         </div>
-        <div className="relative row-span-2">
+        <div className="relative row-span-2 overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={laugh}
-            alt="Lars laughing"
-            className="rounded-lg object-cover"
+            alt="Laughing"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             priority
             fill
           />
         </div>
-        <div className="relative row-span-2">
+        <div className="relative row-span-2 overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={workdiscussion}
-            alt="Lars discussing work with a colleague"
-            className="rounded-lg object-cover"
+            alt="Discussing work with a colleague"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             fill
           />
         </div>
-        <div className="relative h-40">
+        <div className="relative h-40 overflow-hidden rounded-lg group cursor-pointer">
           <Image
             src={workstation}
-            alt="Lars working at his desk"
-            className="rounded-lg object-cover"
+            alt="Working at desk"
+            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={100}
             fill
@@ -153,113 +155,118 @@ export default async function Page() {
         </div>
       </div>
 
-      <p className="mb-4">
-        Whether it's the latest security camera, cutting-edge frontend
-        frameworks, innovative motorcycles with advanced tech, or home
-        automation systems, I deeply enjoy exploring and integrating new
-        technologies. Currently, I work full-time for Adswag, a digital
-        advertising company based in Amsterdam. At Adswag, I immerse myself in
-        various technical challenges and projects, utilizing tools like {` `}
-        <Link
-          href="https://www.docker.com/"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="Docker"
-            icon={
-              <Image
-                src={docker}
-                alt="Docker logo"
-                width={20}
-                height={16}
-                className="w-5 h-4"
-              />
-            }
-          />
-        </Link>
-        {` and `}
-        <Link
-          href="https://kubernetes.io/"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="Kubernetes"
-            icon={
-              <Image
-                src={kubernetes}
-                alt="Kubernetes logo"
-                width={16}
-                height={16}
-                className="w-4 h-4"
-              />
-            }
-          />
-        </Link>
-        , working with{` `}
-        <Link
-          href="https://nextjs.org"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="NextJS"
-            icon={
-              <Image
-                src={nextjs}
-                alt="NextJS logo"
-                width={16}
-                height={16}
-                className="w-4 h-4"
-              />
-            }
-          />
-        </Link>
-        , setting up automated Ubuntu servers with{` `}
-        <Link
-          href="https://www.ansible.com/"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="Ansible"
-            icon={
-              <Image
-                src={ansible}
-                alt="Ansible logo"
-                width={16}
-                height={16}
-                className="w-4 h-4"
-              />
-            }
-          />
-        </Link>
-        , and creating advanced analytics dashboards using{` `}
-        <Link
-          href="https://www.ag-grid.com/"
-          target="_blank"
-          className="inline-flex align-middle"
-        >
-          <Badge
-            text="Ag Grid"
-            icon={
-              <Image
-                src={agGrid}
-                alt="Ag-Grid logo"
-                width={16}
-                height={16}
-                className="w-4 h-4"
-              />
-            }
-          />
-        </Link>
-        . This blend of hands-on development and project leadership allows me to
-        combine my love for technology with practical, real-world applications,
-        while constantly testing the possibilities of new tech.
-      </p>
+      {/* ── About ────────────────────────────────────────────── */}
+      <div className="fade-up fade-up-3 mb-12">
+        <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          Whether it&apos;s the latest security camera, cutting-edge frontend
+          frameworks, or home automation systems — I deeply enjoy exploring and
+          integrating new technologies. At Adswag, I work with{" "}
+          <Link
+            href="https://www.docker.com/"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Docker"
+              icon={
+                <Image
+                  src={docker}
+                  alt="Docker"
+                  width={18}
+                  height={14}
+                  className="w-[18px] h-3.5"
+                />
+              }
+            />
+          </Link>
+          {" and "}
+          <Link
+            href="https://kubernetes.io/"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Kubernetes"
+              icon={
+                <Image
+                  src={kubernetes}
+                  alt="Kubernetes"
+                  width={14}
+                  height={14}
+                  className="w-3.5 h-3.5"
+                />
+              }
+            />
+          </Link>
+          {", build with "}
+          <Link
+            href="https://nextjs.org"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Next.js"
+              icon={
+                <Image
+                  src={nextjs}
+                  alt="Next.js"
+                  width={14}
+                  height={14}
+                  className="w-3.5 h-3.5"
+                />
+              }
+            />
+          </Link>
+          {", automate with "}
+          <Link
+            href="https://www.ansible.com/"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Ansible"
+              icon={
+                <Image
+                  src={ansible}
+                  alt="Ansible"
+                  width={14}
+                  height={14}
+                  className="w-3.5 h-3.5"
+                />
+              }
+            />
+          </Link>
+          {", and build dashboards with "}
+          <Link
+            href="https://www.ag-grid.com/"
+            target="_blank"
+            className="inline-flex align-middle"
+          >
+            <Badge
+              text="Ag Grid"
+              icon={
+                <Image
+                  src={agGrid}
+                  alt="Ag-Grid"
+                  width={14}
+                  height={14}
+                  className="w-3.5 h-3.5"
+                />
+              }
+            />
+          </Link>
+          .
+        </p>
+      </div>
 
-      <div className="my-8">
+      {/* ── Writing ──────────────────────────────────────────── */}
+      <div className="fade-up fade-up-4">
+        <div className="flex items-center gap-3 mb-5">
+          <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-[family-name:var(--font-geist-mono)]">
+            writing
+          </p>
+          <div className="flex-1 h-px bg-neutral-100 dark:bg-neutral-900" />
+        </div>
         <JourneyPosts posts={posts} />
       </div>
     </section>

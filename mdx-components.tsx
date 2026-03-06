@@ -80,8 +80,8 @@ function Code({ children, ...props }: CodeProps) {
     typeof children === "string"
       ? children
       : Array.isArray(children)
-      ? children.join("")
-      : String(children ?? "");
+        ? children.join("")
+        : String(children ?? "");
   let codeHTML = highlight(text);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
@@ -135,7 +135,7 @@ function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
           className: "anchor",
         }),
       ],
-      children
+      children,
     );
   };
 

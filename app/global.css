@@ -1,42 +1,239 @@
 @import "tailwindcss";
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
+/* ─── Design System Tokens ──────────────────────────────────────── */
 :root {
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  --color-primary: #18181b;
+  --color-secondary: #3f3f46;
+  --color-cta: #09090b;
+  --color-bg: #fafafa;
+  --color-text: #09090b;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
 }
 
+/* ─── Dark Mode ─────────────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
-  }
   html {
     color-scheme: dark;
   }
 }
 
+/* ─── Shiki dual-theme (github-light / github-dark) ─────────────── */
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  code[data-theme*=" "],
+  code[data-theme*=" "] span {
+    color: var(--shiki-dark);
+  }
+}
+
+/* ─── Base ──────────────────────────────────────────────────────── */
 html {
   min-width: 360px;
   overflow-y: scroll;
 }
 
+::selection {
+  background-color: #09090b;
+  color: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: #fafafa;
+    color: #09090b;
+  }
+}
+
+/* ─── Entrance Animations ───────────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.fade-up-1 { animation-delay: 60ms; }
+.fade-up-2 { animation-delay: 130ms; }
+.fade-up-3 { animation-delay: 200ms; }
+.fade-up-4 { animation-delay: 270ms; }
+.fade-up-5 { animation-delay: 340ms; }
+.fade-up-6 { animation-delay: 410ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up { animation: none; opacity: 1; }
+}
+
+/* ─── Global Focus Ring (override browser blue default) ─────────── */
+*:focus-visible {
+  outline: 1.5px solid #09090b;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Inputs manage their own focus state via border-color */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  *:focus-visible {
+    outline-color: #fafafa;
+  }
+}
+
+/* ─── Post Row Hover ────────────────────────────────────────────── */
+.post-row {
+  position: relative;
+  padding-left: 0.75rem;
+  transition: padding-left 200ms ease;
+}
+
+.post-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #09090b;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .post-row::before {
+    background: #fafafa;
+  }
+}
+
+.post-row:hover {
+  padding-left: 1rem;
+}
+
+.post-row:hover::before {
+  opacity: 1;
+}
+
+/* ─── Details / Summary (MDX collapsibles) ─────────────────────── */
+details {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+details summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  background: #f9fafb;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Triangle arrow */
+details summary::before {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4.5px 0 4.5px 7px;
+  border-color: transparent transparent transparent #9ca3af;
+  transition: transform 200ms ease;
+  flex-shrink: 0;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* "click to expand" hint — disappears when open */
+details:not([open]) summary::after {
+  content: "click to expand";
+  margin-left: auto;
+  font-size: 0.6875rem;
+  color: #9ca3af;
+  font-family: var(--font-geist-mono), monospace;
+  letter-spacing: 0.01em;
+}
+
+details summary:hover {
+  background: #f3f4f6;
+  color: #09090b;
+}
+
+details > *:not(summary) {
+  padding: 0 1rem 1rem;
+}
+
+details pre,
+.prose details pre {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  details {
+    border-color: #262626;
+  }
+  details summary {
+    background: #171717;
+    color: #d4d4d4;
+  }
+  details summary::before {
+    border-color: transparent transparent transparent #525252;
+  }
+  details:not([open]) summary::after {
+    color: #525252;
+  }
+  details summary:hover {
+    background: #262626;
+    color: #fafafa;
+  }
+  details pre,
+  .prose details pre {
+    border-top-color: #262626;
+  }
+}
+
+/* ─── Prose ─────────────────────────────────────────────────────── */
 .prose .anchor {
   @apply absolute invisible no-underline;
-
   margin-left: -1em;
   padding-right: 0.5em;
   width: 80%;
@@ -83,7 +280,6 @@ html {
 }
 
 .prose img {
-  /* Don't apply styles to next/image */
   @apply m-0;
 }
 
@@ -92,23 +288,23 @@ html {
 }
 
 .prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-4xl font-semibold tracking-tight mt-6 mb-2;
 }
 
 .prose h2 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-xl font-semibold tracking-tight mt-6 mb-2;
 }
 
 .prose h3 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
+  @apply text-lg font-semibold tracking-tight mt-6 mb-2;
 }
 
 .prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
+  @apply text-lg font-semibold tracking-tight mt-6 mb-2;
 }
 
 .prose strong {
-  @apply font-medium;
+  @apply font-semibold;
 }
 
 .prose ul {
@@ -120,21 +316,21 @@ html {
 }
 
 .prose > :first-child {
-  /* Override removing top margin, causing layout shift */
   margin-top: 1.25em !important;
   margin-bottom: 1.25em !important;
 }
 
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
 pre::-webkit-scrollbar {
   display: none;
 }
 
 pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Remove Safari input shadow on mobile */
+/* ─── Form ──────────────────────────────────────────────────────── */
 input[type="text"],
 input[type="email"] {
   -webkit-appearance: none;
@@ -151,4 +347,21 @@ table {
 
 .title {
   text-wrap: balance;
+}
+
+/* ─── Noise Texture Overlay ─────────────────────────────────────── */
+@layer utilities {
+  .noise {
+    position: relative;
+  }
+  .noise::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
 }
