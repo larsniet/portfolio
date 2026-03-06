@@ -39,3 +39,5 @@ next-env.d.ts
 public/*.js
 !public/sw.js
 public/*.map
+
+.cursor/
