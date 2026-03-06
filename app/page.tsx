@@ -109,7 +109,7 @@ export default async function Page() {
             alt="Meeting at the office"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             priority
             fill
           />
@@ -120,7 +120,7 @@ export default async function Page() {
             alt="Portrait on a balcony"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             priority
             fill
           />
@@ -131,7 +131,7 @@ export default async function Page() {
             alt="On a motorcycle"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             fill
           />
         </div>
@@ -141,7 +141,7 @@ export default async function Page() {
             alt="Laughing"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             fill
           />
         </div>
@@ -151,7 +151,7 @@ export default async function Page() {
             alt="Discussing work with a colleague"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             fill
           />
         </div>
@@ -161,7 +161,7 @@ export default async function Page() {
             alt="Working at desk"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={75}
+            quality={70}
             fill
           />
         </div>

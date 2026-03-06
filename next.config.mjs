@@ -11,7 +11,7 @@ const nextConfig = {
         hostname: "larsniet.com",
       },
     ],
-    qualities: [25, 50, 75, 100],
+    qualities: [25, 50, 70, 75, 100],
   },
   async headers() {
     return [
