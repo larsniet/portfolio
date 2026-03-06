@@ -108,7 +108,7 @@ export default async function Page() {
             src={meeting}
             alt="Meeting at the office"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill
@@ -119,7 +119,7 @@ export default async function Page() {
             src={balcony}
             alt="Portrait on a balcony"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill
@@ -130,7 +130,7 @@ export default async function Page() {
             src={bikes}
             alt="On a motorcycle"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill
@@ -141,7 +141,7 @@ export default async function Page() {
             src={laugh}
             alt="Laughing"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill
@@ -152,7 +152,7 @@ export default async function Page() {
             src={workdiscussion}
             alt="Discussing work with a colleague"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill
@@ -163,7 +163,7 @@ export default async function Page() {
             src={workstation}
             alt="Working at desk"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
-            sizes="(max-width: 640px) 50vw, 33vw"
+            sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
             priority
             fill

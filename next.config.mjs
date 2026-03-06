@@ -19,7 +19,7 @@ const nextConfig = {
       },
     ],
     qualities: [25, 50, 70, 75, 100],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    deviceSizes: [256, 384, 640, 750, 828, 1080, 1200, 1920],
   },
   async headers() {
     return [
