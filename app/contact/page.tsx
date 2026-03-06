@@ -30,19 +30,34 @@ function ArrowIcon() {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Lars van der Niet",
-  jobTitle: "Full Stack Developer",
-  url: "https://larsniet.com",
-  email: "lvdnbusiness@gmail.com",
-  worksFor: {
-    "@type": "Organization",
-    name: "Adswag",
-    url: "https://adswag.nl",
-  },
-  sameAs: [
-    "http://linkedin.com/in/larsvanderniet",
-    "https://github.com/larsniet",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://larsniet.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Contact",
+          item: "https://larsniet.com/contact",
+        },
+      ],
+    },
+    {
+      "@type": "ContactPage",
+      name: "Contact Lars van der Niet",
+      url: "https://larsniet.com/contact",
+      author: {
+        "@type": "Person",
+        "@id": "https://larsniet.com/#person",
+        name: "Lars van der Niet",
+      },
+    },
   ],
 };
 

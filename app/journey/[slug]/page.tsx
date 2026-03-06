@@ -73,21 +73,50 @@ export default async function Journey({ params }: Props) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "BlogPosting",
-              headline: post.metadata.title,
-              datePublished: post.metadata.publishedAt,
-              dateModified: post.metadata.publishedAt,
-              description: post.metadata.summary,
-              image: post.metadata.image
-                ? `${baseUrl}${post.metadata.image}`
-                : `${baseUrl}/og?title=${encodeURIComponent(
-                    post.metadata.title
-                  )}`,
-              url: `${baseUrl}/journey/${slug}`,
-              author: {
-                "@type": "Person",
-                name: "Lars van der Niet",
-              },
+              "@graph": [
+                {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Home",
+                      item: baseUrl,
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: "Journey",
+                      item: `${baseUrl}/journey`,
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: post.metadata.title,
+                      item: `${baseUrl}/journey/${slug}`,
+                    },
+                  ],
+                },
+                {
+                  "@type": "BlogPosting",
+                  headline: post.metadata.title,
+                  datePublished: post.metadata.publishedAt,
+                  dateModified: post.metadata.publishedAt,
+                  description: post.metadata.summary,
+                  image: post.metadata.image
+                    ? `${baseUrl}${post.metadata.image}`
+                    : `${baseUrl}/og?title=${encodeURIComponent(
+                        post.metadata.title
+                      )}`,
+                  url: `${baseUrl}/journey/${slug}`,
+                  author: {
+                    "@type": "Person",
+                    "@id": "https://larsniet.com/#person",
+                    name: "Lars van der Niet",
+                    url: baseUrl,
+                  },
+                },
+              ],
             }),
           }}
         />

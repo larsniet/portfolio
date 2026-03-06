@@ -16,21 +16,39 @@ export default async function Page() {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Blog",
-    name: "Lars van der Niet — Journey",
-    description: "Read about the latest developments in my programming journey.",
-    url: `${baseUrl}/journey`,
-    author: {
-      "@type": "Person",
-      name: "Lars van der Niet",
-      url: baseUrl,
-    },
-    blogPost: posts.map((post) => ({
-      "@type": "BlogPosting",
-      headline: post.metadata.title,
-      datePublished: post.metadata.publishedAt,
-      url: `${baseUrl}/journey/${post.slug}`,
-    })),
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Journey",
+            item: `${baseUrl}/journey`,
+          },
+        ],
+      },
+      {
+        "@type": "Blog",
+        name: "Lars van der Niet — Journey",
+        description:
+          "Read about the latest developments in my programming journey.",
+        url: `${baseUrl}/journey`,
+        author: {
+          "@type": "Person",
+          "@id": "https://larsniet.com/#person",
+          name: "Lars van der Niet",
+          url: baseUrl,
+        },
+        blogPost: posts.map((post) => ({
+          "@type": "BlogPosting",
+          headline: post.metadata.title,
+          datePublished: post.metadata.publishedAt,
+          url: `${baseUrl}/journey/${post.slug}`,
+        })),
+      },
+    ],
   };
 
   return (

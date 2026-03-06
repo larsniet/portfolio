@@ -30,19 +30,33 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Lars van der Niet",
-  jobTitle: "Full Stack Developer",
-  url: "https://larsniet.com",
-  email: "lvdnbusiness@gmail.com",
-  worksFor: {
-    "@type": "Organization",
-    name: "Adswag",
-    url: "https://adswag.nl",
-  },
-  sameAs: [
-    "http://linkedin.com/in/larsvanderniet",
-    "https://github.com/larsniet",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://larsniet.com/#website",
+      name: "Lars van der Niet",
+      url: "https://larsniet.com",
+      description:
+        "Full-stack developer and tech enthusiast based in Amsterdam.",
+      author: { "@id": "https://larsniet.com/#person" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://larsniet.com/#person",
+      name: "Lars van der Niet",
+      jobTitle: "Full Stack Developer",
+      url: "https://larsniet.com",
+      email: "lvdnbusiness@gmail.com",
+      worksFor: {
+        "@type": "Organization",
+        name: "Adswag",
+        url: "https://adswag.nl",
+      },
+      sameAs: [
+        "http://linkedin.com/in/larsvanderniet",
+        "https://github.com/larsniet",
+      ],
+    },
   ],
 };
 
