@@ -154,6 +154,7 @@ export default async function Page() {
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={70}
+            priority
             fill
           />
         </div>
@@ -164,6 +165,7 @@ export default async function Page() {
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
             quality={70}
+            priority
             fill
           />
         </div>
