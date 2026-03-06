@@ -110,7 +110,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
           {filtered.length > 0 ? (
             <>
               <div className="px-3 py-1.5 border-b border-neutral-100 dark:border-neutral-900">
-                <p className="text-[10px] text-neutral-400 dark:text-neutral-600 font-medium uppercase tracking-widest font-(family-name:--font-geist-mono)">
+                <p className="text-[10px] text-neutral-500 dark:text-neutral-400 font-medium uppercase tracking-widest font-(family-name:--font-geist-mono)">
                   Posts
                 </p>
               </div>
@@ -149,7 +149,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
             </>
           ) : (
             <div className="px-3 py-5 text-center">
-              <p className="text-xs text-neutral-400 dark:text-neutral-600 font-(family-name:--font-geist-mono)">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
                 No posts found.
               </p>
             </div>

@@ -114,7 +114,7 @@ export default function Page() {
               fill="currentColor"
             />
           </svg>
-          <span className="text-xs text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono)">
+          <span className="text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
             Based in Amsterdam, Netherlands
           </span>
         </div>
@@ -131,7 +131,7 @@ export default function Page() {
             className={`group flex items-center justify-between py-5 border-b border-neutral-100 dark:border-neutral-900 cursor-pointer fade-up fade-up-${i + 3}`}
           >
             <div>
-              <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono) mb-0.5">
+              <p className="text-xs font-medium tracking-widest uppercase text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono) mb-0.5">
                 {contact.label}
               </p>
               <p className="text-sm text-neutral-600 dark:text-neutral-300 group-hover:text-black dark:group-hover:text-white transition-colors duration-200">

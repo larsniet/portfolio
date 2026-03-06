@@ -21,7 +21,7 @@ export async function Navbar() {
         {/* Identity — hidden on xs, visible from sm */}
         <Link
           href="/"
-          className="hidden sm:block text-xs font-medium text-neutral-400 dark:text-neutral-500 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
+          className="hidden sm:block text-xs font-medium text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
         >
           larsniet
         </Link>
@@ -29,7 +29,7 @@ export async function Navbar() {
         {/* On mobile: show logo initial */}
         <Link
           href="/"
-          className="sm:hidden text-xs font-semibold text-neutral-400 dark:text-neutral-500 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
+          className="sm:hidden text-xs font-semibold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer font-(family-name:--font-geist-mono)"
           aria-label="Home"
         >
           ln/

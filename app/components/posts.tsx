@@ -39,7 +39,7 @@ export function JourneyPosts({
           className={`fade-up fade-up-${Math.min(yi + 2, 6)} ${yi > 0 ? "mt-6" : ""}`}
         >
           {/* Year header */}
-          <p className="text-xs font-medium text-neutral-300 dark:text-neutral-700 tabular-nums font-(family-name:--font-geist-mono) mb-1 select-none">
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-500 tabular-nums font-(family-name:--font-geist-mono) mb-1 select-none">
             {year}
           </p>
 
@@ -51,7 +51,7 @@ export function JourneyPosts({
               className="post-row group flex items-baseline gap-4 py-2.5 border-b border-neutral-100 dark:border-neutral-900 cursor-pointer"
             >
               {/* Compact date: "Feb 19" */}
-              <span className="shrink-0 w-10 text-xs text-neutral-400 dark:text-neutral-500 tabular-nums font-(family-name:--font-geist-mono) whitespace-nowrap">
+              <span className="shrink-0 w-10 text-xs text-neutral-500 dark:text-neutral-400 tabular-nums font-(family-name:--font-geist-mono) whitespace-nowrap">
                 {shortDate(post.metadata.publishedAt)}
               </span>
 

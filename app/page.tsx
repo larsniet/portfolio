@@ -87,7 +87,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={adswag}
-                  alt="Adswag"
+                  alt="Adswag logo"
                   width={14}
                   height={14}
                   className="w-3.5 h-3.5"
@@ -109,7 +109,7 @@ export default async function Page() {
             alt="Meeting at the office"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
+            quality={75}
             priority
             fill
           />
@@ -120,7 +120,7 @@ export default async function Page() {
             alt="Portrait on a balcony"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
+            quality={75}
             priority
             fill
           />
@@ -131,8 +131,7 @@ export default async function Page() {
             alt="On a motorcycle"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
-            priority
+            quality={75}
             fill
           />
         </div>
@@ -142,8 +141,7 @@ export default async function Page() {
             alt="Laughing"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
-            priority
+            quality={75}
             fill
           />
         </div>
@@ -153,7 +151,7 @@ export default async function Page() {
             alt="Discussing work with a colleague"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
+            quality={75}
             fill
           />
         </div>
@@ -163,7 +161,7 @@ export default async function Page() {
             alt="Working at desk"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 33vw"
-            quality={100}
+            quality={75}
             fill
           />
         </div>
@@ -185,7 +183,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={docker}
-                  alt="Docker"
+                  alt="Docker logo"
                   width={18}
                   height={14}
                   className="w-[18px] h-3.5"
@@ -204,7 +202,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={kubernetes}
-                  alt="Kubernetes"
+                  alt="Kubernetes logo"
                   width={14}
                   height={14}
                   className="w-3.5 h-3.5"
@@ -223,7 +221,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={nextjs}
-                  alt="Next.js"
+                  alt="Next.js logo"
                   width={14}
                   height={14}
                   className="w-3.5 h-3.5"
@@ -242,7 +240,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={ansible}
-                  alt="Ansible"
+                  alt="Ansible logo"
                   width={14}
                   height={14}
                   className="w-3.5 h-3.5"
@@ -261,7 +259,7 @@ export default async function Page() {
               icon={
                 <Image
                   src={agGrid}
-                  alt="Ag-Grid"
+                  alt="AG Grid logo"
                   width={14}
                   height={14}
                   className="w-3.5 h-3.5"
