@@ -1,12 +1,7 @@
 import Link from "next/link";
 import { getPosts } from "@/app/journey/utils";
 import { SearchBar } from "./search-bar";
-
-const navItems = {
-  "/": { name: "home" },
-  "/journey": { name: "journey" },
-  "/contact": { name: "contact" },
-};
+import { NavLinks } from "./nav-links";
 
 export async function Navbar() {
   const posts = await getPosts();
@@ -16,7 +11,10 @@ export async function Navbar() {
   }));
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-black/90 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
       <div className="max-w-2xl w-full mx-auto px-4 h-12 flex items-center justify-between tracking-tight">
         {/* Identity — hidden on xs, visible from sm */}
         <Link
@@ -37,15 +35,7 @@ export async function Navbar() {
 
         {/* Nav links + Search */}
         <nav className="flex items-center gap-0.5">
-          {Object.entries(navItems).map(([path, { name }]) => (
-            <Link
-              key={path}
-              href={path}
-              className="px-2 py-1 text-sm text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 rounded cursor-pointer"
-            >
-              {name}
-            </Link>
-          ))}
+          <NavLinks />
           {/* Search: hidden on mobile, shown on md+ */}
           <div className="hidden md:block ml-2">
             <SearchBar posts={searchData} />
