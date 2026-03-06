@@ -1,0 +1,48 @@
+name: Cross-post to DEV.to
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/journey/posts/**.mdx"
+
+jobs:
+  crosspost:
+    name: Publish new posts to DEV.to
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          # Need the previous commit so we can detect which files are new
+          fetch-depth: 2
+
+      - name: Detect newly added MDX files
+        id: new_posts
+        run: |
+          FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'app/journey/posts/*.mdx' | tr '\n' ' ')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          if [ -n "$FILES" ]; then
+            echo "Found new posts: $FILES"
+          else
+            echo "No new posts detected"
+          fi
+
+      - name: Set up Node.js
+        if: steps.new_posts.outputs.files != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Post each new article to DEV.to
+        if: steps.new_posts.outputs.files != ''
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          BASE_URL: https://larsniet.com
+        run: |
+          for file in ${{ steps.new_posts.outputs.files }}; do
+            echo "--- Processing $file ---"
+            node scripts/crosspost-devto.js "$file"
+          done
