@@ -126,6 +126,13 @@ export default async function Journey({ params }: Props) {
           </p>
         </div>
         <article className="prose prose-quoteless prose-neutral dark:prose-invert fade-up fade-up-2">
+          {post.metadata.image && (
+            <img
+              src={post.metadata.image}
+              alt={post.metadata.title}
+              className="w-full rounded-lg mb-8 not-prose"
+            />
+          )}
           {post.content}
         </article>
       </section>
