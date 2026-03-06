@@ -39,6 +39,7 @@ function fmField(key) {
 
 const title = fmField("title");
 const summary = fmField("summary");
+const image = fmField("image");
 const slug = path.basename(file, ".mdx");
 const canonicalUrl = `${BASE_URL}/journey/${slug}`;
 
@@ -54,6 +55,7 @@ const payload = {
     published: true,
     canonical_url: canonicalUrl,
     description: summary,
+    ...(image && { main_image: `${BASE_URL}${image}` }),
   },
 };
 
