@@ -61,14 +61,14 @@ export default async function Page() {
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-3">
           My journey
         </h1>
-        <p className="text-sm text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono)">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
           A log of projects, experiments, and discoveries.
         </p>
       </div>
 
       <div className="fade-up fade-up-2">
         <div className="flex items-center gap-3 mb-5">
-          <p className="text-xs font-medium tracking-widest uppercase text-neutral-400 dark:text-neutral-500 font-(family-name:--font-geist-mono)">
+          <p className="text-xs font-medium tracking-widest uppercase text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
             all posts
           </p>
           <div className="flex-1 h-px bg-neutral-100 dark:bg-neutral-900" />
