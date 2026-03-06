@@ -62,7 +62,7 @@ export default async function Page() {
           My journey
         </h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
-          A log of projects, experiments, and discoveries.
+          A log of my thoughts, projects, experiments, and discoveries.
         </p>
       </div>
 
