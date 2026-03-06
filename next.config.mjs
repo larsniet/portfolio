@@ -1,4 +1,3 @@
-import createMDX from "@next/mdx";
 import bundleAnalyzer from "@next/bundle-analyzer";
 
 const withBundleAnalyzer = bundleAnalyzer({
@@ -58,11 +57,4 @@ const nextConfig = {
   },
 };
 
-const withMDX = createMDX({
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
-
-export default withBundleAnalyzer(withMDX(nextConfig));
+export default withBundleAnalyzer(nextConfig);
