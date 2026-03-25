@@ -1,7 +1,27 @@
 import Link from "next/link";
 import Image from "next/image";
 
+function Screenshots({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="not-prose my-8 grid grid-cols-3 gap-3">
+      {children}
+    </div>
+  );
+}
+
+function Screenshot({ src, alt }: { src: string; alt: string }) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-auto rounded-lg"
+    />
+  );
+}
+
 export const mdxComponents = {
+  Screenshots,
+  Screenshot,
   h1: ({ children }: { children: React.ReactNode }) => (
     <h1 className="font-bold text-3xl tracking-tighter mt-8 mb-4">
       {children}
