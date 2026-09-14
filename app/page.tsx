@@ -20,7 +20,6 @@ import ansible from "@/assets/images/ansible.png";
 import react from "@/assets/images/react.png";
 import nestjs from "@/assets/images/nestjs.png";
 import go from "@/assets/images/go.png";
-import claude from "@/assets/images/claude.png";
 
 export const metadata: Metadata = {
   description:
@@ -227,13 +226,7 @@ export default async function Page() {
             src={ansible}
             text="Ansible"
           />
-          {", and more and more of it is written together with "}
-          <TechBadge
-            href="https://claude.com/claude-code"
-            src={claude}
-            text="Claude Code"
-          />
-          .
+          {", and AI agents have become a normal part of how I work."}
         </p>
       </div>
 
