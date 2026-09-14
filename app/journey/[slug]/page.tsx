@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { formatDate, getPost, getPosts } from "@/app/journey/utils";
@@ -64,6 +65,16 @@ export default async function Journey({ params }: Props) {
     if (!post) {
       notFound();
     }
+
+    // ponytail: 3 newest other posts, no tag/similarity matching
+    const readMore = (await getPosts())
+      .filter((p) => p.slug !== slug)
+      .sort(
+        (a, b) =>
+          new Date(b.metadata.publishedAt).getTime() -
+          new Date(a.metadata.publishedAt).getTime(),
+      )
+      .slice(0, 3);
 
     return (
       <section className="pt-2 pb-16">
@@ -135,6 +146,28 @@ export default async function Journey({ params }: Props) {
           )}
           {post.content}
         </article>
+        <aside className="mt-16 pt-8 border-t border-neutral-100 dark:border-neutral-900 fade-up fade-up-3">
+          <p className="text-xs font-medium text-neutral-500 tabular-nums font-(family-name:--font-geist-mono) mb-1 select-none">
+            Read more
+          </p>
+          {readMore.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/journey/${p.slug}`}
+              className="post-row group flex items-baseline gap-4 py-2.5 border-b border-neutral-100 dark:border-neutral-900"
+            >
+              <span className="shrink-0 w-16 text-xs text-neutral-500 dark:text-neutral-400 tabular-nums font-(family-name:--font-geist-mono) whitespace-nowrap">
+                {new Date(`${p.metadata.publishedAt}T00:00:00`).toLocaleString(
+                  "en-us",
+                  { month: "short", year: "numeric" },
+                )}
+              </span>
+              <span className="text-sm text-neutral-700 dark:text-neutral-300 tracking-tight group-hover:text-black dark:group-hover:text-white transition-colors duration-200 min-w-0">
+                {p.metadata.title}
+              </span>
+            </Link>
+          ))}
+        </aside>
       </section>
     );
   } catch (error) {
