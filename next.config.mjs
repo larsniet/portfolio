@@ -41,6 +41,11 @@ const nextConfig = {
         ],
       },
       {
+        // Non-HTML resources: keep them out of Search Console's "crawled, not indexed"
+        source: "/(og|rss|manifest.webmanifest|manifest.json)",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+      {
         source: "/sw.js",
         headers: [
           {
