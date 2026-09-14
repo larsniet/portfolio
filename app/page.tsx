@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import type { Metadata } from "next";
 
 import { JourneyPosts } from "@/app/components/posts";
@@ -9,20 +9,22 @@ import { getPosts } from "@/app/journey/utils";
 import meeting from "@/assets/images/meeting.jpg";
 import balcony from "@/assets/images/balcony.webp";
 import bikes from "@/assets/images/bikes.jpg";
-import laugh from "@/assets/images/laugh.webp";
+import headshot from "@/assets/images/headshot.webp";
 import workdiscussion from "@/assets/images/workdiscussion.jpg";
 import workstation from "@/assets/images/workstation.jpg";
 
 import docker from "@/assets/images/docker.png";
 import adswag from "@/assets/images/adswag.png";
 import kubernetes from "@/assets/images/kubernetes.png";
-import nextjs from "@/assets/images/nextjs.png";
 import ansible from "@/assets/images/ansible.png";
-import agGrid from "@/assets/images/ag-grid.png";
+import react from "@/assets/images/react.png";
+import nestjs from "@/assets/images/nestjs.png";
+import go from "@/assets/images/go.png";
+import claude from "@/assets/images/claude.png";
 
 export const metadata: Metadata = {
   description:
-    "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+    "Senior full-stack developer at Adswag Amsterdam, building a Digital Out-of-Home ad network and AdTech platforms in TypeScript, Go, React and NestJS on Kubernetes.",
   alternates: {
     canonical: "/",
   },
@@ -44,7 +46,7 @@ const jsonLd = {
       "@type": "Person",
       "@id": "https://larsniet.com/#person",
       name: "Lars van der Niet",
-      jobTitle: "Full Stack Developer",
+      jobTitle: "Senior Full Stack Developer",
       url: "https://larsniet.com",
       email: "lvdnbusiness@gmail.com",
       worksFor: {
@@ -59,6 +61,33 @@ const jsonLd = {
     },
   ],
 };
+
+function TechBadge({
+  href,
+  src,
+  text,
+}: {
+  href: string;
+  src: StaticImageData;
+  text: string;
+}) {
+  return (
+    <Link href={href} target="_blank" className="inline-flex align-middle">
+      <Badge
+        text={text}
+        icon={
+          <Image
+            src={src}
+            alt={`${text} logo`}
+            width={14}
+            height={14}
+            className="w-3.5 h-3.5 object-contain"
+          />
+        }
+      />
+    </Link>
+  );
+}
 
 export default async function Page() {
   let posts = await getPosts();
@@ -76,7 +105,7 @@ export default async function Page() {
           Hi, I am Lars
         </h1>
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Full-stack developer and tech enthusiast working at{" "}
+          Senior full-stack developer at{" "}
           <Link
             href="https://adswag.nl"
             target="_blank"
@@ -95,9 +124,10 @@ export default async function Page() {
               }
             />
           </Link>
-          , a digital advertising company in Amsterdam. I lead projects, align
-          them with strategic goals, and push the boundaries of what&apos;s
-          technically possible.
+          , a digital advertising company in Amsterdam. I lead technical
+          projects end to end, from the first architecture sketch to the last
+          deploy, and I like the problems best where hardware, data and
+          software meet.
         </p>
       </div>
 
@@ -138,8 +168,8 @@ export default async function Page() {
         </div>
         <div className="relative row-span-2 overflow-hidden rounded-lg group cursor-pointer">
           <Image
-            src={laugh}
-            alt="Laughing"
+            src={headshot}
+            alt="Portrait of Lars van der Niet"
             className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
             sizes="(max-width: 640px) 50vw, 205px"
             quality={70}
@@ -174,103 +204,35 @@ export default async function Page() {
       {/* ── About ────────────────────────────────────────────── */}
       <div className="fade-up fade-up-3 mb-12">
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          Whether it&apos;s the latest security camera, cutting-edge frontend
-          frameworks, or home automation systems — I deeply enjoy exploring and
-          integrating new technologies. At Adswag, I work with{" "}
-          <Link
-            href="https://www.docker.com/"
-            target="_blank"
-            className="inline-flex align-middle"
-          >
-            <Badge
-              text="Docker"
-              icon={
-                <Image
-                  src={docker}
-                  alt="Docker logo"
-                  width={18}
-                  height={14}
-                  className="w-[18px] h-3.5"
-                />
-              }
-            />
-          </Link>
+          Outside work you&apos;ll find me on a motorcycle, on a kitesurf
+          board, or at home wiring up ESP32 boards and printing parts for
+          whatever automation idea I had that week. At Adswag I build in
+          TypeScript and Go, with{" "}
+          <TechBadge href="https://react.dev" src={react} text="React" />
+          {" on the front and "}
+          <TechBadge href="https://nestjs.com" src={nestjs} text="NestJS" />
           {" and "}
-          <Link
+          <TechBadge href="https://go.dev" src={go} text="Go" />
+          {" services on the back. It all runs on "}
+          <TechBadge href="https://www.docker.com/" src={docker} text="Docker" />
+          {" and "}
+          <TechBadge
             href="https://kubernetes.io/"
-            target="_blank"
-            className="inline-flex align-middle"
-          >
-            <Badge
-              text="Kubernetes"
-              icon={
-                <Image
-                  src={kubernetes}
-                  alt="Kubernetes logo"
-                  width={14}
-                  height={14}
-                  className="w-3.5 h-3.5"
-                />
-              }
-            />
-          </Link>
-          {", build with "}
-          <Link
-            href="https://nextjs.org"
-            target="_blank"
-            className="inline-flex align-middle"
-          >
-            <Badge
-              text="Next.js"
-              icon={
-                <Image
-                  src={nextjs}
-                  alt="Next.js logo"
-                  width={14}
-                  height={14}
-                  className="w-3.5 h-3.5"
-                />
-              }
-            />
-          </Link>
-          {", automate with "}
-          <Link
+            src={kubernetes}
+            text="Kubernetes"
+          />
+          {", is automated with "}
+          <TechBadge
             href="https://www.ansible.com/"
-            target="_blank"
-            className="inline-flex align-middle"
-          >
-            <Badge
-              text="Ansible"
-              icon={
-                <Image
-                  src={ansible}
-                  alt="Ansible logo"
-                  width={14}
-                  height={14}
-                  className="w-3.5 h-3.5"
-                />
-              }
-            />
-          </Link>
-          {", and build dashboards with "}
-          <Link
-            href="https://www.ag-grid.com/"
-            target="_blank"
-            className="inline-flex align-middle"
-          >
-            <Badge
-              text="Ag Grid"
-              icon={
-                <Image
-                  src={agGrid}
-                  alt="AG Grid logo"
-                  width={14}
-                  height={14}
-                  className="w-3.5 h-3.5"
-                />
-              }
-            />
-          </Link>
+            src={ansible}
+            text="Ansible"
+          />
+          {", and more and more of it is written together with "}
+          <TechBadge
+            href="https://claude.com/claude-code"
+            src={claude}
+            text="Claude Code"
+          />
           .
         </p>
       </div>
