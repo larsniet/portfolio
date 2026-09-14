@@ -1,0 +1,87 @@
+---
+title: "From graduation project to production: building a Branded Content Management System"
+publishedAt: "2026-09-14"
+summary: "For my graduation at Hogeschool Leiden I built a CMS for branded content at Adswag. It started as a Next.js prototype with Supabase, tested against a competitor with real users, and grew into a React + NestJS platform that is still in production today."
+featured: true
+---
+
+# From graduation project to production: building a Branded Content Management System
+
+Branded content is the kind of advertising that doesn't look like advertising. Instead of a banner, an advertiser gets a full article on a publisher's website, written to fit in with the rest of the content. Sounds simple. The process behind it in 2023 was not.
+
+At Adswag, where I did my graduation internship, getting one article live could take up to six months. Drafts went back and forth over email. Nobody knew which version was the latest. Feedback lived in someone's inbox, or in a project management tool that half the people involved didn't have access to. And once an article was live, there was no good way to see how it performed.
+
+My assignment was to replace that process with software. Twenty weeks, one developer, a backend, a dashboard and an API.
+
+## Figuring out what to build
+
+I didn't start with code. The first five weeks were research, which I'll admit felt slow at the time, but it paid off later.
+
+I interviewed campaign managers and marketeers, sent out a survey to internal staff and external partners like IGMN and Azerion, and did a heuristic evaluation of NapoleonCat, the closest thing to a competitor I could find. A direct competitor didn't exist, which is a nice problem to have.
+
+The survey result that stuck with me: nobody was happy with the existing process. Not one respondent. The pain points were consistent across everyone I talked to:
+
+- Communication and feedback scattered across email
+- No version control, so confusion about which draft was current
+- No central place where everyone could see and edit the same article
+- Nothing to analyse an article after it went live
+
+I also built a quick prototype and ran moderated usability tests, timing four people on the same tasks in both NapoleonCat and my prototype. Then I had them fill in a System Usability Scale questionnaire. NapoleonCat scored 51. The prototype scored 77. Small sample, so I ran a t-test to make sure the difference wasn't noise. It wasn't.
+
+## Designing it
+
+I followed the Design Thinking method, mostly because it maps well onto research, design, build and test. Persona's, customer journey maps, paper prototypes in Procreate, then wireframes and mockups in Figma using Adswag's pink and dark blue.
+
+The feedback rounds were honestly the hardest part of the whole project. Not technically. Emotionally. You spend a week on a design you're proud of, show it to five people, and get five different opinions about why it's wrong. Most of the criticism was well argued once we sat down together, which made it easier to swallow. But it took me a while to stop taking it personally.
+
+Some of the changes that came out of those sessions: moving logout into a dropdown under the username, turning the organisation list into a select, and adding sorting and filtering to the article table. Small stuff. All of it made the product better.
+
+## Building it
+
+The first version was Next.js with TypeScript, Tailwind and Supabase. Supabase because it came with authentication out of the box and connects to BigQuery, which is where Adswag stores all its ad data. Next.js because the API routes meant I didn't need a separate backend to get an MVP live.
+
+```plaintext
+Graduation version (2024)
+├── Next.js app router
+│   ├── [orgId]/bc        article management per organisation
+│   ├── settings          users, roles, organisation
+│   ├── auth              login, register, reset, verify (Zod validation)
+│   └── api               endpoints publishers' sites call for content
+├── Supabase             Postgres, auth, storage, triggers
+└── BigQuery             analytics behind the dashboard
+```
+
+The backend was a big chunk of the work but fell outside the scope of the report, which was graded on user interaction. So the database design, the triggers, the storage setup and the BigQuery connection all happened, they just didn't make it onto paper. That's a weird feeling when you're writing a 90-page document.
+
+I worked in one-week sprints from a Jira board that Adswag also used for marketing and sales around the product. Eight sprints for the frontend, plus the backend weeks before that. The team did code reviews on my work, and I ended up introducing a few patterns they hadn't used before. Learning went both ways.
+
+After the build I ran another round of moderated usability tests with campaign managers. The final SUS score came out at 71, against 40 for NapoleonCat. The issues that came out were small and fixable: unclear password requirements, no indication which fields were optional, and no confirmation after saving an article. All fixed in the last two weeks.
+
+## What it became
+
+The graduation version went live at app.adswag.nl with a demo account for the school. That version doesn't exist anymore.
+
+After graduating I joined Adswag and the product kept growing. Publishers needed their own environment. Media agencies needed billing. We needed real roles instead of visual ones, campaign management, creative uploads, a queue for background jobs. Next.js API routes and Supabase functions were fine for an MVP but not for that.
+
+So we rebuilt the backend in NestJS with Prisma on top of the same Postgres database, moved authentication to Keycloak, and split the frontend into a React app built with Vite. Analytics moved to CubeJS on top of BigQuery. All of it lives in a Turborepo monorepo now, with a shared UI package that I've spent a lot of time in.
+
+```plaintext
+Today
+├── apps/headline-frontend     React + Vite, TanStack Query
+├── apps/headline-api          NestJS, Prisma, BullMQ, Keycloak auth
+├── apps/cubejs                analytics on BigQuery
+├── packages/ui                shared component library
+└── packages/*-core            shared domain logic
+```
+
+Things I've built in there since: the article editor on top of BlockNote, the billing and revenue insights pages, admin user management, the creative upload flow, and a fair share of the design system. Roughly a thousand commits at the time of writing.
+
+Somewhere during the graduation period an email came in from the managing director of GroupM, the largest media agency group in the world, asking about the product. It wasn't even finished yet. That was the moment it stopped feeling like a school project.
+
+## Lessons learned
+
+Recruiting test users is harder than building the thing you want them to test. My first invitation got a handful of replies. What worked was calling people, not emailing them.
+
+Scope the project smaller than you think you need to. Mine was too big for twenty weeks, and it only worked out because the backend was agreed to be out of the report from day one. A feedback and revision system, publisher self-service and proper roles all went on the recommendations list. We built them later, with more people and more time.
+
+And the research phase is not wasted time. Every design decision I had to defend in a feedback session, I could point back to an interview or a survey result. That made the conversations a lot shorter.
