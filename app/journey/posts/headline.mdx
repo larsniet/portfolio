@@ -10,7 +10,7 @@ featured: true
 
 Branded content is the kind of advertising that doesn't look like advertising. Instead of a banner, an advertiser gets a full article on a publisher's website, written to fit in with the rest of the content. Sounds simple. The process behind it in 2023 was not.
 
-At Adswag, where I did my graduation internship, getting one article live could take up to six months. Drafts went back and forth over email. Nobody knew which version was the latest. Feedback lived in someone's inbox, or in a project management tool that half the people involved didn't have access to. And once an article was live, there was no good way to see how it performed.
+At Adswag, where I had been freelancing for a couple of years before doing my graduation internship there, getting one article live could take up to six months. Drafts went back and forth over email. Nobody knew which version was the latest. Feedback lived in someone's inbox, or in a project management tool that half the people involved didn't have access to. And once an article was live, there was no good way to see how it performed.
 
 My assignment was to replace that process with software. Twenty weeks, one developer, a backend, a dashboard and an API. That software is called Headline today. During my graduation it didn't have a name yet, just the very catchy "Branded Content Management System", or BCMS.
 
@@ -62,7 +62,7 @@ After the build I ran another round of moderated usability tests with campaign m
 
 The graduation version went live at app.adswag.nl with a demo account for the school. That version doesn't exist anymore.
 
-After graduating I joined Adswag and the BCMS got a proper name, a brand and a lot more scope. Publishers needed their own environment. Media agencies needed billing. We needed real roles instead of visual ones, campaign management, creative uploads, a queue for background jobs. Next.js API routes and Supabase functions were fine for an MVP but not for that.
+After graduating I stayed on at Adswag full-time and the BCMS got a proper name, a brand and a lot more scope. Publishers needed their own environment. Media agencies needed billing. We needed real roles instead of visual ones, campaign management, creative uploads, a queue for background jobs. Next.js API routes and Supabase functions were fine for an MVP but not for that.
 
 So we rebuilt the backend in NestJS with Prisma on top of the same Postgres database, moved authentication to Keycloak, and split the frontend into a React app built with Vite. Analytics moved to CubeJS on top of BigQuery. All of it lives in a Turborepo monorepo now, with a shared UI package that I've spent a lot of time in.
 
