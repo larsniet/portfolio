@@ -1,18 +1,18 @@
 ---
-title: "From graduation project to production: building a Branded Content Management System"
+title: "Headline: from graduation project to a production CMS for branded content"
 publishedAt: "2026-09-14"
-summary: "For my graduation at Hogeschool Leiden I built a CMS for branded content at Adswag. It started as a Next.js prototype with Supabase, tested against a competitor with real users, and grew into a React + NestJS platform that is still in production today."
+summary: "Headline is Adswag's platform for creating, publishing and measuring branded content. It started as my graduation project at Hogeschool Leiden, a Next.js prototype with Supabase, and grew into the React + NestJS product I work on today."
 image: "/images/headline-cover.webp"
 featured: true
 ---
 
-# From graduation project to production: building a Branded Content Management System
+# Headline: from graduation project to a production CMS for branded content
 
 Branded content is the kind of advertising that doesn't look like advertising. Instead of a banner, an advertiser gets a full article on a publisher's website, written to fit in with the rest of the content. Sounds simple. The process behind it in 2023 was not.
 
 At Adswag, where I did my graduation internship, getting one article live could take up to six months. Drafts went back and forth over email. Nobody knew which version was the latest. Feedback lived in someone's inbox, or in a project management tool that half the people involved didn't have access to. And once an article was live, there was no good way to see how it performed.
 
-My assignment was to replace that process with software. Twenty weeks, one developer, a backend, a dashboard and an API.
+My assignment was to replace that process with software. Twenty weeks, one developer, a backend, a dashboard and an API. That software is called Headline today. During my graduation it didn't have a name yet, just the very catchy "Branded Content Management System", or BCMS.
 
 ## Figuring out what to build
 
@@ -58,16 +58,16 @@ I worked in one-week sprints from a Jira board that Adswag also used for marketi
 
 After the build I ran another round of moderated usability tests with campaign managers. The final SUS score came out at 71, against 40 for NapoleonCat. The issues that came out were small and fixable: unclear password requirements, no indication which fields were optional, and no confirmation after saving an article. All fixed in the last two weeks.
 
-## What it became
+## Becoming Headline
 
 The graduation version went live at app.adswag.nl with a demo account for the school. That version doesn't exist anymore.
 
-After graduating I joined Adswag and the product kept growing. Publishers needed their own environment. Media agencies needed billing. We needed real roles instead of visual ones, campaign management, creative uploads, a queue for background jobs. Next.js API routes and Supabase functions were fine for an MVP but not for that.
+After graduating I joined Adswag and the BCMS got a proper name, a brand and a lot more scope. Publishers needed their own environment. Media agencies needed billing. We needed real roles instead of visual ones, campaign management, creative uploads, a queue for background jobs. Next.js API routes and Supabase functions were fine for an MVP but not for that.
 
 So we rebuilt the backend in NestJS with Prisma on top of the same Postgres database, moved authentication to Keycloak, and split the frontend into a React app built with Vite. Analytics moved to CubeJS on top of BigQuery. All of it lives in a Turborepo monorepo now, with a shared UI package that I've spent a lot of time in.
 
 ```plaintext
-Today
+Headline today
 ├── apps/headline-frontend     React + Vite, TanStack Query
 ├── apps/headline-api          NestJS, Prisma, BullMQ, Keycloak auth
 ├── apps/cubejs                analytics on BigQuery
@@ -75,9 +75,9 @@ Today
 └── packages/*-core            shared domain logic
 ```
 
-Things I've built in there since: the article editor on top of BlockNote, the billing and revenue insights pages, admin user management, the creative upload flow, and a fair share of the design system. Roughly a thousand commits at the time of writing.
+Things I've built in Headline since: the article editor on top of BlockNote, the billing and revenue insights pages, admin user management, the creative upload flow, and a fair share of the design system. Roughly a thousand commits at the time of writing.
 
-Somewhere during the graduation period an email came in from the managing director of GroupM, the largest media agency group in the world, asking about the product. It wasn't even finished yet. That was the moment it stopped feeling like a school project.
+Somewhere during the graduation period an email came in from the managing director of GroupM, the largest media agency group in the world, asking about the product. It wasn't even finished yet, let alone called Headline. That was the moment it stopped feeling like a school project.
 
 ## Lessons learned
 
@@ -86,3 +86,5 @@ Recruiting test users is harder than building the thing you want them to test. M
 Scope the project smaller than you think you need to. Mine was too big for twenty weeks, and it only worked out because the backend was agreed to be out of the report from day one. A feedback and revision system, publisher self-service and proper roles all went on the recommendations list. We built them later, with more people and more time.
 
 And the research phase is not wasted time. Every design decision I had to defend in a feedback session, I could point back to an interview or a survey result. That made the conversations a lot shorter.
+
+Most of those early decisions are still in Headline today. The name changed. The problem it solves didn't.
