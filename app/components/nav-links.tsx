@@ -10,13 +10,6 @@ const paths = { home: "/", journey: "/journey", contact: "/contact" };
 export function NavLinks({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const p = prefix(locale);
-  // ponytail: the other locale's URL is the same path with /nl added or removed
-  const other = locale === "nl" ? "en" : "nl";
-  const otherHref =
-    locale === "nl"
-      ? pathname.replace(/^\/nl/, "") || "/"
-      : `/nl${pathname === "/" ? "" : pathname}`;
-
   return (
     <>
       {navItems.map((item) => {
@@ -39,15 +32,6 @@ export function NavLinks({ locale }: { locale: Locale }) {
           </Link>
         );
       })}
-      <Link
-        href={otherHref}
-        hrefLang={other}
-        lang={other}
-        aria-label={other === "nl" ? "Nederlands" : "English"}
-        className="ml-1 px-2 py-1 text-xs uppercase rounded cursor-pointer text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 font-(family-name:--font-geist-mono)"
-      >
-        {other}
-      </Link>
     </>
   );
 }

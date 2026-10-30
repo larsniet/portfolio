@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPosts } from "@/app/journey/utils";
 import { SearchBar } from "./search-bar";
 import { NavLinks } from "./nav-links";
+import { LocaleSwitcher } from "./locale-switcher";
 import { prefix, type Locale } from "@/app/i18n";
 
 export async function Navbar({ locale }: { locale: Locale }) {
@@ -38,9 +39,12 @@ export async function Navbar({ locale }: { locale: Locale }) {
         {/* Nav links + Search */}
         <nav className="flex items-center gap-0.5">
           <NavLinks locale={locale} />
-          {/* Search: hidden on mobile, shown on md+ */}
-          <div className="hidden md:block ml-2">
-            <SearchBar posts={searchData} locale={locale} />
+          <div className="flex items-center gap-2 ml-2">
+            {/* Search: hidden on mobile, shown on md+ */}
+            <div className="hidden md:block">
+              <SearchBar posts={searchData} locale={locale} />
+            </div>
+            <LocaleSwitcher locale={locale} />
           </div>
         </nav>
       </div>
