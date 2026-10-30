@@ -1,22 +1,48 @@
 ---
 title: "iCare: A free 20-20-20 eye-break reminder for iPhone and Apple Watch"
 publishedAt: "2026-03-25"
-summary: "A minimal eye-break reminder app that follows the 20-20-20 rule. Built with SwiftUI for iPhone and Apple Watch, with no accounts, no backend, and no subscription. Just quiet reminders and a 20-second countdown."
+summary: "I've been nearsighted since a childhood spent twenty centimetres from a Nintendo DS, and my prescription still creeps up at every check-up. iCare is the eye-break reminder I built for myself: the 20-20-20 rule on iPhone and Apple Watch, no accounts, no subscription. Plus what the research says about screens and myopia, and what a timer can and can't fix."
 image: "/images/icare.webp"
 featured: true
 ---
 
 # iCare: A free 20-20-20 eye-break reminder for iPhone and Apple Watch
 
-I spend most of my day staring at a screen. That's not a complaint, it's just the job. But after long stretches of focused work I started noticing dry eyes, headaches, and that general foggy feeling by the end of the afternoon. The fix is stupidly simple: every 20 minutes, look at something 20 feet away for 20 seconds. It's called the [20-20-20 rule](https://www.aao.org/eye-health/tips-prevention/computer-usage) and optometrists have been recommending it for years.
+I'm nearsighted. Not dramatically: I drive, I ride my motorcycle, I pass the eye test for my licence. But I'm the one squinting at the departure board while everyone around me reads it without thinking, and for the past few years every check-up has ended the same way, with a prescription one notch stronger than the last. I wear glasses now.
 
-The problem isn't knowing about the rule. It's actually remembering to do it when you're deep in a problem.
+Neither of my parents does. That turns out to matter. Myopia is partly inherited, and children with no nearsighted parents are the group least likely to develop it: under ten percent in the [Orinda study](https://pmc.ncbi.nlm.nih.gov/articles/PMC2871403/), against thirty to forty percent for kids with two nearsighted parents. I was in the lucky group and got it anyway. When I told the optometrist at Pearle how I grew up, the reaction was a nod rather than surprise. A Nintendo DS held about twenty centimetres from my face from the age of six, and after that every screen there was, always close, always for hours. The most likely cause, in the optometrist's words.
+
+Nobody can prove that for one person. But the numbers for the population as a whole are not subtle, and I'll get to them below.
+
+The advice I got was the one optometrists have given for years: every 20 minutes, look at something 20 feet away for 20 seconds. The [20-20-20 rule](https://www.aao.org/eye-health/tips-prevention/computer-usage). Knowing it was never the problem. Remembering to do it while I'm deep in a problem is.
 
 <Screenshots>
   <Screenshot src="/images/icare-home.jpg" alt="iCare home screen with countdown timer" />
   <Screenshot src="/images/icare-countdown.jpg" alt="Break countdown synced between iPhone and Apple Watch" />
   <Screenshot src="/images/icare-schedule.jpg" alt="iCare schedule setup screen" />
 </Screenshots>
+
+## What the research actually says
+
+I went looking for the studies rather than taking one optometrist's word for it. Three findings stuck.
+
+**Near work is linked to myopia, and the dose matters.** A [2015 meta-analysis in PLoS ONE](https://pmc.ncbi.nlm.nih.gov/articles/PMC4618477) pooled 27 studies covering about 25,000 children aged 6 to 18. Children who did more near work had 14 percent higher odds of being myopic, and every extra diopter-hour of near work per week added about 2 percent. In the weighting those studies used, reading counts triple and screens double. A handheld console at twenty centimetres is about as near as near work gets.
+
+**Screens specifically, too.** A [2021 review in The Lancet Digital Health](https://doi.org/10.1016/S2589-7500(21)00135-7) went through 33 studies on smart device use. Screen time on phones and tablets came with roughly 26 percent higher odds of myopia, and combined with computer use, 77 percent. The authors are careful to say most of those studies measured screen time badly, by questionnaire, so hold the exact numbers loosely. The direction is consistent.
+
+**This is a global trend, not a personal quirk.** [Holden and colleagues](https://pubmed.ncbi.nlm.nih.gov/26875007/) estimated in 2016 that 23 percent of the world was myopic in 2000 and projected close to 50 percent by 2050, about 4.8 billion people. East Asia, where screen-heavy schooling started earliest, is already well past half.
+
+The flip side is just as well documented. The [Sydney Myopia Study](https://pubmed.ncbi.nlm.nih.gov/18294691/) found that twelve-year-olds who spent more time outdoors were less likely to be myopic, and the effect held even for kids who also did a lot of reading. It wasn't sport that mattered, it was daylight. The leading theory is that bright light drives retinal dopamine, which slows the eye's elongation.
+
+The growing eye is the key phrase there. Nearly all of this research is about children, because that's when the eyeball is still changing shape. Whether near work keeps nudging an adult prescription is less settled. Mine keeps moving, so I'm not inclined to wait for the definitive paper.
+
+## What a 20-minute timer can and can't fix
+
+I want to be honest about this, because the App Store is full of apps that aren't. There is no evidence that the 20-20-20 rule slows myopia. What it does is treat the strain: the dry eyes, the headaches, the fog at four in the afternoon.
+
+Even that has only really been tested once. In a [2023 study in Contact Lens and Anterior Eye](https://pubmed.ncbi.nlm.nih.gov/35963776/), 29 symptomatic computer users got webcam-driven 20-20-20 reminders for two weeks. Eye strain and dry-eye symptoms dropped. One week after the reminders stopped, the improvement was gone. That last part is the interesting bit: the rule works for as long as something keeps reminding you, and not a day longer. Which is an argument for a tool that stays on, not for willpower.
+
+So iCare is the part of my eye care I can automate. The walk outside at lunch is the part I can't.
 
 ## Every existing app wanted my money or my patience
 
