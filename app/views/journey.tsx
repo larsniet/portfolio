@@ -6,13 +6,15 @@ import { alternates, prefix, type Locale } from "@/app/i18n";
 
 const copy = {
   en: {
-    description: "Read about the latest developments in my programming journey.",
+    description:
+      "Posts by Lars van der Niet on full-stack development, AdTech, Kubernetes, hardware projects and the tools behind them.",
     h1: "My journey",
     intro: "A log of my thoughts, projects, experiments, and discoveries.",
     all: "all posts",
   },
   nl: {
-    description: "Lees over de nieuwste ontwikkelingen in mijn reis als developer.",
+    description:
+      "Posts van Lars van der Niet over full-stack development, AdTech, Kubernetes, hardwareprojecten en de tools erachter.",
     h1: "Mijn journey",
     intro: "Een logboek van gedachten, projecten, experimenten en ontdekkingen.",
     all: "alle posts",

@@ -1,4 +1,8 @@
+import type { Metadata } from "next";
 import type { Locale } from "@/app/i18n";
+
+// Service worker fallback, never something to rank
+export const offlineMetadata: Metadata = { robots: { index: false, follow: false } };
 
 const copy = {
   en: {
