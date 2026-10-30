@@ -115,7 +115,9 @@ export async function Post({ slug, locale }: { slug: string; locale: Locale }) {
                         post.metadata.title,
                       )}`,
                   url: `${baseUrl}${p}/journey/${slug}`,
+                  mainEntityOfPage: `${baseUrl}${p}/journey/${slug}`,
                   inLanguage: locale,
+                  publisher: { "@id": `${baseUrl}/#person` },
                   author: {
                     "@type": "Person",
                     "@id": `${baseUrl}/#person`,
