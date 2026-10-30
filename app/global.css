@@ -367,7 +367,11 @@ table {
   }
   .noise::after {
     content: "";
-    position: fixed;
+    /* Absolute, not fixed: Safari 26 ignores theme-color and tints its status bar
+       from whichever pinned element covers the top of the viewport. A fixed
+       full-screen overlay with no solid colour made the bar translucent. The
+       texture is uniform, so covering the document instead is visually identical. */
+    position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 100;
