@@ -21,6 +21,16 @@ const nextConfig = {
     qualities: [25, 50, 70, 75, 100],
     deviceSizes: [256, 384, 480, 640, 750, 828, 1080, 1200, 1920],
   },
+  async redirects() {
+    return [
+      // Headline post was renamed; Google still has the old slug
+      ...["", "/nl"].map((p) => ({
+        source: `${p}/journey/branded-content-management-system`,
+        destination: `${p}/journey/headline`,
+        permanent: true,
+      })),
+    ];
+  },
   async headers() {
     return [
       {
