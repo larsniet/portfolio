@@ -3,25 +3,25 @@ import { getPosts } from "@/app/journey/utils";
 export const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://larsniet.com";
 
-export default async function sitemap() {
-  const journeys = (await getPosts()).map((post) => ({
-    url: `${baseUrl}/journey/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
-
+// One entry per locale, each pointing at its sibling via hreflang
+const entry = (path: string, lastModified: Date | string) => {
+  const en = `${baseUrl}${path}`;
+  const nl = `${baseUrl}/nl${path}`;
+  const alternates = { languages: { en, nl, "x-default": en } };
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/journey`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-    },
-    ...journeys,
+    { url: en, lastModified, alternates },
+    { url: nl, lastModified, alternates },
+  ];
+};
+
+export default async function sitemap() {
+  const posts = await getPosts();
+  return [
+    ...entry("", new Date()),
+    ...entry("/journey", new Date()),
+    ...entry("/contact", new Date()),
+    ...posts.flatMap((post) =>
+      entry(`/journey/${post.slug}`, post.metadata.publishedAt),
+    ),
   ];
 }

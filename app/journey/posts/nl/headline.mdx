@@ -1,0 +1,90 @@
+---
+title: "Headline: van afstudeerproject naar een productie-CMS voor branded content"
+publishedAt: "2026-09-14"
+summary: "Headline is het platform van Adswag voor het maken, publiceren en meten van branded content. Het begon als mijn afstudeerproject aan de Hogeschool Leiden, een Next.js-prototype met Supabase, en groeide uit tot het React + NestJS-product waar ik vandaag de dag aan werk."
+image: "/images/headline-cover.webp"
+featured: true
+---
+
+# Headline: van afstudeerproject naar een productie-CMS voor branded content
+
+Branded content is het soort reclame dat niet op reclame lijkt. In plaats van een banner krijgt een adverteerder een volledig artikel op de website van een uitgever, geschreven zodat het past bij de rest van de content. Klinkt simpel. Het proces erachter was dat in 2023 niet.
+
+Bij Adswag, waar ik al een paar jaar als freelancer werkte voordat ik er mijn afstudeerstage deed, kon het tot zes maanden duren om één artikel live te krijgen. Concepten gingen over en weer via e-mail. Niemand wist welke versie de laatste was. Feedback zat in iemands inbox, of in een projectmanagementtool waar de helft van de betrokkenen geen toegang toe had. En als een artikel eenmaal live stond, was er geen goede manier om te zien hoe het presteerde.
+
+Mijn opdracht was om dat proces te vervangen door software. Twintig weken, één developer, een backend, een dashboard en een API. Die software heet vandaag Headline. Tijdens mijn afstuderen had het nog geen naam, alleen het zeer pakkende "Branded Content Management System", oftewel BCMS.
+
+## Uitzoeken wat ik moest bouwen
+
+Ik ben niet met code begonnen. De eerste vijf weken waren onderzoek, wat destijds eerlijk gezegd traag voelde, maar zich later uitbetaalde.
+
+Ik interviewde campagnemanagers en marketeers, stuurde een enquête naar interne medewerkers en externe partners zoals IGMN en Azerion, en deed een heuristische evaluatie van NapoleonCat, het dichtst bij een concurrent dat ik kon vinden. Een directe concurrent bestond niet, en dat is een fijn probleem om te hebben.
+
+Het enquêteresultaat dat me is bijgebleven: niemand was tevreden met het bestaande proces. Niet één respondent. De pijnpunten waren bij iedereen die ik sprak hetzelfde:
+
+- Communicatie en feedback verspreid over e-mail
+- Geen versiebeheer, dus verwarring over welk concept actueel was
+- Geen centrale plek waar iedereen hetzelfde artikel kon zien en bewerken
+- Niets om een artikel te analyseren nadat het live was gegaan
+
+Ik bouwde ook een snel prototype en deed gemodereerde usabilitytests, waarbij ik vier mensen dezelfde taken liet uitvoeren in zowel NapoleonCat als mijn prototype en de tijd bijhield. Daarna liet ik ze een System Usability Scale-vragenlijst invullen. NapoleonCat scoorde 51. Het prototype 77. Kleine steekproef, dus ik deed een t-toets om zeker te weten dat het verschil geen ruis was. Dat was het niet.
+
+## Het ontwerp
+
+Ik volgde de Design Thinking-methode, vooral omdat die goed aansluit op onderzoeken, ontwerpen, bouwen en testen. Persona's, customer journey maps, papieren prototypes in Procreate, daarna wireframes en mockups in Figma in het roze en donkerblauw van Adswag.
+
+De feedbackrondes waren eerlijk gezegd het moeilijkste deel van het hele project. Niet technisch. Emotioneel. Je werkt een week aan een ontwerp waar je trots op bent, laat het aan vijf mensen zien en krijgt vijf verschillende meningen over waarom het niet klopt. De meeste kritiek was goed onderbouwd zodra we er samen voor gingen zitten, en dat maakte het makkelijker te slikken. Maar het duurde even voordat ik het niet meer persoonlijk opvatte.
+
+Een paar aanpassingen die uit die sessies kwamen: uitloggen verplaatsen naar een dropdown onder de gebruikersnaam, de organisatielijst omzetten in een select, en sorteren en filteren toevoegen aan de artikeltabel. Kleine dingen. Allemaal maakten ze het product beter.
+
+## De bouw
+
+De eerste versie was Next.js met TypeScript, Tailwind en Supabase. Supabase omdat het authenticatie out of the box meebracht en koppelt met BigQuery, waar Adswag al zijn advertentiedata opslaat. Next.js omdat ik dankzij de API routes geen aparte backend nodig had om een MVP live te krijgen.
+
+```plaintext
+Graduation version (2024)
+├── Next.js app router
+│   ├── [orgId]/bc        article management per organisation
+│   ├── settings          users, roles, organisation
+│   ├── auth              login, register, reset, verify (Zod validation)
+│   └── api               endpoints publishers' sites call for content
+├── Supabase             Postgres, auth, storage, triggers
+└── BigQuery             analytics behind the dashboard
+```
+
+De backend was een groot deel van het werk, maar viel buiten de scope van het verslag, dat beoordeeld werd op gebruikersinteractie. Dus het databaseontwerp, de triggers, de storage-opzet en de BigQuery-koppeling zijn er allemaal gekomen, ze haalden alleen het papier niet. Dat is een raar gevoel als je een document van 90 pagina's schrijft.
+
+Ik werkte in sprints van een week vanaf een Jira-board dat Adswag ook gebruikte voor marketing en sales rond het product. Acht sprints voor de frontend, plus de backend-weken daarvoor. Het team deed code reviews op mijn werk, en uiteindelijk introduceerde ik een paar patronen die zij nog niet gebruikten. Het leren ging dus twee kanten op.
+
+Na de bouw deed ik nog een ronde gemodereerde usabilitytests met campagnemanagers. De uiteindelijke SUS-score kwam uit op 71, tegenover 40 voor NapoleonCat. De problemen die naar boven kwamen waren klein en op te lossen: onduidelijke wachtwoordeisen, geen aanduiding welke velden optioneel waren, en geen bevestiging na het opslaan van een artikel. Allemaal opgelost in de laatste twee weken.
+
+## Headline worden
+
+De afstudeerversie ging live op app.adswag.nl met een demo-account voor school. Die versie bestaat niet meer.
+
+Na mijn afstuderen bleef ik fulltime bij Adswag en kreeg het BCMS een echte naam, een merk en een stuk meer scope. Uitgevers hadden hun eigen omgeving nodig. Mediabureaus hadden facturatie nodig. We hadden echte rollen nodig in plaats van visuele, campagnebeheer, uploads van creatives, een queue voor achtergrondtaken. Next.js API routes en Supabase functions waren prima voor een MVP, maar niet daarvoor.
+
+Dus we hebben de backend opnieuw gebouwd in NestJS met Prisma bovenop dezelfde Postgres-database, de authenticatie verplaatst naar Keycloak en de frontend afgesplitst in een React-app gebouwd met Vite. Analytics verhuisde naar CubeJS bovenop BigQuery. Dat alles zit nu in een Turborepo-monorepo, met een gedeeld UI-package waar ik veel tijd in heb gestoken.
+
+```plaintext
+Headline today
+├── apps/headline-frontend     React + Vite, TanStack Query
+├── apps/headline-api          NestJS, Prisma, BullMQ, Keycloak auth
+├── apps/cubejs                analytics on BigQuery
+├── packages/ui                shared component library
+└── packages/*-core            shared domain logic
+```
+
+Dingen die ik sindsdien in Headline heb gebouwd: de artikeleditor bovenop BlockNote, de pagina's voor facturatie en omzetinzichten, gebruikersbeheer voor admins, de uploadflow voor creatives en een flink deel van het design system. Ruwweg duizend commits op het moment van schrijven.
+
+Ergens tijdens de afstudeerperiode kwam er een e-mail binnen van de managing director van GroupM, de grootste mediabureaugroep ter wereld, met vragen over het product. Het was nog niet eens af, laat staan dat het Headline heette. Dat was het moment waarop het niet meer als een schoolproject voelde.
+
+## Wat ik heb geleerd
+
+Testgebruikers werven is lastiger dan bouwen wat je ze wilt laten testen. Op mijn eerste uitnodiging kwam een handjevol reacties. Wat werkte was mensen bellen, niet mailen.
+
+Maak de scope van het project kleiner dan je denkt nodig te hebben. De mijne was te groot voor twintig weken, en het is alleen goed gekomen omdat vanaf dag één was afgesproken dat de backend buiten het verslag viel. Een feedback- en revisiesysteem, selfservice voor uitgevers en echte rollen gingen allemaal op de lijst met aanbevelingen. Die hebben we later gebouwd, met meer mensen en meer tijd.
+
+En de onderzoeksfase is geen verspilde tijd. Elke ontwerpkeuze die ik in een feedbacksessie moest verdedigen, kon ik terugvoeren op een interview of een enquêteresultaat. Dat maakte de gesprekken een stuk korter.
+
+De meeste van die vroege keuzes zitten vandaag nog steeds in Headline. De naam is veranderd. Het probleem dat het oplost niet.

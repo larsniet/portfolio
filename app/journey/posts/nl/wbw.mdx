@@ -1,0 +1,47 @@
+---
+title: "Telegram-notificaties krijgen zodra een webpagina verandert"
+publishedAt: "2025-10-20"
+summary: "Een Python-bot in Docker die elke webpagina in de gaten houdt op veranderingen in elementen en je een Telegram-bericht stuurt zodra er iets verandert. Ondersteunt zowel statische HTML-parsing als volledige JavaScript-rendering voor dynamische content."
+featured: false
+---
+
+# Telegram-notificaties krijgen zodra een webpagina verandert
+
+Sommige pagina's hebben geen notificaties. Voorraadniveaus, ticketbeschikbaarheid, afspraakslots: je moet blijven verversen en hopen dat je het op tijd ziet. WBW automatiseert dat door de content van een pagina via CSS-selectors in de gaten te houden en je een Telegram-bericht te sturen zodra de tekst verandert of een element verdwijnt.
+
+## Hoe het werkt
+
+Je start een gesprek met de bot, stuurt hem een URL en een of meer CSS-selectors, en hij begint elke 60 seconden te pollen. Als de tekst van het geselecteerde element verandert, krijg je een bericht. Als je sessie van 12 uur afloopt, laat hij dat ook weten.
+
+De monitoring-loop draait in twee modi, afhankelijk van de doelpagina:
+
+- **Fast mode**: haalt statische HTML op, met Cloudflare-bypass via cloudscraper. Licht en snel.
+- **JavaScript mode**: start een headless Chrome-instantie via Zendriver voor pagina's die hun content dynamisch laden. Trager, maar kan alles aan wat een echte browser ook kan.
+
+Je stelt de modus vooraf in met een environment variable. Als een site JavaScript nodig heeft om het element te renderen dat je volgt, zet je het globaal aan.
+
+## Implementatie
+
+De bot is gebouwd in Python en draait als één Docker-container. FastAPI serveert een health check-endpoint op poort 8080, en de polling-loop van de bot draait tegelijk in dezelfde event loop via asyncio. Geen threading, geen aparte processen.
+
+Sessies worden opgeslagen in een SQLite-database die via een Docker-volume bewaard blijft, dus de bot overleeft een herstart zonder actieve monitors te verliezen. Maximaal 5 gebruikers kunnen tegelijk monitoren; sessies verlopen automatisch na 12 uur.
+
+De retry-logica gaat netjes om met wispelturige pagina's. Als een element verdwijnt, probeert de monitor het tot drie keer opnieuw voordat hij je waarschuwt, zodat je geen valse meldingen krijgt bij tijdelijke paginastatussen of een haperende load. Bij netwerkfouten volgt exponential backoff voordat de bot opgeeft en het probleem meldt.
+
+## Draaien
+
+De hele setup is één `docker-compose up`:
+
+```bash
+# .env
+TELEGRAM_BOT_TOKEN=your_token_here
+USE_JAVASCRIPT=true  # or false for static-only mode
+```
+
+```bash
+docker-compose up --build
+```
+
+Verder geen dependencies. De Dockerfile regelt de installatie van Chrome voor JavaScript mode.
+
+[Bekijk op GitHub](https://github.com/larsniet/wbw)

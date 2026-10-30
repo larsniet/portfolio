@@ -2,10 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { prefix, t, type Locale } from "@/app/i18n";
 
 type Post = { title: string; slug: string };
 
-export function SearchBar({ posts }: { posts: Post[] }) {
+export function SearchBar({
+  posts,
+  locale = "en",
+}: {
+  posts: Post[];
+  locale?: Locale;
+}) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -53,7 +60,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
     setQuery("");
     setOpen(false);
     setActiveIndex(-1);
-    router.push(`/journey/${slug}`);
+    router.push(`${prefix(locale)}/journey/${slug}`);
   }
 
   function highlight(text: string) {
@@ -99,7 +106,7 @@ export function SearchBar({ posts }: { posts: Post[] }) {
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search..."
+          placeholder={t[locale].search}
           className="pl-8 pr-3 py-1 text-xs rounded-sm border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-black dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-black dark:focus:border-white w-full md:w-28 md:focus:w-44 transition-all duration-200 font-(family-name:--font-geist-mono)"
         />
       </div>

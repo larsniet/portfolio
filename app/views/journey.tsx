@@ -2,17 +2,33 @@ import type { Metadata } from "next";
 import { JourneyPosts } from "@/app/components/posts";
 import { getPosts } from "@/app/journey/utils";
 import { baseUrl } from "@/app/sitemap";
+import { alternates, prefix, type Locale } from "@/app/i18n";
 
-export const metadata: Metadata = {
-  title: "Journey",
-  description: "Read about the latest developments in my programming journey.",
-  alternates: {
-    canonical: "/journey",
+const copy = {
+  en: {
+    description: "Read about the latest developments in my programming journey.",
+    h1: "My journey",
+    intro: "A log of my thoughts, projects, experiments, and discoveries.",
+    all: "all posts",
+  },
+  nl: {
+    description: "Lees over de nieuwste ontwikkelingen in mijn reis als developer.",
+    h1: "Mijn journey",
+    intro: "Een logboek van gedachten, projecten, experimenten en ontdekkingen.",
+    all: "alle posts",
   },
 };
 
-export default async function Page() {
-  let posts = await getPosts();
+export const journeyMetadata = (locale: Locale): Metadata => ({
+  title: "Journey",
+  description: copy[locale].description,
+  alternates: alternates("/journey", locale),
+});
+
+export async function Journey({ locale }: { locale: Locale }) {
+  let posts = await getPosts(locale);
+  const c = copy[locale];
+  const p = prefix(locale);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -20,24 +36,24 @@ export default async function Page() {
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+          { "@type": "ListItem", position: 1, name: "Home", item: `${baseUrl}${p}` },
           {
             "@type": "ListItem",
             position: 2,
             name: "Journey",
-            item: `${baseUrl}/journey`,
+            item: `${baseUrl}${p}/journey`,
           },
         ],
       },
       {
         "@type": "Blog",
         name: "Lars van der Niet — Journey",
-        description:
-          "Read about the latest developments in my programming journey.",
-        url: `${baseUrl}/journey`,
+        description: c.description,
+        url: `${baseUrl}${p}/journey`,
+        inLanguage: locale,
         author: {
           "@type": "Person",
-          "@id": "https://larsniet.com/#person",
+          "@id": `${baseUrl}/#person`,
           name: "Lars van der Niet",
           url: baseUrl,
         },
@@ -45,7 +61,7 @@ export default async function Page() {
           "@type": "BlogPosting",
           headline: post.metadata.title,
           datePublished: post.metadata.publishedAt,
-          url: `${baseUrl}/journey/${post.slug}`,
+          url: `${baseUrl}${p}/journey/${post.slug}`,
         })),
       },
     ],
@@ -59,21 +75,21 @@ export default async function Page() {
       />
       <div className="fade-up fade-up-1 mb-10">
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-3">
-          My journey
+          {c.h1}
         </h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
-          A log of my thoughts, projects, experiments, and discoveries.
+          {c.intro}
         </p>
       </div>
 
       <div className="fade-up fade-up-2">
         <div className="flex items-center gap-3 mb-5">
           <p className="text-xs font-medium tracking-widest uppercase text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
-            all posts
+            {c.all}
           </p>
           <div className="flex-1 h-px bg-neutral-100 dark:bg-neutral-900" />
         </div>
-        <JourneyPosts posts={posts} />
+        <JourneyPosts posts={posts} locale={locale} />
       </div>
     </section>
   );

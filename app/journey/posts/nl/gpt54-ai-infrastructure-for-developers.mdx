@@ -1,0 +1,158 @@
+---
+title: "GPT-5.4 is uit. De hype is niet helemaal terecht, maar de verschuiving is echt"
+publishedAt: "2026-03-06"
+summary: "GPT-5.4 is uit en iedereen gaat erover uit zijn dak. Ik vind de hype wat overdreven, maar de richting die het voor developers aangeeft is echt de moeite waard om in de gaten te houden."
+image: "/images/gpt54-ai-infrastructure.webp"
+featured: true
+---
+
+# GPT-5.4 is uit. De hype is niet helemaal terecht, maar de verschuiving is echt
+
+GPT-5.4 kwam uit op 5 maart 2026, en binnen een paar uur stond mijn feed vol met mensen die het een doorbraak noemden.
+
+Ik ben wat sceptischer.
+
+Het model is beter, geen twijfel. Maar als je de laatste paar releases hebt gevolgd, zie je een patroon: het pure logische redeneren voelt per versie niet dramatisch slimmer. Wat wél verbetert (en waar mensen volgens mij eigenlijk op reageren zonder het door te hebben) is hoeveel beter deze modellen worden in _begrijpen wat je vraagt_. De conversatielaag, het herkennen van je intentie, het feit dat het je prompt niet meer verkeerd leest.
+
+Dat is nuttig. Maar het is niet hetzelfde als intelligenter worden.
+
+---
+
+## Wat er echt is veranderd in GPT-5.4
+
+OpenAI zet deze release in de markt rond verbeteringen in redeneren en coderen. Er zijn ook "Thinking"- en "Pro"-varianten voor diepere analyse en enterprise-workloads.
+
+Het contextvenster is wat ik echt interessant vind. Volgens berichten gaat het richting een miljoen tokens, wat betekent dat je het kunt voeren met:
+
+- Een complete codebase
+- Een lange reeks logbestanden
+- Maanden aan documentatie
+
+...en daar in één keer vragen over kunt stellen.
+
+```plaintext
+Full-repo code assistant
+├── Ingest entire codebase
+├── Understand cross-file dependencies
+├── Suggest refactors across modules
+└── Answer questions with full context
+```
+
+Dat is geen gimmick. Voor developers die AI-tooling bouwen, maakt een grotere context echt dingen mogelijk die eerder niet haalbaar waren.
+
+De verbeteringen in agentic workflows zijn ook het vermelden waard. GPT-5.4 is ontworpen om te werken binnen systemen die zelfstandig acties uitvoeren, niet alleen om vragen te beantwoorden. Maar ook hier zou ik de verwachtingen temperen. Beter zijn in het volgen van instructies in meerdere stappen is niet hetzelfde als echt anders redeneren over moeilijke problemen.
+
+---
+
+## Mijn eerlijke kijk op het plateau
+
+Ik zie steeds mensen deze modellen benchmarken op opgaven van de wiskunde-olympiade of logicapuzzels om te bewijzen dat ze slimmer worden. En ja, de scores gaan omhoog. Maar als ik ze dagelijks gebruik voor echte engineeringproblemen, zoals iets subtiels debuggen, een design-afweging doordenken of begrijpen waarom een systeem zich op een bepaalde manier gedraagt, gaat het nog steeds op vertrouwde manieren mis.
+
+Wat _wel_ merkbaar is verbeterd van GPT-4 via 4.5 naar nu 5.x, is hoe zelden het model je intentie verkeerd begrijpt. Eerdere versies klampten zich vast aan het verkeerde deel van je prompt. Dat gebeurt nu veel minder. Het model is beter geworden in een goede gesprekspartner zijn.
+
+Dat is een echte verbetering. Ik wil het alleen niet verwarren met een model dat fundamenteel beter is gaan redeneren.
+
+---
+
+## Wat er wél toe doet voor developers
+
+Ook al is het intelligentieplateau echt, de bredere verschuiving waar het deel van uitmaakt kun je niet zomaar wegwuiven.
+
+AI wordt infrastructuur. Niet op een hype-manier, meer op dezelfde saaie, praktische manier waarop databases en message queues infrastructuur werden. Iets waar je omheen ontwerpt, niet iets wat je er achteraf aan vastschroeft.
+
+Applicaties worden steeds vaker gebouwd met een expliciete AI-laag:
+
+```plaintext
+┌─────────────┐
+│   Frontend  │
+├─────────────┤
+│   Backend   │
+├─────────────┤
+│  Database   │
+├─────────────┤
+│   AI Layer  │  ← this is just part of the stack now
+└─────────────┘
+```
+
+En de patronen die in die laag zitten, worden snel volwassen, ongeacht welk model je erin stopt.
+
+---
+
+## Patronen die je echt moet leren
+
+Als je tijd in dit vakgebied gaat steken, richt je dan op de patronen die niet veranderen elke keer dat OpenAI een nieuw model uitbrengt.
+
+### RAG (Retrieval-Augmented Generation)
+
+Het idee is simpel: in plaats van te vertrouwen op wat het model tijdens de training heeft onthouden, haal je op het moment van de vraag relevante data op en geef je die als context aan het model.
+
+```plaintext
+User query
+   ↓
+Embed query as vector
+   ↓
+Search vector database
+   ↓
+Retrieve relevant documents
+   ↓
+Pass context + query to model
+   ↓
+AI generates grounded answer
+```
+
+Dit patroon werkt met GPT-4, GPT-5.4, Claude, Gemini. Het model is bijna inwisselbaar. De retrieval goed krijgen is het lastige deel.
+
+### Agents
+
+Een agent is gewoon een model dat in een loop tools kan aanroepen tot het een taak heeft afgerond. De workflow ziet er ongeveer zo uit:
+
+```plaintext
+User request
+     ↓
+AI plans tasks
+     ↓
+Calls tools (search, code exec, APIs)
+     ↓
+Writes code
+     ↓
+Tests code
+     ↓
+Returns result
+```
+
+Of GPT-5.4 nu slimmer is of niet, betrouwbaardere intentieherkenning betekent dat agents minder vaak stilletjes falen. Het model zal minder snel verkeerd inschatten welke tool het moet aanroepen of wanneer het moet stoppen. Daar vertalen de verbeteringen in de conversatielaag zich echt naar iets concreets.
+
+### AI in echte pipelines stoppen
+
+Het meest onderschatte gebruik van deze modellen is als verwerkingsstap binnen bestaande infrastructuur. Logtriage is een goed voorbeeld:
+
+```typescript
+const result = await openai.chat.completions.create({
+  model: "gpt-5.4",
+  messages: [
+    {
+      role: "system",
+      content:
+        "You are an on-call engineer. Classify this log entry and suggest a root cause.",
+    },
+    {
+      role: "user",
+      content: logEntry,
+    },
+  ],
+});
+```
+
+Dataclassificatie, documenten taggen, samenvatten. Daar verdient AI volgens mij op dit moment zijn plek in de stack. Het is niet glamoureus, maar het werkt, en de lat voor "goed genoeg" ligt laag genoeg dat zelfs een niet-perfect model het prima afhandelt.
+
+---
+
+## Dus moet je je druk maken om GPT-5.4 specifiek?
+
+Eerlijk gezegd, waarschijnlijk niet zo veel.
+
+Als je al bouwt met GPT-4 of iets vergelijkbaars, is het upgradepad reëel en zijn de verbeteringen aan het contextvenster het testen waard. Maar de doorbraak-framing in de pers en op social media voelt overdreven.
+
+De interessantere vraag is niet "hoe slim is dit model", maar "hoe verandert AI wat ik moet bouwen en hoe ik het bouw". Die vraag heeft een duidelijk antwoord: AI wordt een standaardlaag in softwarearchitectuur, en de patronen eromheen zijn het nu al waard om in te investeren, ongeacht welk model eronder zit.
+
+Het intelligentieplateau is misschien echt. De infrastructuurverschuiving is dat zeker.

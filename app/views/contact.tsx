@@ -1,14 +1,34 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { alternates, prefix, t, type Locale } from "@/app/i18n";
+import { baseUrl } from "@/app/sitemap";
 
-export const metadata: Metadata = {
-  title: "Contact Lars van der Niet",
-  description:
-    "Get in touch with Lars van der Niet — full stack developer based in Amsterdam.",
-  alternates: {
-    canonical: "/contact",
+const copy = {
+  en: {
+    title: "Contact Lars van der Niet",
+    description:
+      "Get in touch with Lars van der Niet — full stack developer based in Amsterdam.",
+    h1: "Get in touch",
+    intro: "Feel free to reach out — whether it's about a project, an opportunity, or just to say hi.",
+    location: "Based in Amsterdam, Netherlands",
+    email: "Email",
+  },
+  nl: {
+    title: "Contact met Lars van der Niet",
+    description:
+      "Neem contact op met Lars van der Niet, full-stack developer in Amsterdam.",
+    h1: "Neem contact op",
+    intro: "Stuur gerust een bericht, of het nu om een project gaat, een kans, of gewoon om hoi te zeggen.",
+    location: "Gevestigd in Amsterdam, Nederland",
+    email: "E-mail",
   },
 };
+
+export const contactMetadata = (locale: Locale): Metadata => ({
+  title: copy[locale].title,
+  description: copy[locale].description,
+  alternates: alternates("/contact", locale),
+});
 
 function ArrowIcon() {
   return (
@@ -28,7 +48,7 @@ function ArrowIcon() {
   );
 }
 
-const jsonLd = {
+const jsonLd = (locale: Locale) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -38,28 +58,29 @@ const jsonLd = {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://larsniet.com",
+          item: `${baseUrl}${prefix(locale)}`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Contact",
-          item: "https://larsniet.com/contact",
+          item: `${baseUrl}${prefix(locale)}/contact`,
         },
       ],
     },
     {
       "@type": "ContactPage",
-      name: "Contact Lars van der Niet",
-      url: "https://larsniet.com/contact",
+      name: copy[locale].title,
+      url: `${baseUrl}${prefix(locale)}/contact`,
+      inLanguage: locale,
       author: {
         "@type": "Person",
-        "@id": "https://larsniet.com/#person",
+        "@id": `${baseUrl}/#person`,
         name: "Lars van der Niet",
       },
     },
   ],
-};
+});
 
 const contacts = [
   {
@@ -79,22 +100,22 @@ const contacts = [
   },
 ];
 
-export default function Page() {
+export function Contact({ locale }: { locale: Locale }) {
+  const c = copy[locale];
   return (
     <section className="pt-2 pb-16">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale)) }}
       />
 
       {/* ── Header ───────────────────────────────────────────── */}
       <div className="fade-up fade-up-1 mb-10">
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-3">
-          Get in touch
+          {c.h1}
         </h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs">
-          Feel free to reach out — whether it&apos;s about a project, an
-          opportunity, or just to say hi.
+          {c.intro}
         </p>
       </div>
 
@@ -115,7 +136,7 @@ export default function Page() {
             />
           </svg>
           <span className="text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono)">
-            Based in Amsterdam, Netherlands
+            {c.location}
           </span>
         </div>
       </div>
@@ -132,7 +153,7 @@ export default function Page() {
           >
             <div>
               <p className="text-xs font-medium tracking-widest uppercase text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono) mb-0.5">
-                {contact.label}
+                {contact.label === "Email" ? c.email : contact.label}
               </p>
               <p className="text-sm text-neutral-600 dark:text-neutral-300 group-hover:text-black dark:group-hover:text-white transition-colors duration-200">
                 {contact.value}

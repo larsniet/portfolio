@@ -1,0 +1,92 @@
+---
+title: "Verbonden ESP32 Hello Kitty-lampjes bouwen: een DIY-jubileumcadeau"
+publishedAt: "2024-10-15"
+summary: "Voor ons jubileum besloot ik techniek te combineren met de favoriete personages van mijn vriendin en een set verbonden lampjes met Hello Kitty-thema te maken. Dit zijn niet zomaar lampjes, ze communiceren met elkaar! Zet je de ene uit, dan volgt de andere, als symbool voor verbondenheid (dat was tenminste het idee). En ze zijn ook nog op afstand te bedienen via een webapplicatie."
+featured: false
+---
+
+# Verbonden ESP32 Hello Kitty-lampjes bouwen: een DIY-jubileumcadeau
+
+![Hello Kitty-lampjes](/images/hello-kitty-lights.jpg)
+
+## Gebruikte materialen
+
+Laat ik beginnen met een lijst van de materialen die ik voor dit project heb gebruikt:
+
+- **Twee vazen**: houten voet met een glazen bovenkant.
+- **Twee hartvormige Hello Kitty-lampjes**: voor dat beetje extra charme.
+- **Twee ESP32-microcontrollers**: twee ESP32-WROOM-32D's, in 3D-geprinte behuizingen.
+- **Jumper wires**: om de onderdelen met elkaar te verbinden.
+- **Twee momentary drukknoppen**: om de lampjes handmatig aan en uit te zetten.
+- **3D-geprinte onderdelen**: op maat gemaakte voetjes zodat de lampjes in het glas passen.
+- **Webapplicatie**: gebouwd met Next.js en gehost op Vercel voor bediening op afstand.
+
+Niet al deze materialen zijn natuurlijk essentieel. Je hoeft geen Hello Kitty-lampjes of precies de vazen te gebruiken die ik koos. Het kernidee is twee lampjes die met elkaar kunnen communiceren en op afstand te bedienen zijn.
+
+## Gebruikt gereedschap
+
+- **3D-printer**: voor de voetjes en behuizingen op maat.
+- **Soldeerbout**: om de draden stevig te verbinden.
+- **Arduino IDE**: om de ESP32's te programmeren.
+- **MQTT-broker**: voor de berichten tussen de apparaten (ik ga hier niet diep op in, maar ik link naar bronnen om er een op te zetten).
+- **Next.js**: voor het ontwikkelen van de webapplicatie.
+- **Vercel**: voor het hosten van de webapplicatie.
+- **Heteluchtpistool**: voor het krimpen van de krimpkous om de draden.
+- **Striptang**: om de draden voor te bereiden.
+- **Schroevendraaier**: om een paar onderdelen uit elkaar te halen.
+
+## Het concept
+
+Het idee was om twee losse lampjes te hebben die met elkaar verbonden zijn. Druk je op de knop van de ene, dan gaat niet alleen dat lampje uit, maar wordt er ook een signaal gestuurd om het andere uit te zetten. Dat staat symbool voor de verbinding tussen twee mensen: wat op de ene plek gebeurt, heeft effect op de andere. Daarnaast wilde ik de lampjes op afstand kunnen bedienen, dus bouwde ik een webapplicatie die met de MQTT-broker praat.
+
+## De hardware bouwen
+
+### De lampjes in elkaar zetten
+
+1. **De vazen voorbereiden**: de houten voeten zorgden voor een stevige basis, terwijl de glazen bovenkant het geheel wat eleganter maakte.
+2. **De voetjes 3D-printen**: ik ontwierp en printte op maat gemaakte voetjes zodat de Hello Kitty-lampjes stevig in het glas staan.
+3. **De ESP32's behuizen**: met de 3D-printer maakte ik behuizingen voor de ESP32-microcontrollers, zodat ze beschermd zijn en de opstelling netjes blijft.
+4. **De onderdelen bedraden**:
+   - De ESP32's aangesloten op de Hello Kitty-lampjes.
+   - De momentary drukknoppen toegevoegd voor handmatige bediening.
+   - Gezorgd dat alle bedrading netjes in de voet van de vaas zit.
+
+## De MQTT-broker opzetten
+
+Ik gebruikte een Eclipse MQTT-broker voor de berichten tussen de twee ESP32's en de webapplicatie.
+
+1. **Eclipse MQTT installeren**: de broker ingesteld om naar berichten op specifieke topics te luisteren.
+2. **Topics configureren**: het topic `home/lights/toggle` aangemaakt voor de communicatie.
+3. **De broker testen**: met MQTT-clienttools gecontroleerd of berichten goed verstuurd en ontvangen werden.
+
+Om te testen kun je publieke MQTT-brokers gebruiken zoals [HiveMQ](https://www.hivemq.com/mqtt/public-mqtt-broker/). Voor een productieopstelling is het echter aan te raden je eigen broker te hosten, voor betere beveiliging en controle. Ik heb dat gedaan door [Eclipse Mosquitto](https://mosquitto.org/) te draaien in een kubernetes cluster op mijn Truenas SCALE-server.
+
+## De ESP32's programmeren
+
+- **Setup**: initialiseert de pinnen en zet de wifi- en MQTT-verbindingen op.
+- **Loop**: controleert op knopdrukken om het lampje te togglen en publiceert de nieuwe status naar het MQTT-topic.
+- **Callback**: ontvangt berichten van de MQTT-broker en werkt de status van het lampje bij.
+
+Ik heb ook beveiligingsmaatregelen ingesteld zoals TLS-versleuteling voor de MQTT-verbinding, om de dataprivacy te waarborgen. De volledige code voor de ESP32 vind je in de GitHub-repository waarnaar ik aan het einde van dit artikel link.
+
+## Flowchart
+
+Hier is een vereenvoudigde flowchart die de communicatie tussen de ESP32's, de MQTT-broker en de webapplicatie laat zien:
+
+![Flowchart](/images/esp32-mqtt-wifi-flowchart.png)
+
+## De webapp ontwikkelen
+
+Ik wilde een gebruiksvriendelijke interface om de lampjes op afstand te bedienen, dus bouwde ik een webapplicatie met Next.js en hostte die op Vercel.
+
+### Functies
+
+- **Realtime bediening**: zet de lampjes aan of uit.
+- **Statusweergave**: toont de huidige status van elk lampje.
+- **Responsive design**: te gebruiken op zowel desktop als mobiel.
+
+## Conclusie
+
+Dit project is met liefde gemaakt, een combinatie van techniek en een persoonlijke touch. Wil je iets vergelijkbaars maken, dan hoop ik dat deze handleiding een goed startpunt is. Stel gerust je vragen of deel je eigen creaties!
+
+[Ga naar de GitHub-repository voor meer informatie](https://github.com/larsniet/love-hearts)

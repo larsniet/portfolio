@@ -1,0 +1,93 @@
+---
+title: "iCare: een gratis 20-20-20 oogpauze-herinnering voor iPhone en Apple Watch"
+publishedAt: "2026-03-25"
+summary: "Een minimalistische oogpauze-app die de 20-20-20-regel volgt. Gebouwd met SwiftUI voor iPhone en Apple Watch, zonder accounts, zonder backend en zonder abonnement. Alleen rustige herinneringen en een countdown van 20 seconden."
+image: "/images/icare.webp"
+featured: true
+---
+
+# iCare: een gratis 20-20-20 oogpauze-herinnering voor iPhone en Apple Watch
+
+Ik breng het grootste deel van mijn dag door starend naar een scherm. Dat is geen klacht, het is gewoon het werk. Maar na lange stukken geconcentreerd werken begon ik droge ogen, hoofdpijn en dat algemene wazige gevoel aan het einde van de middag op te merken. De oplossing is belachelijk simpel: kijk elke 20 minuten 20 seconden lang naar iets op 20 voet (zo'n zes meter) afstand. Het heet de [20-20-20-regel](https://www.aao.org/eye-health/tips-prevention/computer-usage) en optometristen raden het al jaren aan.
+
+Het probleem is niet dat je de regel niet kent. Het is eraan denken om het ook echt te doen als je diep in een probleem zit.
+
+<Screenshots>
+  <Screenshot src="/images/icare-home.jpg" alt="iCare-startscherm met countdown-timer" />
+  <Screenshot src="/images/icare-countdown.jpg" alt="Pauze-countdown gesynchroniseerd tussen iPhone en Apple Watch" />
+  <Screenshot src="/images/icare-schedule.jpg" alt="Scherm voor het instellen van het schema in iCare" />
+</Screenshots>
+
+## Elke bestaande app wilde mijn geld of mijn geduld
+
+Ik heb een handjevol 20-20-20-apps uit de App Store geprobeerd. Sommige waren prima, maar vroegen een abonnement voor wat in wezen een herhalende timer is. Andere waren volgestopt met gamification, streaks, wellness-dashboards en meditatie-upsells, allemaal vastgeplakt aan wat een pauze van 20 seconden zou moeten zijn. Een paar waren echt verlaten: ze crashten bij het opstarten of zaten vast op een iOS-versie van twee jaar geleden.
+
+Geen van de apps die ik vond ondersteunde Apple Watch. Dat was de echte dealbreaker. Als ik diep in de code zit en mijn telefoon op stil aan de andere kant van de kamer ligt, helpt een notificatie die ik nooit zie niet. Een zachte tik op mijn pols trekt wél mijn aandacht zonder mijn flow te onderbreken.
+
+Dus bouwde ik er zelf een.
+
+## Wat het doet
+
+iCare doet precies één ding: je volgens een schema herinneren aan oogpauzes, en je er daarna doorheen aftellen.
+
+Het startscherm toont een ronde timer die aftelt naar je volgende pauze. Als die afgaat, krijg je een notificatie met drie opties: de pauze starten, snoozen of helemaal overslaan. Tik je op "start", dan opent een countdown van 20 seconden die je vertelt naar iets in de verte te kijken. Dat is de hele interactie.
+
+Verder:
+
+- **Instelbaar interval** van 15 tot 45 minuten, zodat je het kunt afstemmen op hoe je werkt
+- **Aanpasbare pauzeduur** tussen 10 en 30 seconden
+- **Schema-instellingen** met actieve uren en een alleen-doordeweeks-modus, zodat het 's avonds en in het weekend stil blijft
+- **Pauzeren, snoozen, overslaan** zodat je altijd de controle houdt zonder alles uit te zetten
+- **Geschiedenis van vandaag** met in één oogopslag de voltooide en overgeslagen pauzes
+
+## Apple Watch maakt het pas echt nuttig
+
+De Watch-companion was de belangrijkste reden dat ik dit bouwde in plaats van gewoon een herhalende timer te zetten. Herinneringen komen binnen als een haptische tik op je pols, subtiel genoeg om een vergadering of gesprek niet te verstoren, maar duidelijk genoeg dat je hem niet mist.
+
+Je kunt de countdown direct starten vanuit de Watch-notificatie. De telefoon en de Watch blijven gesynchroniseerd via WatchConnectivity, dus een pauze starten op het ene apparaat zie je terug op het andere. Instellingen synchroniseren ook, dus je stelt het één keer in en beide apparaten blijven gelijk.
+
+## Hoe het gebouwd is
+
+iCare is een native SwiftUI-app voor iOS 17 en watchOS 10. Ik wilde het lean houden, dus er zitten nul third-party Swift packages in. Alles is gebouwd op uitsluitend Apple-frameworks.
+
+De architectuur is rechttoe rechtaan:
+
+- **`AppState`** is het centrale observable model dat de planning, pauzestatus, notificaties en Watch-synchronisatie beheert
+- **`ReminderEngine`** doet het rekenwerk voor de intervallen: volgende afgaantijden, actieve uren, weekdagfiltering, snooze-logica
+- **`NotificationCoordinator`** beheert `UserNotifications` met actionable categories (Start, Snooze, Skip)
+- **`WatchSyncManager`** verbindt de state van iPhone en Watch via `WatchConnectivity`
+- **`SettingsStore`** slaat voorkeuren op in `UserDefaults` via een gedeelde App Group, zodat beide targets dezelfde data lezen
+
+Er is ook een Focus-filterintegratie via App Intents. Je kunt het gedrag van herinneringen per Focus-modus overschrijven, zodat je "Niet storen"- of "Slaap"-focus de herinneringen automatisch kan pauzeren zonder dat je iets hoeft te doen.
+
+```
+iCare/                 iPhone app (SwiftUI)
+  App/                 Entry point and root navigation
+  Features/            Home, Countdown, History, Settings, Onboarding
+  Intents/             Focus filter (SetFocusFilterIntent)
+
+iCareWatch/            watchOS app
+  App/                 Entry point
+  Features/            Home, Countdown, Notification scene
+
+Shared/                Code shared between iPhone and Watch
+  Models/              AppState, settings, break records
+  Services/            ReminderEngine, NotificationCoordinator, WatchSyncManager
+  DesignSystem/        Colors, typography, shared UI components
+```
+
+Het project gebruikt XcodeGen voor het genereren van het project en Fastlane met GitHub Actions voor CI/CD. Een versietag pushen triggert de hele pipeline: code signing via Match, bouwen via Gym en uploaden naar App Store Connect.
+
+## Wat ik heb geleerd
+
+WatchConnectivity is grilliger dan de documentatie doet vermoeden. De Watch en de telefoon hebben niet altijd tegelijk een actieve sessie, en `transferUserInfo` zet berichten in een wachtrij die in de verkeerde volgorde of veel later dan verwacht kunnen aankomen. Uiteindelijk gebruik ik `sendMessage` voor realtime-commando's (zoals "start nu een pauze") en `updateApplicationContext` voor het synchroniseren van instellingen, wat overschrijft in plaats van in de wachtrij zet. Die verdeling goed krijgen kostte wat trial and error.
+
+Lokale notificaties op iOS hebben ook limieten die ik niet had verwacht. Je kunt maar 64 notificaties tegelijk ingepland hebben, wat veel klinkt totdat je beseft dat een interval van 20 minuten over een werkdag van 8 uur er 24 per dag doorheen jaagt. De engine plant een schuivend venster vooruit in en ververst dat elke keer dat de app naar de voorgrond komt.
+
+## Geen accounts, geen tracking, geen abonnement
+
+iCare verzamelt niets. Er is geen analytics-SDK, geen backend, geen account aanmaken. Je instellingen en pauzegeschiedenis staan in UserDefaults op je apparaat en synchroniseren naar je Watch via Apple's versleutelde WatchConnectivity-protocol. Het privacybeleid is kort, omdat er niets te melden valt.
+
+Een abonnement vragen voor een timer die lokaal op je telefoon draait voelt verkeerd. iCare is gratis.
+
+[Bekijk op GitHub](https://github.com/larsniet/i-care)

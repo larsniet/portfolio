@@ -1,0 +1,52 @@
+---
+title: "Een GitHub-profiel-README die zichzelf bijwerkt"
+publishedAt: "2026-02-19"
+summary: "Mijn GitHub-profiel-README blijft automatisch in sync met mijn portfolio. Een GitHub Actions-workflow haalt elk uur de nieuwste projecten van mijn website op en herschrijft de README, zonder handmatig werk."
+featured: false
+---
+
+# Een GitHub-profiel-README die zichzelf bijwerkt
+
+GitHub heeft een verborgen feature: als je een repository aanmaakt met dezelfde naam als je gebruikersnaam, wordt de README daarvan direct op je profielpagina getoond. Het is eigenlijk een persoonlijke landingspagina, maar dan in markdown. Het nadeel is dat hij snel veroudert. Elke keer als je een nieuw project afrondt, moet je eraan denken hem handmatig bij te werken.
+
+Dat wilde ik niet. Dus heb ik het geautomatiseerd.
+
+## Hoe het werkt
+
+De portfoliowebsite stelt al mijn projecten al beschikbaar via een API-endpoint op `/api/projects`. Elk project heeft een titel, beschrijving, URL en een `featured`-vlag. Meer data is er niet nodig om de README actueel te houden.
+
+Een GitHub Actions-workflow draait volgens een schema, elk uur, en doet het volgende:
+
+1. **Haalt** de nieuwste projecten op van `larsniet.com/api/projects`
+2. **Filtert** ze met `jq`: featured projecten gaan in de ene lijst, de rest in de andere
+3. **Injecteert** de gegenereerde content in de README tussen twee HTML-commentaarmarkers, met `awk`
+4. **Commit en pusht** het resultaat als er iets is veranderd
+
+```yaml
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+```
+
+De `workflow_dispatch`-trigger is handig om direct een update te forceren na het publiceren van een nieuwe post, zonder op de volgende geplande run te wachten.
+
+## Het markersysteem
+
+De README gebruikt HTML-commentaarmarkers om de zones af te bakenen die vervangen worden:
+
+```markdown
+<!-- FEATURED-PROJECTS:START -->
+- [Project title](url) — description
+<!-- FEATURED-PROJECTS:END -->
+```
+
+Het `awk`-script loopt regel voor regel door het bestand, en zodra het een `START`-marker tegenkomt, print het de nieuwe content en zet het een skip-vlag. Alles tussen de markers wordt vervangen. Regels buiten de markers gaan ongewijzigd door, dus de rest van de README blijft precies zoals geschreven.
+
+## Het resultaat
+
+Elke keer als ik een nieuwe post op mijn portfolio publiceer, werkt het GitHub-profiel zichzelf binnen een uur bij. Featured projecten staan bovenaan, de rest volgt eronder, en ik hoef de profielrepository nooit aan te raken.
+
+Het is klein, maar het betekent dat het profiel altijd de werkelijke stand van mijn werk laat zien, in plaats van wat ik ooit voor het laatst heb opgeschreven.
+
+[Bekijk de repository](https://github.com/larsniet/larsniet)

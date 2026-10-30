@@ -1,6 +1,21 @@
 import Link from "next/link";
+import { prefix, type Locale } from "@/app/i18n";
 
-export default function NotFound() {
+const copy = {
+  en: {
+    h1: "Page not found",
+    text: "The page you're looking for doesn't exist or has been moved.",
+    back: "Back home",
+  },
+  nl: {
+    h1: "Pagina niet gevonden",
+    text: "De pagina die je zoekt bestaat niet of is verplaatst.",
+    back: "Terug naar home",
+  },
+};
+
+export function NotFound({ locale }: { locale: Locale }) {
+  const c = copy[locale];
   return (
     <section className="pt-2 pb-16">
       <div className="fade-up fade-up-1">
@@ -8,13 +23,13 @@ export default function NotFound() {
           404
         </p>
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-4">
-          Page not found
+          {c.h1}
         </h1>
         <p className="text-neutral-500 dark:text-neutral-400 mb-8">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          {c.text}
         </p>
         <Link
-          href="/"
+          href={prefix(locale) || "/"}
           className="inline-flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors duration-200 cursor-pointer"
         >
           <svg
@@ -29,7 +44,7 @@ export default function NotFound() {
           >
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
-          Back home
+          {c.back}
         </Link>
       </div>
     </section>

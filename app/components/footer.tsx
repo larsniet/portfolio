@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { t, type Locale } from "@/app/i18n";
 
 function ArrowIcon({ className = "" }: { className?: string }) {
   return (
@@ -18,7 +19,8 @@ function ArrowIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
+  const s = t[locale];
   return (
     <footer className="mt-16 mb-10 border-t border-neutral-200 dark:border-neutral-800 pt-8">
       <ul className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-6 mb-6">
@@ -30,7 +32,7 @@ export default function Footer() {
             href="/rss"
           >
             <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            <span>rss feed</span>
+            <span>{s.rss}</span>
           </Link>
         </li>
         <li>
@@ -41,12 +43,12 @@ export default function Footer() {
             href="https://github.com/larsniet/portfolio"
           >
             <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            <span>view source</span>
+            <span>{s.source}</span>
           </a>
         </li>
       </ul>
       <p className="text-xs text-neutral-500 dark:text-neutral-500 font-(family-name:--font-geist-mono)">
-        © {new Date().getFullYear()} Lars van der Niet — MIT Licensed
+        © {new Date().getFullYear()} Lars van der Niet — {s.license}
       </p>
     </footer>
   );

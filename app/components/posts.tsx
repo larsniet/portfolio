@@ -1,17 +1,20 @@
 import Link from "next/link";
+import { dateLocale, prefix, type Locale } from "@/app/i18n";
 
-function shortDate(dateStr: string): string {
+function shortDate(dateStr: string, locale: Locale): string {
   const d = new Date(`${dateStr}T00:00:00`);
-  return d.toLocaleString("en-us", { month: "short", day: "numeric" });
+  return d.toLocaleString(dateLocale(locale), { month: "short", day: "numeric" });
 }
 
 export function JourneyPosts({
   posts,
+  locale = "en",
 }: {
   posts: {
     slug: string;
     metadata: { title: string; publishedAt: string };
   }[];
+  locale?: Locale;
 }) {
   const sorted = [...posts].sort(
     (a, b) =>
@@ -47,12 +50,12 @@ export function JourneyPosts({
           {byYear[year].map((post) => (
             <Link
               key={post.slug}
-              href={`/journey/${post.slug}`}
+              href={`${prefix(locale)}/journey/${post.slug}`}
               className="post-row group flex items-baseline gap-4 py-2.5 border-b border-neutral-100 dark:border-neutral-900 cursor-pointer"
             >
               {/* Compact date: "Feb 19" */}
               <span className="shrink-0 w-10 text-xs text-neutral-500 dark:text-neutral-400 tabular-nums font-(family-name:--font-geist-mono) whitespace-nowrap">
-                {shortDate(post.metadata.publishedAt)}
+                {shortDate(post.metadata.publishedAt, locale)}
               </span>
 
               {/* Title */}

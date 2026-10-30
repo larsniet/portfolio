@@ -1,0 +1,84 @@
+---
+title: "Image Renamer: orde in je fotobibliotheek"
+publishedAt: "2026-02-19"
+summary: "Een Python-tool die foto- en videobestanden automatisch hernoemt op basis van hun EXIF-metadata, als oplossing voor de chaos die ontstaat doordat camera's hun bestandsnummering resetten na het formatteren van een SD-kaart."
+featured: false
+---
+
+# Image Renamer: orde in je fotobibliotheek
+
+Als je weleens foto's van een digitale camera of telefoon hebt overgezet, ken je bestandsnamen als `IMG_0001.jpg` vast wel. En na het formatteren van de kaart begint de volgende lading gewoon weer bij `IMG_0001.jpg`. Duizenden cryptisch benoemde bestanden doorzoeken om die ene foto te vinden is behoorlijk frustrerend. Precies dat probleem lost Image Renamer op.
+
+## Het probleem
+
+Digitale camera's resetten hun bestandsnummering elke keer dat je een SD-kaart formatteert. Na een paar reisjes zit je al met tientallen bestanden met dezelfde naam, verspreid over verschillende mappen. Sorteren op naam heeft dan geen zin meer, en sorteren op datum werkt alleen als je bestandssysteem de originele timestamps heeft bewaard. En dat gebeurt vaak niet bij het kopiëren tussen apparaten.
+
+De echte aanmaakdatum zit echter bijna altijd nog in het bestand zelf, als EXIF-metadata. Elke moderne camera slaat de exacte datum en tijd van de opname op in het bestand. Image Renamer leest die data uit en gebruikt ze om elk bestand een betekenisvolle, chronologisch sorteerbare naam te geven.
+
+## Hoe het werkt
+
+De kern van de applicatie is eenvoudig. Voor elk afbeeldingsbestand in een map doet hij het volgende:
+
+1. Leest het veld `DateTimeOriginal` uit de EXIF-metadata van het bestand met Pillow
+2. Valt terug op de aanmaaktijd van het bestandssysteem als er geen EXIF-data aanwezig is
+3. Genereert een nieuwe bestandsnaam op basis van een instelbaar `strftime`-formaat (standaard: `2023-04-25_14-30-15.jpg`)
+4. Lost botsingen op door een teller als suffix toe te voegen, zodat er nooit stilletjes bestanden worden overschreven
+5. Maakt optioneel een back-up van alle originele bestanden voordat ze worden hernoemd
+
+Het resultaat is een map waarin elk bestand een unieke, leesbare naam heeft die in elke bestandsverkenner perfect sorteert.
+
+## Features
+
+- Ondersteunt de afbeeldingsformaten JPG, JPEG, PNG, NEF, CR2 en ARW
+- Optionele video-ondersteuning (MP4, MOV, AVI, MKV en meer)
+- Instelbaar bestandsnaamformaat met de standaard `strftime`-codes van Python
+- Back-upmodus om de originelen veilig te bewaren
+- Duplicaatdetectie: bestanden met exact dezelfde timestamp overslaan of verwijderen
+- Instellingen worden onthouden, zodat je voorkeuren bewaard blijven tussen sessies
+
+## Twee manieren om het te gebruiken
+
+### GUI
+
+Voor wie liever een visuele interface heeft, komt de app met een GUI op basis van PyQt6. Je kiest je map, pakt een datumformaat uit de presets of definieert je eigen formaat, zet back-up en video-opties aan of uit en ziet het hernoemen in realtime gebeuren in een live log.
+
+### CLI
+
+Voor scripts of bulkbewerkingen biedt de command-line interface precies dezelfde functionaliteit:
+
+```bash
+# Basic usage
+imagerenamer /path/to/photos
+
+# With backup
+imagerenamer /path/to/photos --backup
+
+# Include video files
+imagerenamer /path/to/photos --include-videos
+
+# Custom filename format
+imagerenamer /path/to/photos --format "%Y%m%d_%H%M%S"
+
+# Remove duplicates instead of renaming with a suffix
+imagerenamer /path/to/photos --remove-duplicates
+```
+
+## Distributie
+
+Een van de doelen was om de tool toegankelijk te maken voor mensen zonder technische achtergrond. Het project gebruikt GitHub Actions om bij elke release automatisch platform-native executables te bouwen: een standalone `.exe` voor Windows, een `.app`-bundle voor macOS en een binary voor Linux. Geen Python-installatie nodig. Iedereen kan het downloaden en meteen gebruiken.
+
+Voor developers is het ook beschikbaar op PyPI:
+
+```bash
+pip install modern-image-renamer
+```
+
+## Geleerde lessen
+
+Cross-platform GUI-applicaties bouwen in Python heeft zo zijn eigenaardigheden. PyInstaller, dat de app verpakt tot standalone executables, triggert op Windows regelmatig valse meldingen van antivirussoftware. Een bekende frustratie voor developers die Python-apps distribueren. De oplossing was om het probleem duidelijk te documenteren en alternatieve installatiemethodes aan te bieden voor gebruikers die ertegenaan lopen.
+
+Het opzetten van de CI/CD-pipeline met GitHub Actions heeft me ook veel geleerd over matrix builds: dezelfde build job parallel draaien op Windows-, macOS- en Linux-runners en vanuit één workflow platformspecifieke artifacts opleveren.
+
+---
+
+[Bekijk op GitHub](https://github.com/larsniet/image-renamer) · [Download de nieuwste release](https://github.com/larsniet/image-renamer/releases/latest)

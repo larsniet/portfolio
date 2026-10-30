@@ -1,6 +1,8 @@
 import matter from "gray-matter";
 import path from "path";
 import fs from "fs/promises";
+import { existsSync } from "fs";
+import { dateLocale, type Locale } from "@/app/i18n";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import { mdxComponents } from "@/app/components/mdx-remote-components";
@@ -13,16 +15,19 @@ export type Metadata = {
   featured?: boolean;
 };
 
-export async function getPosts() {
-  const postsDirectory = path.join(process.cwd(), "app/journey/posts");
-  const files = await fs.readdir(postsDirectory);
+// English is the source of truth; Dutch siblings live in posts/nl/<slug>.mdx
+const postsDir = (locale: Locale) =>
+  path.join(process.cwd(), "app/journey/posts", locale === "nl" ? "nl" : "");
+
+export async function getPosts(locale: Locale = "en") {
+  const files = await fs.readdir(postsDir("en"));
 
   const posts = await Promise.all(
     files
       .filter((file) => file.endsWith(".mdx"))
       .map(async (file) => {
         const slug = file.replace(/\.mdx$/, "");
-        const post = await getPost(slug);
+        const post = await getPost(slug, locale);
         return post;
       })
   );
@@ -32,9 +37,12 @@ export async function getPosts() {
   );
 }
 
-export async function getPost(slug: string) {
-  const postsDirectory = path.join(process.cwd(), "app/journey/posts");
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
+export async function getPost(
+  slug: string,
+  locale: Locale = "en",
+): Promise<{ metadata: Metadata; content: React.ReactNode; slug: string } | null> {
+  const fullPath = path.join(postsDir(locale), `${slug}.mdx`);
+  if (locale !== "en" && !existsSync(fullPath)) return getPost(slug, "en");
 
   try {
     const fileContents = await fs.readFile(fullPath, "utf8");
@@ -75,7 +83,11 @@ export async function getPost(slug: string) {
   }
 }
 
-export function formatDate(date: string, includeRelative = false) {
+export function formatDate(
+  date: string,
+  includeRelative = false,
+  locale: Locale = "en",
+) {
   let currentDate = new Date();
   if (!date.includes("T")) {
     date = `${date}T00:00:00`;
@@ -98,7 +110,7 @@ export function formatDate(date: string, includeRelative = false) {
     formattedDate = "Today";
   }
 
-  let fullDate = targetDate.toLocaleString("en-us", {
+  let fullDate = targetDate.toLocaleString(dateLocale(locale), {
     month: "long",
     day: "numeric",
     year: "numeric",

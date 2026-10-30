@@ -1,0 +1,52 @@
+---
+title: "Queens: een constraint-satisfaction puzzelgame bouwen"
+publishedAt: "2025-07-08"
+summary: "Een browserpuzzelgame geïnspireerd op het N-Queens-probleem. Plaats één kroon in elke rij, kolom en kleurregio zonder dat twee kronen elkaar raken, en bouw daarna de engine die elke keer uniek oplosbare puzzels genereert."
+featured: false
+---
+
+# Queens: een constraint-satisfaction puzzelgame bouwen
+
+Het N-Queens-probleem is een klassieker: zet N koninginnen op een schaakbord van N×N zodat geen twee elkaar aanvallen. Queens is een variant. In plaats van de aanvalsregels uit het schaken is de constraint simpeler en visueler. Kronen mogen elkaar helemaal niet raken, ook niet diagonaal, en het bord is verdeeld in gekleurde regio's die elk precies één kroon nodig hebben. Het resultaat is een puzzel die makkelijk te begrijpen is, maar echt logisch redeneren vraagt om op te lossen.
+
+## De regels
+
+- Plaats precies één kroon in elke rij, kolom en kleurregio
+- Twee kronen mogen elkaar niet raken, ook niet diagonaal
+- Tik één keer om een cel als onmogelijk te markeren (×), tik nog een keer om een kroon te plaatsen
+
+Dat is het hele spel. De complexiteit komt uit de wisselwerking tussen de regioconstraint en de niet-raken-regel: één cel wegstrepen kan door het hele bord doorwerken.
+
+## Het interessante deel: puzzels genereren
+
+Het spel speelbaar maken was het makkelijke deel. Het moeilijke deel was een generator bouwen die consequent puzzels oplevert die:
+
+1. **Uniek oplosbaar** zijn: er bestaat precies één geldige plaatsing van kronen
+2. **Logisch afleidbaar** zijn: geen gokwerk nodig, elke stap volgt uit wat al bekend is
+3. **Visueel gevarieerd** zijn: andere layouts per puzzel, geen twee voelen hetzelfde
+
+De generator volgt een pipeline van vijf stappen:
+
+1. Genereer een geldige N-Queens-oplossing met de niet-aangrenzend-constraint toegepast
+2. Laat gekleurde regio's groeien rond de positie van elke koningin, met verschillende groeistrategieën (horizontaal, verticaal, circulair)
+3. Valideer de regio-indeling: geen rijen of kolommen van één kleur, geen regio die meer dan 40% van het bord beslaat, alle regio's orthogonaal verbonden
+4. Genereer beginhints (vooraf geplaatste kronen en kruisjes) die logische startpunten geven
+5. Verifieer de uniciteit met een backtracking-solver en bevestig dat de DeductionEngine hem zonder gokken kan oplossen
+
+Als een stap mislukt, probeert de generator het opnieuw, tot 100 keer, in plaats van de constraints te versoepelen. Het resultaat haalt een validatiesuite van 49 tests met een slagingspercentage van 90%+ voor bordgroottes van 4×4 tot 7×7.
+
+## De DeductionEngine
+
+De solver is wat de eis "logisch afleidbaar" niet-triviaal maakte. Hij implementeert dezelfde redenering die een menselijke speler zou gebruiken:
+
+- Als een rij binnen een regio nog maar één cel over heeft, moet daar een kroon komen
+- Als het plaatsen van een kroon in een cel een andere regio zonder geldige cellen zou achterlaten, kan die cel worden weggestreept
+- Als alle resterende geldige cellen van een regio in dezelfde rij of kolom liggen, kan die rij of kolom voor alle andere regio's worden vrijgemaakt
+
+Puzzels worden alleen geaccepteerd als de engine ze van begin tot eind met deze regels kan oplossen, zonder backtracking of gokken.
+
+## Tech stack
+
+Gebouwd met Next.js en TypeScript. De game state, puzzelgeneratie en deductielogica zitten allemaal in `src/game/` als pure TypeScript-classes, zonder framework-dependencies, zodat ze makkelijk los van de UI te testen zijn. De testsuite dekt alle eisen aan de generator en de deductieregels.
+
+[Bekijk op GitHub](https://github.com/larsniet/queens)

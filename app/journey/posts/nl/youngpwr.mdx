@@ -1,0 +1,109 @@
+---
+title: "YoungPWR ontwikkelen: technische uitdagingen overwinnen voor de empowerment van jongeren"
+summary: "Ontdek hoe YoungPWR is gebouwd, een platform dat jongeren sterker maakt met workshops, vacatures en meer. Lees over de technische uitdagingen die ik tegenkwam en hoe ik ze heb opgelost."
+publishedAt: "2023-01-04"
+featured: false
+---
+
+![Teamfoto van YoungPWR](/images/youngpwr.webp)
+
+# Dit is YoungPWR: een platform voor de empowerment van jongeren
+
+YoungPWR helpt je om meer power, geluk en succes te krijgen. YoungPWR is je coach en geeft je het netwerk dat je nodig hebt om sterker en gelukkiger te worden, succesvol te zijn en net dat beetje meer te verdienen. YoungPWR helpt je door kennis te delen via workshops, podcasts, blogs en social media. En je vindt er leuk werk in de buurt: klussen (opdrachtgevers), een bijbaan, een stage of vrijwilligerswerk. Helemaal gratis met een YoungPWR-account.
+
+## Mijn rol als developer
+
+Als developer met een passie voor oplossingen die ertoe doen, kreeg ik de kans om YoungPWR te ontwikkelen, een dynamisch platform dat jongeren sterker wil maken. In deze blogpost deel ik mijn verhaal, de technische uitdagingen die ik tegenkwam en de oplossingen die ik heb gebouwd om YoungPWR tot leven te brengen. Het project werd oorspronkelijk gestart door een groep jonge webdevelopers die het idee achter YoungPWR geweldig vonden. Na verloop van tijd hadden zij geen tijd meer om het project voort te zetten en heb ik het overgenomen. Bijna alles moest opnieuw worden geschreven, omdat de code niet meer up-to-date was.
+
+## Projectoverzicht
+
+### De missie en visie van YoungPWR
+
+YoungPWR zet zich in om jongeren sterker te maken door ze de middelen te geven die ze nodig hebben om te slagen. Het platform biedt allerlei functies, waaronder workshops, podcasts, blogs en vacatures, allemaal bedoeld om jongeren te helpen hun doelen te bereiken en succesvol te worden.
+
+### De belangrijkste functies van YoungPWR: workshops, podcasts, blogs en vacatures
+
+Het platform is ontworpen als een complete bron voor jongeren. De belangrijkste functies zijn:
+
+- **Workshops**: educatieve sessies over uiteenlopende onderwerpen om vaardigheden en kennis te vergroten.
+- **Podcasts**: inspirerende en informatieve podcasts met experts en succesvolle mensen.
+- **Blogs**: artikelen en posts over een breed scala aan onderwerpen die relevant zijn voor jongeren.
+- **Vacatures**: aanbod van klussen, bijbanen, stages en vrijwilligerswerk in de buurt.
+
+### De rol van technologie in het succes van YoungPWR
+
+Technologie speelt een cruciale rol in het leveren van de functies van YoungPWR. Het platform maakt gebruik van moderne technologieën om een soepele en aantrekkelijke gebruikerservaring te bieden, zodat jongeren makkelijk en efficiënt bij de middelen kunnen die ze nodig hebben.
+
+## De keuze voor de tech stack
+
+### Waarom Next.js voor de frontend?
+
+Voor de frontend van YoungPWR kozen we voor Next.js vanwege de krachtige features en mogelijkheden. Next.js biedt server-side rendering (SSR), wat de performance en SEO verbetert, en daarmee is het een ideale keuze voor ons platform. Daarnaast biedt Next.js een fijne developer experience met functies als automatische code splitting, static site generation en een solide routing-systeem.
+
+### Styling met Styled-Components
+
+Voor de styling van de frontend kozen we voor Styled-Components, een CSS-in-JS-library. Met Styled-Components schrijf je CSS direct in je JavaScript, wat scoped styles en makkelijkere component-gebaseerde styling mogelijk maakt. Deze aanpak maakt de styles beter onderhoudbaar en herbruikbaar binnen het hele platform.
+
+### Backend met Strapi: flexibiliteit en maatwerk
+
+Voor de backend kozen we Strapi, een open-source headless CMS. Strapi biedt veel flexibiliteit en mogelijkheden voor maatwerk, waardoor we content efficiënt kunnen aanmaken en beheren. Het ondersteunt REST- en GraphQL-API's, wat de integratie met onze Next.js-frontend eenvoudig maakt. Bovendien breidt het plugin-ecosysteem van Strapi de functionaliteit uit, zodat we features kunnen toevoegen wanneer dat nodig is.
+
+## De infrastructuur opzetten
+
+### Hosting op DigitalOcean: droplets en databases
+
+We kozen voor DigitalOcean als hostingpartij vanwege de betrouwbaarheid en de lage kosten. DigitalOcean Droplets zijn schaalbare virtual private servers en passen perfect bij onze behoeften. We hebben een Ubuntu-droplet opgezet voor het hosten van het Strapi CMS en een PostgreSQL-database voor het databeheer. Deze opzet zorgt voor een robuuste en schaalbare infrastructuur voor YoungPWR.
+
+### PostgreSQL configureren voor databeheer
+
+PostgreSQL is een krachtig, open-source relationeel databasesysteem. We kozen voor PostgreSQL vanwege de performance, schaalbaarheid en uitgebreide functionaliteit. PostgreSQL opzetten op DigitalOcean was eenvoudig, en het biedt de betrouwbaarheid en efficiëntie die we nodig hebben voor ons databeheer.
+
+### Strapi deployen op een Ubuntu-droplet
+
+Strapi deployen op een Ubuntu-droplet bestond uit een aantal stappen. Eerst installeerden we de benodigde dependencies, waaronder Node.js en NPM. Daarna zetten we Strapi op, configureerden we de verbinding met onze PostgreSQL-database en deployden we het CMS. Met deze opzet kunnen we content soepel beheren en hebben we een stabiele backend voor YoungPWR.
+
+## Performance en beveiliging
+
+### NGINX voor load balancing en beveiliging
+
+Om de performance en beveiliging van ons platform te verbeteren hebben we NGINX ingezet. NGINX werkt als reverse proxy en load balancer en verdeelt het inkomende verkeer over meerdere servers. Dat verbetert de performance door de load te verdelen en zorgt voor extra beveiliging, omdat het een extra laag vormt tussen de gebruikers en onze backend-servers.
+
+### Sneller en veiliger met Cloudflare
+
+Cloudflare biedt een reeks diensten die YoungPWR sneller en veiliger maken. Dankzij het CDN van Cloudflare wordt content snel geleverd aan gebruikers over de hele wereld. Daarnaast beschermen de beveiligingsfuncties van Cloudflare ons platform tegen DDoS-aanvallen en andere dreigingen, een extra beschermlaag dus.
+
+### De Next.js-applicatie deployen op Vercel
+
+Voor de frontend kozen we ervoor om onze Next.js-applicatie te deployen op Vercel. Vercel integreert naadloos met Next.js en biedt automatische deployments, wat het een uitstekende keuze maakt voor ons platform. De serverless architectuur van Vercel zorgt voor schaalbaarheid en hoge performance, zodat we een snelle en responsieve gebruikerservaring kunnen leveren.
+
+## Technische uitdagingen overwinnen
+
+### Uitdaging 1: Strapi integreren met Next.js
+
+Een van de grootste uitdagingen was het integreren van Strapi met onze Next.js-frontend. Strapi biedt een solide API, maar een soepele communicatie tussen frontend en backend vroeg om zorgvuldige planning en uitvoering. We gebruikten de REST- en GraphQL-API's van Strapi om data op te halen en content dynamisch te renderen op de frontend. Efficiënte strategieën voor het ophalen van data en het goed afhandelen van API-responses waren de sleutel om deze uitdaging te overwinnen.
+
+### Uitdaging 2: databaseconfiguratie en -beheer
+
+Het configureren en beheren van de PostgreSQL-database bracht weer andere uitdagingen met zich mee. Data-integriteit waarborgen, queries optimaliseren en migraties beheren waren cruciale taken. We hebben degelijke praktijken voor databasebeheer ingevoerd, waaronder regelmatige back-ups, performance monitoring en query-optimalisatie, zodat de database efficiënt en betrouwbaar presteert.
+
+### Uitdaging 3: een soepele gebruikerservaring (UX)
+
+Een soepele gebruikerservaring was heel belangrijk voor YoungPWR. Dat betekende laadtijden optimaliseren, zorgen voor een responsive design en een intuïtieve interface bouwen. We maakten gebruik van de server-side rendering en static site generation van Next.js om de performance te verbeteren. Daarnaast hebben we uitgebreid getest met gebruikers en feedbacksessies gehouden om de gebruikerservaring te verfijnen en usability-problemen op te lossen.
+
+## Toekomstige features en verbeteringen voor YoungPWR
+
+Voor de toekomst hebben we een aantal mooie plannen met YoungPWR. Denk aan verdergaande personalisatie, een matchingplatform, AI-gestuurde aanbevelingen en een breder contentaanbod. We willen ook meer sociale features toevoegen, zodat gebruikers makkelijker met elkaar in contact komen en kunnen samenwerken. Het doel is om YoungPWR continu door te ontwikkelen en de gebruikers nog meer waarde te bieden.
+
+## Conclusie
+
+### Terugblik op het ontwikkeltraject
+
+Het ontwikkelen van YoungPWR was een waardevol traject vol uitdagingen en leermomenten. Van het kiezen van de juiste tech stack tot het overwinnen van technische hobbels: elke stap heeft bijgedragen aan een robuust platform met impact. De toewijding en het harde werk dat in dit project is gestoken hebben zich uitbetaald in een platform dat jongeren sterker maakt en ze helpt hun doelen te bereiken.
+
+### De impact van YoungPWR op de empowerment van jongeren
+
+YoungPWR heeft al een flinke impact gehad op de empowerment van jongeren door waardevolle middelen en kansen te bieden. De workshops, podcasts, blogs en vacatures op het platform hebben veel jongeren geholpen aan vaardigheden, kennis en contacten. Terwijl we blijven groeien en verbeteren, willen we nog meer jongeren bereiken en een positief verschil maken in hun leven.
+
+### Slotgedachten en dankwoord
+
+Al met al is de ontwikkeling van YoungPWR een mooi voorbeeld van hoe technologie positieve verandering kan aanjagen. Ik heb met veel plezier aan dit project gewerkt en ben trots op wat we hebben bereikt.

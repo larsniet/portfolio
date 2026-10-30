@@ -1,0 +1,251 @@
+---
+title: "Zo zet je een Passbolt-server op Google Cloud op"
+publishedAt: "2025-02-10"
+summary: "Een stapsgewijze tutorial voor het opzetten van een self-hosted Passbolt-wachtwoordmanager op een Google Cloud-VM met de SMTP-service van Gmail."
+featured: false
+---
+
+# Passbolt opzetten met Gmail SMTP op Google Cloud
+
+Deze handleiding neemt je stap voor stap mee in het opzetten van een gratis, self-hosted Passbolt-wachtwoordmanager op een Google Cloud-VM met de SMTP-service van Gmail (met je account `mail@email.com`). Je hebt nodig:
+
+- Een domein waarvan je de DNS kunt beheren.
+- Een Google Cloud-account.
+- Een Gmail-account met een app-wachtwoord (als je tweestapsverificatie gebruikt).
+
+## Deel 1: je Google Cloud-VM en DNS opzetten
+
+1. **Maak een Google Cloud-project aan en schakel facturering in**
+
+   - Ga naar de [Google Cloud Console](https://console.cloud.google.com) en maak een nieuw project aan.
+   - Schakel facturering in (een creditcard is verplicht, maar binnen de free tier zou de factuur op $0 moeten uitkomen).
+
+2. **Schakel de Compute Engine API in**
+
+   - Zoek in de Cloud Console naar "Compute Engine API" en schakel die in.
+
+3. **Maak een VM-instance aan**
+
+   - Ga naar **Compute Engine** → **VM instances** en klik op **CREATE INSTANCE**.
+   - Geef je instance een naam (bijvoorbeeld `passbolt`), kies de regio **us-central1** en het machinetype **e2-micro**.
+   - Laat de overige instellingen op de standaardwaarden staan. Noteer na het aanmaken het **External IP** van de VM.
+
+4. **Stel de DNS van je domein in**
+
+   - Log in bij je domeinregistrar (bijvoorbeeld GoDaddy of Namecheap) en voeg een A-record toe voor je subdomein (bijvoorbeeld `passbolt.yourdomain.com`) dat naar het External IP van je VM verwijst.
+
+5. **Stel firewallregels in**
+   - Ga in Google Cloud naar **VPC network** → **Firewall rules** en maak een regel aan die inkomend HTTP- en HTTPS-verkeer toestaat:
+     - **Name:** `passbolt-ingress`
+     - **Targets:** All instances (of gebruik specifieke tags)
+     - **Source IP ranges:** `0.0.0.0/0`
+     - **Protocols/Ports:** TCP: `80,443`
+       > **Let op:** Gmail SMTP op poort 587 wordt alleen gebruikt voor uitgaande mail, dus daar is geen inkomende regel voor nodig.
+
+---
+
+## Deel 2: Gmail SMTP configureren met Postfix
+
+Passbolt verstuurt e-mails (voor registratie, notificaties, enzovoort) via SMTP. Omdat Google Cloud poort 25 blokkeert, configureren we Postfix zo dat het de SMTP-server van Gmail op poort 587 gebruikt.
+
+### Stap 1: een app-wachtwoord aanmaken voor Gmail
+
+- Log in op je Gmail-account `mail@email.com`.
+- Als tweestapsverificatie aanstaat, maak dan een **app-wachtwoord** aan in de beveiligingsinstellingen van je Google-account. Bewaar dit wachtwoord, je hebt het later nodig.
+
+### Stap 2: SSH naar je VM en word root
+
+```bash
+sudo su -
+```
+
+### Stap 3: Postfix en de benodigde modules installeren
+
+```bash
+apt update && apt -y install postfix libsasl2-modules
+```
+
+_Kies **Local only** als je tijdens de configuratie van Postfix om een keuze wordt gevraagd._
+
+### Stap 4: de Postfix-configuratie aanpassen
+
+Open het configuratiebestand van Postfix:
+
+```bash
+nano /etc/postfix/main.cf
+```
+
+Voeg de volgende regels toe of vervang ze (verwijder eventuele SendGrid-specifieke instellingen als die er staan):
+
+```conf
+# Use Gmail’s SMTP server on port 587
+relayhost = [smtp.gmail.com]:587
+
+# Enable SASL authentication
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+
+# Enable TLS encryption
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+
+# (Optional) Increase header size limit
+header_size_limit = 4096000
+```
+
+Sla op en sluit af (druk op **Ctrl+X**, dan **Y**, dan **Enter**).
+
+### Stap 5: het SASL-wachtwoordbestand aanmaken
+
+Maak of bewerk het bestand:
+
+```bash
+nano /etc/postfix/sasl_passwd
+```
+
+Voeg de volgende regel toe en vervang `YOUR_APP_PASSWORD` door je Gmail-app-wachtwoord (let op dat er geen spaties in staan):
+
+```plaintext
+[smtp.gmail.com]:587 mail@email.com:YOUR_APP_PASSWORD
+```
+
+Sla op en sluit af.
+
+### Stap 6: het wachtwoordbestand beveiligen en activeren
+
+```bash
+postmap /etc/postfix/sasl_passwd
+chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+systemctl restart postfix
+```
+
+### Stap 7: de e-mailconfiguratie testen (optioneel)
+
+Installeer `mailutils` om een testmail te versturen:
+
+```bash
+apt -y install mailutils
+echo "Test email from Postfix using Gmail SMTP" | mail -s "Test Email" your_email@example.com
+```
+
+Controleer je inbox (of je spammap) om te bevestigen dat de mail is aangekomen.
+
+---
+
+## Deel 3: Passbolt installeren
+
+### Stap 1: UUID's genereren voor de wachtwoorden
+
+Genereer drie UUID's om als veilige wachtwoorden te gebruiken:
+
+```bash
+uuidgen
+uuidgen
+uuidgen
+```
+
+- **Eerste UUID:** root-wachtwoord van de database.
+- **Tweede UUID:** wachtwoord van de Passbolt-databasegebruiker (`passboltadmin`).
+- **Derde UUID:** passphrase van de IT-beheerder.
+
+### Stap 2: het Passbolt-installatiescript downloaden en verifiëren
+
+```bash
+curl -LO https://download.passbolt.com/ce/installer/passbolt-repo-setup.ce.sh
+curl -LO https://github.com/passbolt/passbolt-dep-scripts/releases/latest/download/passbolt-ce-SHA512SUM.txt
+sha512sum -c passbolt-ce-SHA512SUM.txt && sudo bash ./passbolt-repo-setup.ce.sh || { echo "Bad checksum. Aborting"; rm -f passbolt-repo-setup.ce.sh; exit 1; }
+```
+
+### Stap 3: de Passbolt CE-server installeren
+
+```bash
+sudo apt install passbolt-ce-server
+```
+
+### Stap 4: de vragen op het scherm doorlopen
+
+Houd tijdens de installatie deze richtlijnen aan:
+
+- **Proceed with installation?**
+  Typ: `Yes`
+
+- **Databaseconfiguratie:**
+
+  - Vul voor de **root**-databasegebruiker de **eerste UUID** in als wachtwoord.
+  - Gebruik voor de Passbolt-servicegebruiker `passboltadmin` met de **tweede UUID** als wachtwoord.
+  - Zet de databasenaam op `passboltdb`.
+
+- **Webserver (Nginx) instellen:**
+
+  - Kies ervoor om Nginx te installeren: `Yes`
+  - Gebruik de automatische configuratie.
+  - Vul je Passbolt-subdomein in (bijvoorbeeld `passbolt.yourdomain.com`).
+  - Geef het e-mailadres op dat eigenaar is van je Google Cloud-project.
+
+- **SMTP-opties:**
+  - **Sender Name:** bijvoorbeeld `Password Manager`
+  - **Sender Email:** `mail@email.com`
+  - **SMTP Host:** `smtp.gmail.com`
+  - **TLS:** Yes
+  - **Port:** `587`
+  - **Authentication:** Username and password
+  - **Username:** `mail@email.com`
+  - **Password:** je Gmail-app-wachtwoord
+
+### Stap 5: de bestandsrechten van de JWT-bestanden corrigeren
+
+```bash
+sudo chown -Rf root:www-data /etc/passbolt/jwt/
+sudo chmod 750 /etc/passbolt/jwt/
+sudo chmod 640 /etc/passbolt/jwt/jwt.key
+sudo chmod 640 /etc/passbolt/jwt/jwt.pem
+```
+
+---
+
+## Deel 4: Passbolt configureren via de webinterface
+
+1. **Open de Passbolt-UI**
+   Open je browser en ga naar je subdomein (bijvoorbeeld `https://passbolt.yourdomain.com`). Je zou nu de welkomstpagina van Passbolt moeten zien.
+
+2. **Doorloop de eerste configuratie:**
+
+   - **Database-instellingen:**
+     - **Host:** `127.0.0.1`
+     - **Port:** `3306`
+     - **User:** `passboltadmin`
+     - **Password:** gebruik de **tweede UUID**
+     - **Database Name:** `passboltdb`
+   - **OpenPGP-sleutel genereren:**
+     Volg de stappen om de OpenPGP-sleutel van je server te genereren (gebruik "passbolt" als servernaam en het bijbehorende e-mailadres).
+   - **SMTP-instellingen:**
+     Controleer het volgende:
+     - **Sender Name:** bijvoorbeeld `Password Manager`
+     - **Sender Email:** `mail@email.com`
+     - **SMTP Host:** `smtp.gmail.com`
+     - **TLS:** Enabled
+     - **Port:** `587`
+     - **Authentication:** Username & password (je Gmail-gegevens)
+
+3. **Test de e-mailfunctionaliteit:**
+   Verstuur een testmail via de Passbolt-interface. Controleer in je inbox (of je spammap) of de mail is aangekomen.
+
+4. **Maak het beheerdersaccount aan:**
+   Maak een nieuw beheerdersaccount aan (bijvoorbeeld "IT") met de **derde UUID** als passphrase. Volg eventuele verdere instructies op het scherm.
+
+---
+
+## Deel 5: afronden en controleren
+
+- **Controleer de webtoegang:**
+  Controleer of je Passbolt via HTTPS kunt bereiken op je subdomein.
+
+- **Test het versturen van e-mails:**
+  Gebruik de ingebouwde testmailfunctie van Passbolt om te controleren of Gmail SMTP goed werkt.
+
+- **Controleer de DNS- en firewallinstellingen:**
+  Zorg dat het A-record van je domein naar het IP van je VM wijst en dat de poorten 80 en 443 open staan.
+
+- **Beveilig je inloggegevens:**
+  Bewaar de gegenereerde UUID's en je Gmail-app-wachtwoord op een veilige plek, want die zijn essentieel voor het beheer van je Passbolt-installatie.

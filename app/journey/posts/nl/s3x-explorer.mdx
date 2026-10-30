@@ -1,0 +1,59 @@
+---
+title: "S3X Explorer: een VS Code-extensie voor S3-compatibele storage"
+publishedAt: "2025-07-31"
+summary: "Een VS Code-extensie om S3-compatibele storage rechtstreeks vanuit de editor te bekijken en te beheren. Gebouwd met uitstekende ondersteuning voor Cloudflare R2, AWS S3 en MinIO, inclusief inline bewerken, bulkbewerkingen, presigned URL's en multipart uploads."
+featured: true
+---
+
+# S3X Explorer: een VS Code-extensie voor S3-compatibele storage
+
+Als je regelmatig met object storage werkt, ben je het snel zat om steeds te wisselen tussen je editor en een webconsole om bestanden te beheren. S3X Explorer brengt het bestandsbeheer rechtstreeks naar VS Code: buckets doorbladeren, objecten openen en inline bewerken, bestanden uploaden en downloaden, allemaal zonder de editor te verlaten.
+
+## Waarom ik het heb gebouwd
+
+Ik gebruik Cloudflare R2 als mijn primaire object storage. Het is S3-compatibel en goedkoop, maar het dashboard is traag voor snelle acties. Ik wilde iets dat aanvoelt als een lokale bestandsverkenner, met een boomstructuur, klikken om te openen en opslaan om te synchroniseren, maar dan bovenop een S3-API. De bestaande VS Code-extensies die ik probeerde ondersteunden de path-style URL's die R2 vereist niet, of werden niet meer onderhouden. Dus heb ik er zelf een gebouwd.
+
+## Features
+
+De extensie integreert in de Activity Bar van VS Code als een tree view die de structuur van je bucket weerspiegelt. Van daaruit kun je:
+
+- **Bladeren** door buckets en mappen, met paginering voor grote buckets
+- **Objecten openen** direct in de VS Code-editor: tekstbestanden openen als bewerkbare buffers die bij het opslaan terug worden gesynchroniseerd
+- **Uploaden** via de rechtermuisknop of drag-and-drop, met multipart-afhandeling voor bestanden groter dan 100MB
+- **Downloaden, hernoemen, kopiëren, verplaatsen, verwijderen**: de volledige set CRUD-bewerkingen via contextmenu's
+- **Bulkbewerkingen**: meerdere items selecteren met Ctrl/Cmd+klik om in één keer te verwijderen, kopiëren of verplaatsen
+- **Presigned URL's genereren** met instelbare geldigheid (15 minuten tot 7 dagen), direct gekopieerd naar je klembord
+- **Zoeken** in objecten op prefix (server-side) of op inhoud (client-side)
+- **Objectmetadata bekijken**: grootte, content type, storage class, custom headers
+
+## Ondersteuning voor Cloudflare R2
+
+R2 vereist path-style URL's en werkt met elke regio-identifier. De extensie regelt dit standaard met een `forcePathStyle`-instelling. Configureren duurt ongeveer 30 seconden:
+
+```jsonc
+{
+  "s3x.endpointUrl": "https://<account-id>.auto.r2.cloudflarestorage.com",
+  "s3x.accessKeyId": "your-access-key-id",
+  "s3x.secretAccessKey": "your-secret-access-key",
+  "s3x.forcePathStyle": true,
+  "s3x.region": "us-east-1"
+}
+```
+
+Dezelfde configuratie werkt voor AWS S3, MinIO en andere S3-compatibele diensten, je hoeft alleen de endpoint-URL aan te passen.
+
+## Hoe het gebouwd is
+
+De extensie is geschreven in TypeScript en opgebouwd rond de extension-API's van VS Code:
+
+- **TreeDataProvider**: stuurt de tree view van buckets, mappen en objecten aan
+- **FileSystemProvider**: registreert een eigen `s3x://` URI-schema zodat VS Code S3-objecten kan openen en opslaan als lokale bestanden
+- **S3-clientlaag**: een wrapper om de AWS SDK met caching, retry-logica en rate limiting
+
+Het inline bewerken werkt door een virtueel bestandssysteem te mounten. Als je op een object klikt, opent VS Code het via de `s3x://`-provider, die de inhoud van S3 ophaalt. Bij het opslaan pusht de provider de bijgewerkte inhoud terug. Voor de gebruiker voelt het precies als het bewerken van een lokaal bestand.
+
+## Gepubliceerd op twee marketplaces
+
+De extensie is beschikbaar op zowel de VS Code Marketplace als Open VSX (voor VS Code-compatibele editors zoals VSCodium). Releases zijn geautomatiseerd met GitHub Actions: één workflow publiceert bij elke getagde release naar allebei.
+
+[Bekijk op GitHub](https://github.com/larsniet/s3x-explorer)

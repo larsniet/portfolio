@@ -1,0 +1,79 @@
+---
+title: "NXNative: Switch-games op een Mac, zonder emulator"
+publishedAt: "2026-10-30"
+summary: "NXNative maakt van een Switch-game die je bezit een native Mac- of iPhone-app. Het idee is briljant, ik ben eraan gaan bijdragen, en toch blijf ik het gevoel houden dat dit soort projecten de mensen die de games maken geld kost."
+image: "/images/nxnative.webp"
+featured: true
+---
+
+# NXNative draait Switch-games op mijn Mac zonder emulator. Ik vind het geweldig, en het zit me niet lekker
+
+Twee weken geleden verscheen er op GitHub een repository met de naam [nxnative](https://github.com/seedds/nxnative). Het neemt een Nintendo Switch-game die je bezit, plus de keys van je eigen console, en maakt er een Mac-app van of een unsigned IPA die je op een iPhone kunt sideloaden. Mario Kart 8 Deluxe op 60 fps op een telefoon. Op het moment van schrijven staat het op bijna tienduizend sterren.
+
+Ik speel er sinds de eerste week mee, en gisteren heb ik mijn eerste pull request geopend. Ik denk ook dat het zo'n project is waarbij precies datgene wat het geweldig maakt, het ook ongemakkelijk maakt. Die twee dingen zijn tegelijk waar, en ik wil over allebei schrijven.
+
+## Het is geen emulator, en dat is het slimme eraan
+
+Elke Switch-emulator tot nu toe deed hetzelfde: doen alsof je de ARM-CPU van de Switch bent, doen alsof je de GPU bent, en alles tijdens runtime vertalen. Dat kost veel, en daarom hebben emulators stevige hardware nodig en haperen ze alsnog.
+
+NXNative slaat het eerste deel volledig over. De Switch draait op een ARM-chip. Elke Apple Silicon Mac en elke recente iPhone ook. De code van de game zelf kan rechtstreeks op de Apple-CPU draaien, zonder vertaling. Alleen de onderdelen die met het besturingssysteem en de GPU van Nintendo praten, moeten worden vervangen.
+
+```plaintext
+Your NSP + prod.keys
+   ↓
+NSO rewriter          patches the game binary so it runs as a normal process
+   ↓
+Horizon HLE host      answers the game's calls to the Switch OS (files, input, audio)
+   ↓
+NVN → Metal           rebuilds the Switch graphics API on Apple's Metal
+   ↓
+Mac app or unsigned IPA
+```
+
+De auteur vergelijkt het eerder met Wine dan met een emulator, en dat is het juiste mentale model. De game denkt dat hij op een Switch draait. Dat is niet zo. Het is een native proces op je Mac met een compatibiliteitslaag eronder.
+
+Wat me het meest verraste is hoe ver het al is voor iets dat twee weken oud is. Er staan zo'n zeventig titels op de geteste lijst, elk met een notitiepagina die vertelt wat werkt en wat niet. Sommige notities zijn charmant in hun eerlijkheid: Mario Kart 8 Deluxe draait prima, maar zonder Mii-hoofden. Balatro speel je via touch. De eerste build duurt een half uur tot een uur en vereist een M1 iPad of een iPhone 15 Pro of nieuwer, omdat oudere telefoons het gecomprimeerde textuurformaat niet kunnen lezen.
+
+## Mijn pull request: een controller die macOS wel zag, maar de game niet
+
+Ik heb een 8BitDo Ultimate 2C Wireless. In zijn eigen modus via Bluetooth verschijnt hij in Systeeminstellingen met een batterijpercentage, dus macOS weet duidelijk dat hij bestaat. Mario Kart niet. Er gebeurde niets als ik op een knop drukte.
+
+De reden is dat NXNative controllers uitleest via Apple's GameController-framework, en GameController kent alleen Xbox-, PlayStation-, Switch Pro- en MFi-controllers. Al het andere is er onzichtbaar voor, ook al koppelt macOS het prima. Ik heb [een issue aangemaakt](https://github.com/seedds/nxnative/issues/637), naar de code gekeken en besloten dat het klein genoeg was om zelf te fixen.
+
+De [PR](https://github.com/seedds/nxnative/pull/669) leest die controllers in plaats daarvan uit via IOHIDManager, de lager gelegen HID-API die alles ziet. Elke HID-pad krijgt een spelerslot, op dezelfde manier als de GameController-pads, dus je kunt ze mengen. Twee Xbox-controllers en twee 8BitDo's zijn speler één tot en met vier. De mapping van HID-knoppen, hat en assen naar Switch-knoppen zit in één header zonder platformcode, dus die heeft zijn eigen test. Met drie environment variables kun je knoppen opnieuw toewijzen, de ruwe usage-nummers loggen of het hele ding uitzetten:
+
+```bash
+DM_HID_MAP=A=1,B=2,X=3,Y=4   # remap buttons
+DM_HID_LOG=1                  # print each button's HID usage number
+DM_HID_PADS=0                 # turn HID pads off
+```
+
+Het is zo'n tweehonderd regels. Ik heb het getest met Mario Kart 8 Deluxe en Super Mario Party Jamboree, met de 8BitDo naast een Xbox-controller, en elke knop en stick vergeleken met de log. De bekende beperking is dat het fabrikanten op naam overslaat (Microsoft, Sony, Nintendo) om te voorkomen dat een controller twee keer wordt uitgelezen, dus een MFi-pad van een andere fabrikant zou dubbel verschijnen. Het commentaar in het bestand zegt waar je die moet toevoegen.
+
+De PR staat nog open. Bijdragen aan een codebase die grotendeels uit C en Objective-C bestaat, na jaren TypeScript, was leuker dan ik had verwacht. De code is klein en direct, en de auteur heeft duidelijke regels: geen gamebestanden, geen keys, niets wat uit een game is gehaald, in welke wijziging dan ook.
+
+## Het deel waar ik over blijf twijfelen
+
+Het zit zo. NXNative vereist dat je je eigen game en je eigen keys aanlevert. De repository bevat niets van Nintendo. Juridisch en technisch is het een tool om games te spelen waar je al voor hebt betaald, op hardware die je al bezit.
+
+Voor de duidelijkheid: zo gebruik ik het ook. De twee games in mijn bibliotheek komen van mijn eigen Switch, met mijn eigen keys. Ik heb ze gekocht, ik heb ze gedumpt, en er is nergens iets gedownload.
+
+Ik denk niet dat de meeste mensen het zo gaan gebruiken.
+
+Je eigen cartridge dumpen betekent een Switch hacken, wat alleen werkt op vroege hardwarerevisies, en daarna je keys eruit halen. De meeste mensen die "Mario Kart op iPhone" horen, gaan dat niet doen. Die downloaden ergens een NSP. De tool doet zelf niets verkeerd, maar maakt het verkeerde wel een stuk aantrekkelijker.
+
+Nintendo's trackrecord hierin is duidelijk. Yuzu werd in februari 2024 aangeklaagd en schikte voor 2,4 miljoen dollar en een volledige stopzetting. Ryujinx verdween later dat jaar nadat Nintendo contact had opgenomen met de ontwikkelaar. Nintendo's argument in de Yuzu-zaak was dat Tears of the Kingdom anderhalve week voor release lekte en meer dan een miljoen keer werd gedownload. Een miljoen downloads is geen miljoen gemiste verkopen, en ik denk dat iedereen die eerlijk naar de cijfers heeft gekeken dat beaamt. Maar het is ook niet nul.
+
+En daar zit mijn twijfel. Ik vind het geweldig dat ik Mario Kart op mijn Mac kan spelen met mijn eigen controller. Ik werk ook voor mijn brood aan software, en ik weet wat het kost om iets goeds te bouwen. Games zijn de duurste software die er is. Een first-party titel van Nintendo is jaren werk van honderden mensen. Als een flink deel van de mensen die hem op een iPhone spelen er nooit voor heeft betaald, dan is dat geld dat niet in de volgende gaat.
+
+Het gebruikelijke tegenargument is dat piraten de game toch niet hadden gekocht, en er is onderzoek dat die kant op wijst. Een studie in opdracht van de Europese Commissie uit 2017 vond geen duidelijk bewijs dat piraterij gameverkopen verdringt, en hintte zelfs op een klein positief effect. Dat vind ik aannemelijk voor een vijftienjarige zonder geld. Ik vind het minder aannemelijk voor een volwassene met een iPhone 15 Pro en een Mac, en dat is precies voor wie NXNative is.
+
+## Waarom dan toch bijdragen
+
+Omdat het technische idee klopt, en ik denk dat het dit specifieke project zal overleven.
+
+ARM-binaries native draaien met een dunne compatibiliteitslaag is een betere aanpak dan emulatie, en niet alleen voor Switch-games. Het is hetzelfde idee dat Wine en Proton heeft laten werken, en de Steam Deck bestaat dankzij dat idee. Als Nintendo NXNative morgen stopzet, verdwijnt de aanpak niet. Iemand past hem toe op het volgende.
+
+Ik denk ook dat de beste manier om zo'n project aan de goede kant van de lijn te houden, is dat mensen die om die lijn geven eraan meedoen. De auteur trekt hem al duidelijk. Ik help liever met controllerondersteuning dan dat ik van een afstand toekijk en klaag.
+
+Ik heb geen schoon antwoord. Ik heb een werkende controller en een open PR. Daar moet het voorlopig mee doen.

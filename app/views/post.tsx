@@ -3,25 +3,21 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { formatDate, getPost, getPosts } from "@/app/journey/utils";
 import { baseUrl } from "@/app/sitemap";
+import { alternates, dateLocale, prefix, t, type Locale } from "@/app/i18n";
 
-export const dynamic = "force-static";
-export const revalidate = 3600;
-
-type Props = {
-  params: Promise<any>;
-  searchParams: Promise<any>;
-};
-
-export async function generateStaticParams() {
+export async function postParams() {
   const posts = await getPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPost(slug);
+export async function postMetadata(
+  slug: string,
+  locale: Locale,
+): Promise<Metadata> {
+  const post = await getPost(slug, locale);
+  const p = prefix(locale);
 
   if (!post) {
     return {
@@ -37,15 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.metadata.title,
     description: post.metadata.summary,
-    alternates: {
-      canonical: `/journey/${slug}`,
-    },
+    alternates: alternates(`/journey/${slug}`, locale),
     openGraph: {
       title: post.metadata.title,
       description: post.metadata.summary,
       type: "article",
       publishedTime: post.metadata.publishedAt,
-      url: `${baseUrl}/journey/${slug}`,
+      locale: locale === "nl" ? "nl_NL" : "en_US",
+      url: `${baseUrl}${p}/journey/${slug}`,
       images: [{ url: ogImage }],
     },
     twitter: {
@@ -57,18 +52,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function Journey({ params }: Props) {
+export async function Post({ slug, locale }: { slug: string; locale: Locale }) {
+  const p = prefix(locale);
   try {
-    const { slug } = await params;
-    const post = await getPost(slug);
+    const post = await getPost(slug, locale);
 
     if (!post) {
       notFound();
     }
 
     // ponytail: 3 newest other posts, no tag/similarity matching
-    const readMore = (await getPosts())
-      .filter((p) => p.slug !== slug)
+    const readMore = (await getPosts(locale))
+      .filter((other) => other.slug !== slug)
       .sort(
         (a, b) =>
           new Date(b.metadata.publishedAt).getTime() -
@@ -92,19 +87,19 @@ export default async function Journey({ params }: Props) {
                       "@type": "ListItem",
                       position: 1,
                       name: "Home",
-                      item: baseUrl,
+                      item: `${baseUrl}${p}`,
                     },
                     {
                       "@type": "ListItem",
                       position: 2,
                       name: "Journey",
-                      item: `${baseUrl}/journey`,
+                      item: `${baseUrl}${p}/journey`,
                     },
                     {
                       "@type": "ListItem",
                       position: 3,
                       name: post.metadata.title,
-                      item: `${baseUrl}/journey/${slug}`,
+                      item: `${baseUrl}${p}/journey/${slug}`,
                     },
                   ],
                 },
@@ -119,10 +114,11 @@ export default async function Journey({ params }: Props) {
                     : `${baseUrl}/og?title=${encodeURIComponent(
                         post.metadata.title,
                       )}`,
-                  url: `${baseUrl}/journey/${slug}`,
+                  url: `${baseUrl}${p}/journey/${slug}`,
+                  inLanguage: locale,
                   author: {
                     "@type": "Person",
-                    "@id": "https://larsniet.com/#person",
+                    "@id": `${baseUrl}/#person`,
                     name: "Lars van der Niet",
                     url: baseUrl,
                   },
@@ -133,7 +129,7 @@ export default async function Journey({ params }: Props) {
         />
         <div className="fade-up fade-up-1 mb-6">
           <p className="text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono) tabular-nums">
-            {formatDate(post.metadata.publishedAt)}
+            {formatDate(post.metadata.publishedAt, false, locale)}
           </p>
         </div>
         <article className="prose prose-quoteless prose-neutral dark:prose-invert fade-up fade-up-2">
@@ -148,22 +144,24 @@ export default async function Journey({ params }: Props) {
         </article>
         <aside className="mt-16 pt-8 border-t border-neutral-100 dark:border-neutral-900 fade-up fade-up-3">
           <p className="text-xs font-medium text-neutral-500 tabular-nums font-(family-name:--font-geist-mono) mb-1 select-none">
-            Read more
+            {t[locale].readMore}
           </p>
-          {readMore.map((p) => (
+          {readMore.map((other) => (
             <Link
-              key={p.slug}
-              href={`/journey/${p.slug}`}
+              key={other.slug}
+              href={`${p}/journey/${other.slug}`}
               className="post-row group flex items-baseline gap-4 py-2.5 border-b border-neutral-100 dark:border-neutral-900"
             >
               <span className="shrink-0 w-16 text-xs text-neutral-500 dark:text-neutral-400 tabular-nums font-(family-name:--font-geist-mono) whitespace-nowrap">
-                {new Date(`${p.metadata.publishedAt}T00:00:00`).toLocaleString(
-                  "en-us",
-                  { month: "short", year: "numeric" },
-                )}
+                {new Date(
+                  `${other.metadata.publishedAt}T00:00:00`,
+                ).toLocaleString(dateLocale(locale), {
+                  month: "short",
+                  year: "numeric",
+                })}
               </span>
               <span className="text-sm text-neutral-700 dark:text-neutral-300 tracking-tight group-hover:text-black dark:group-hover:text-white transition-colors duration-200 min-w-0">
-                {p.metadata.title}
+                {other.metadata.title}
               </span>
             </Link>
           ))}
