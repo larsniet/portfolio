@@ -130,8 +130,18 @@ export async function Post({ slug, locale }: { slug: string; locale: Locale }) {
           }}
         />
         <div className="fade-up fade-up-1 mb-6">
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono) tabular-nums">
-            {formatDate(post.metadata.publishedAt, false, locale)}
+          <p className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 font-(family-name:--font-geist-mono) tabular-nums">
+            <Link
+              href={p || "/"}
+              rel="author"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors duration-200"
+            >
+              Lars van der Niet
+            </Link>
+            <span aria-hidden="true">·</span>
+            <time dateTime={post.metadata.publishedAt}>
+              {formatDate(post.metadata.publishedAt, false, locale)}
+            </time>
           </p>
         </div>
         <article className="prose prose-quoteless prose-neutral dark:prose-invert fade-up fade-up-2">
