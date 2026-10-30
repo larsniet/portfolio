@@ -36,11 +36,11 @@ export const metadata: Metadata = {
     template: "%s | Lars van der Niet",
   },
   description:
-    "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+    "Lars van der Niet (Lars Niet), senior full-stack developer at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, Go and TypeScript.",
   openGraph: {
     title: "Lars van der Niet",
     description:
-      "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers. Passionate about new technologies and innovative solutions.",
+      "Lars van der Niet (Lars Niet), senior full-stack developer at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, Go and TypeScript.",
     url: baseUrl,
     siteName: "Lars van der Niet",
     locale: "en_US",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Lars van der Niet",
     description:
-      "Leading tech projects at Adswag Amsterdam. Expertise in Docker, Kubernetes, NextJS, and Ubuntu servers.",
+      "Lars van der Niet (Lars Niet), senior full-stack developer at Adswag Amsterdam.",
     images: [`${baseUrl}/og?title=Lars+van+der+Niet`],
   },
   robots: {
@@ -72,6 +72,52 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${baseUrl}/#website`,
+      name: "Lars van der Niet",
+      alternateName: ["Lars Niet", "larsniet.com"],
+      url: baseUrl,
+      description: "Personal site of Lars van der Niet, full-stack developer in Amsterdam.",
+      publisher: { "@id": `${baseUrl}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${baseUrl}/#person`,
+      name: "Lars van der Niet",
+      // ponytail: spellings people actually type; Google reads these for entity matching
+      alternateName: ["Lars Niet", "Lars vd Niet", "Lars v.d. Niet", "larsniet"],
+      givenName: "Lars",
+      familyName: "van der Niet",
+      jobTitle: "Senior Full Stack Developer",
+      description:
+        "Lars van der Niet is a senior full-stack developer at Adswag in Amsterdam, working in TypeScript, Go, React and NestJS on Kubernetes.",
+      url: baseUrl,
+      image: `${baseUrl}/images/lars-van-der-niet.webp`,
+      email: "lvdnbusiness@gmail.com",
+      nationality: "Dutch",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Amsterdam",
+        addressCountry: "NL",
+      },
+      worksFor: {
+        "@type": "Organization",
+        name: "Adswag",
+        url: "https://adswag.nl",
+      },
+      knowsAbout: ["TypeScript", "Go", "React", "NestJS", "Kubernetes", "Docker", "AdTech", "Digital Out-of-Home"],
+      sameAs: [
+        "https://www.linkedin.com/in/larsvanderniet",
+        "https://github.com/larsniet",
+      ],
+    },
+  ],
 };
 
 const cx = (...classes: string[]) => classes.filter(Boolean).join(" ");
@@ -91,6 +137,10 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased noise bg-white dark:bg-black">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ServiceWorkerRegister />
         {/* Full-width sticky navbar */}
         <Navbar />

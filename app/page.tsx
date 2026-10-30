@@ -23,42 +23,10 @@ import go from "@/assets/images/go.png";
 
 export const metadata: Metadata = {
   description:
-    "Senior full-stack developer at Adswag Amsterdam, building a Digital Out-of-Home ad network and AdTech platforms in TypeScript, Go, React and NestJS on Kubernetes.",
+    "Lars van der Niet, senior full-stack developer at Adswag Amsterdam, building a Digital Out-of-Home ad network and AdTech platforms in TypeScript, Go, React and NestJS on Kubernetes.",
   alternates: {
     canonical: "/",
   },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://larsniet.com/#website",
-      name: "Lars van der Niet",
-      url: "https://larsniet.com",
-      description:
-        "Full-stack developer and tech enthusiast based in Amsterdam.",
-      author: { "@id": "https://larsniet.com/#person" },
-    },
-    {
-      "@type": "Person",
-      "@id": "https://larsniet.com/#person",
-      name: "Lars van der Niet",
-      jobTitle: "Senior Full Stack Developer",
-      url: "https://larsniet.com",
-      email: "lvdnbusiness@gmail.com",
-      worksFor: {
-        "@type": "Organization",
-        name: "Adswag",
-        url: "https://adswag.nl",
-      },
-      sameAs: [
-        "http://linkedin.com/in/larsvanderniet",
-        "https://github.com/larsniet",
-      ],
-    },
-  ],
 };
 
 function TechBadge({
@@ -93,15 +61,10 @@ export default async function Page() {
 
   return (
     <section className="pt-2 pb-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
       {/* ── Hero ─────────────────────────────────────────────── */}
       <div className="fade-up fade-up-1 mb-10">
         <h1 className="mb-4 text-4xl font-semibold tracking-tighter leading-tight text-black dark:text-white">
-          Hi, I am Lars
+          Hi, I am Lars van der Niet
         </h1>
         <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
           Senior full-stack developer at{" "}
