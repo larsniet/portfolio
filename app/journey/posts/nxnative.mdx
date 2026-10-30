@@ -1,0 +1,79 @@
+---
+title: "NXNative: Switch games on a Mac, no emulator"
+publishedAt: "2026-10-30"
+summary: "NXNative turns a Switch game you own into a native Mac or iPhone app. The idea is brilliant, I've started contributing to it, and I still can't shake the feeling that projects like this cost the people who make the games."
+image: "/images/nxnative.webp"
+featured: true
+---
+
+# NXNative runs Switch games on my Mac without an emulator. I love it, and it worries me
+
+Two weeks ago a repository called [nxnative](https://github.com/seedds/nxnative) showed up on GitHub. It takes a Nintendo Switch game you own, plus your own console keys, and turns it into a Mac app or an unsigned IPA you can sideload on an iPhone. Mario Kart 8 Deluxe at 60 fps on a phone. It's at almost ten thousand stars at the time of writing.
+
+I've been playing with it since the first week, and yesterday I opened my first pull request. I also think it's one of those projects where the thing that makes it great is the same thing that makes it uncomfortable. Both of those things are true at the same time, and I want to write about both.
+
+## It's not an emulator, and that's the clever bit
+
+Every Switch emulator so far has done the same thing: pretend to be the Switch's ARM CPU, pretend to be its GPU, and translate everything at runtime. That costs a lot, which is why emulators need beefy hardware and still stutter.
+
+NXNative skips the first part completely. The Switch runs on an ARM chip. So does every Apple Silicon Mac and every recent iPhone. The game's own code can run directly on the Apple CPU, no translation needed. The only things that have to be replaced are the parts that talk to Nintendo's operating system and GPU.
+
+```plaintext
+Your NSP + prod.keys
+   ↓
+NSO rewriter          patches the game binary so it runs as a normal process
+   ↓
+Horizon HLE host      answers the game's calls to the Switch OS (files, input, audio)
+   ↓
+NVN → Metal           rebuilds the Switch graphics API on Apple's Metal
+   ↓
+Mac app or unsigned IPA
+```
+
+The author compares it to Wine more than to an emulator, and that's the right mental model. The game thinks it's on a Switch. It isn't. It's a native process on your Mac with a compatibility layer underneath.
+
+What surprised me most is how far along it already is for something that's two weeks old. Around seventy titles are on the tested list, each with a notes page that says what works and what doesn't. Some notes are charming in their honesty: Mario Kart 8 Deluxe runs great but has no Mii heads. Balatro plays by touch. The first build takes half an hour to an hour and needs an M1 iPad or an iPhone 15 Pro or newer, because older phones can't read the compressed texture format.
+
+## My pull request: a controller macOS could see but the game couldn't
+
+I own an 8BitDo Ultimate 2C Wireless. In its own mode over Bluetooth it shows up in System Settings with a battery percentage, so macOS clearly knows it exists. Mario Kart didn't. Nothing happened when I pressed a button.
+
+The reason is that NXNative reads controllers through Apple's GameController framework, and GameController only lists Xbox, PlayStation, Switch Pro and MFi controllers. Anything else is invisible to it, even though macOS pairs it just fine. I [filed the issue](https://github.com/seedds/nxnative/issues/637), looked at the code, and decided it was small enough to fix myself.
+
+The [PR](https://github.com/seedds/nxnative/pull/669) reads those controllers through IOHIDManager instead, the lower-level HID API that sees everything. Each HID pad gets a player slot the same way the GameController pads do, so you can mix them. Two Xbox controllers and two 8BitDos are players one to four. The mapping from HID buttons, hat and axes to Switch buttons lives in one header with no platform code in it, so it has its own test. Three environment variables let you remap buttons, log the raw usage numbers, or turn the whole thing off:
+
+```bash
+DM_HID_MAP=A=1,B=2,X=3,Y=4   # remap buttons
+DM_HID_LOG=1                  # print each button's HID usage number
+DM_HID_PADS=0                 # turn HID pads off
+```
+
+It's about two hundred lines. I tested it with Mario Kart 8 Deluxe and Super Mario Party Jamboree with the 8BitDo next to an Xbox controller, checking every button and stick against the log. The known limit is that it skips vendors by name (Microsoft, Sony, Nintendo) to avoid reading a controller twice, so an MFi pad from another vendor would show up twice. The comment in the file says where to add it.
+
+The PR is still open. Contributing to a codebase that is mostly C and Objective-C after years of TypeScript was more fun than I expected. The code is small and direct, and the author has clear rules: no game files, no keys, nothing extracted from a game in any change.
+
+## The part I keep going back and forth on
+
+Here's the thing. NXNative requires you to supply your own game and your own keys. The repository contains nothing from Nintendo. Legally and technically, it's a tool for playing games you already paid for, on hardware you already own.
+
+To be clear, that's how I use it. The two games in my library came off my own Switch, with my own keys. I bought them, I dumped them, and nothing was downloaded from anywhere.
+
+I don't think that's how most people will use it.
+
+Dumping your own cartridge means hacking a Switch, which only works on early hardware revisions, and then extracting your keys. Most people who hear "Mario Kart on iPhone" are not going to do that. They're going to download an NSP from somewhere. The tool doesn't do anything wrong, but it makes the wrong thing a lot more attractive.
+
+Nintendo's track record here is clear. Yuzu was sued in February 2024 and settled for 2.4 million dollars and a full shutdown. Ryujinx disappeared later that year after Nintendo got in touch with the developer. Nintendo's argument in the Yuzu case was that Tears of the Kingdom leaked a week and a half before release and was downloaded over a million times. A million downloads is not a million lost sales, and I think everyone who has looked at the numbers honestly agrees with that. But it's also not zero.
+
+And that's where my doubt sits. I love that I can play Mario Kart on my Mac with my own controller. I also work on software for a living, and I know what it costs to build something good. Games are the most expensive software there is. A Nintendo first-party title is years of work by hundreds of people. If a meaningful share of the people playing it on an iPhone never paid for it, that's money that doesn't go into the next one.
+
+The usual counterargument is that pirates wouldn't have bought the game anyway, and there's some research pointing that way. A study commissioned by the European Commission in 2017 found no clear evidence that piracy displaced game sales, and even hinted at a small positive effect. I find that plausible for a fifteen-year-old with no money. I find it less plausible for an adult with an iPhone 15 Pro and a Mac, which is exactly who NXNative is for.
+
+## So why contribute
+
+Because the technical idea is right, and I think it will outlive this particular project.
+
+Running ARM binaries natively with a thin compatibility layer is a better approach than emulation, and not just for Switch games. It's the same idea that made Wine and Proton work, and the Steam Deck exists because of it. If Nintendo shuts NXNative down tomorrow, the approach doesn't go away. Someone will apply it to the next thing.
+
+I also think the best way to keep a project like this on the right side of the line is for people who care about that line to be part of it. The author already draws it clearly. I'd rather help with controller support than watch from a distance and complain.
+
+I don't have a clean answer. I have a working controller and an open PR. That will have to do for now.
