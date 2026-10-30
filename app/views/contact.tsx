@@ -5,20 +5,22 @@ import { baseUrl } from "@/app/sitemap";
 
 const copy = {
   en: {
-    title: "Contact Lars van der Niet",
+    title: "Contact",
     description:
-      "Get in touch with Lars van der Niet — full stack developer based in Amsterdam.",
+      "Contact Lars van der Niet, senior full-stack developer at Adswag in Amsterdam, by email, LinkedIn or GitHub.",
     h1: "Get in touch",
-    intro: "Feel free to reach out — whether it's about a project, an opportunity, or just to say hi.",
+    intro:
+      "Lars van der Niet is a senior full-stack developer at Adswag in Amsterdam. For a project, an opportunity or just to say hi, email is the quickest way to reach me.",
     location: "Based in Amsterdam, Netherlands",
     email: "Email",
   },
   nl: {
-    title: "Contact met Lars van der Niet",
+    title: "Contact",
     description:
-      "Neem contact op met Lars van der Niet, full-stack developer in Amsterdam.",
+      "Neem contact op met Lars van der Niet, senior full-stack developer bij Adswag in Amsterdam, via e-mail, LinkedIn of GitHub.",
     h1: "Neem contact op",
-    intro: "Stuur gerust een bericht, of het nu om een project gaat, een kans, of gewoon om hoi te zeggen.",
+    intro:
+      "Lars van der Niet is senior full-stack developer bij Adswag in Amsterdam. Voor een project, een kans of gewoon om hoi te zeggen is e-mail de snelste weg.",
     location: "Gevestigd in Amsterdam, Nederland",
     email: "E-mail",
   },
@@ -70,7 +72,7 @@ const jsonLd = (locale: Locale) => ({
     },
     {
       "@type": "ContactPage",
-      name: copy[locale].title,
+      name: `${copy[locale].title} Lars van der Niet`,
       url: `${baseUrl}${prefix(locale)}/contact`,
       inLanguage: locale,
       author: {
@@ -114,7 +116,7 @@ export function Contact({ locale }: { locale: Locale }) {
         <h1 className="text-4xl font-semibold tracking-tighter text-black dark:text-white mb-3">
           {c.h1}
         </h1>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xs">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-md">
           {c.intro}
         </p>
       </div>

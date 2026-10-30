@@ -23,6 +23,13 @@ import nestjs from "@/assets/images/nestjs.png";
 import go from "@/assets/images/go.png";
 
 export const homeMetadata = (locale: Locale): Metadata => ({
+  // ponytail: absolute title so the homepage, not /contact, wins name searches
+  title: {
+    absolute:
+      locale === "nl"
+        ? "Lars van der Niet | Senior full-stack developer in Amsterdam"
+        : "Lars van der Niet | Senior full-stack developer, Amsterdam",
+  },
   description:
     locale === "nl"
       ? "Lars van der Niet, senior full-stack developer bij Adswag in Amsterdam. Bouwt een Digital Out-of-Home advertentienetwerk en AdTech-platformen in TypeScript, Go, React en NestJS op Kubernetes."
