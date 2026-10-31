@@ -133,12 +133,15 @@ select:focus-visible {
   }
 }
 
-.post-row:hover {
-  padding-left: 1rem;
-}
+/* Only on devices that actually hover: a tap on iOS otherwise flashes this and shifts the row */
+@media (hover: hover) {
+  .post-row:hover {
+    padding-left: 1rem;
+  }
 
-.post-row:hover::before {
-  opacity: 1;
+  .post-row:hover::before {
+    opacity: 1;
+  }
 }
 
 /* ─── Details / Summary (MDX collapsibles) ─────────────────────── */

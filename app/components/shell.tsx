@@ -25,7 +25,9 @@ export function layoutMetadata(locale: Locale): Metadata {
     manifest: "/manifest.json",
     appleWebApp: {
       capable: true,
-      statusBarStyle: "black-translucent",
+      // "default" keeps the page out from under the status bar: iOS 26 progressive-blurs
+      // whatever sits under a translucent bar, which faded the top of the navbar.
+      statusBarStyle: "default",
       title: "Lars van der Niet",
     },
     alternates: {
